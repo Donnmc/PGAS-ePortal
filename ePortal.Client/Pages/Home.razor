@@ -1,0 +1,67 @@
+﻿@page "/"
+@using System.Net.Http
+@using System.Text.Json
+@using System.Threading.Tasks
+
+<h3>Bible Verses</h3>
+<div class="ml-10 mr-10">
+    @if (latestVerse != null)
+    {
+    <MudTable Items="new List<BibleVerseLatestDTO> { latestVerse }" Hover="true" SortLabel="Sort By" Class="flex-grow-1">
+        <HeaderContent>
+            <MudTh><MudTableSortLabel SortBy="new Func<BibleVerseLatestDTO, object>(x => x.Verse)">Verse</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<BibleVerseLatestDTO, object>(x => x.Chapter)">Chapter</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<BibleVerseLatestDTO, object>(x => x.Date)">Date</MudTableSortLabel></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Verse">@context.Verse</MudTd>
+            <MudTd DataLabel="Chapter">@context.Chapter</MudTd>
+            <MudTd DataLabel="Date">@context.Date?.ToString("yyyy-MM-dd")</MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[] { 10, 25, 50, 100 }" />
+        </PagerContent>
+        </MudTable>
+    }
+    else
+    {
+        <p>Loading...</p>
+    }
+</div>
+
+@code {
+
+    public class BibleVerseLatestDTO
+    {
+        public string Verse { get; set; }
+        public string Chapter { get; set; }
+        public DateTime? Date { get; set; }
+    }
+
+    private const string API_URL = "https://localhost:7049";
+
+    private BibleVerseLatestDTO? latestVerse;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshLatestVerse();
+    }
+
+    private async Task RefreshLatestVerse()
+    {
+        try
+        {
+            using HttpClient httpClient = new HttpClient();
+            HttpResponseMessage httpResponse = await httpClient.GetAsync(API_URL + "/api/bible_verses/latest");
+            httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
+            using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
+            latestVerse = await JsonSerializer.DeserializeAsync<BibleVerseLatestDTO>(responseStream,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+        catch (HttpRequestException ex)
+        {
+            // Handle exception, log, or display an error message
+            Console.WriteLine($"Error fetching data: {ex.Message}");
+        }
+    }
+}
