@@ -10,10 +10,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //SQL Connection
-builder.Services.AddDbContext<ePortal.WebAPI.Models.pgas_eportal_v2Context>(
+builder.Services.AddDbContext<ePortal.WebAPI.Context.pgas_eportal_v2Context>(
     options =>
-    { 
-        options.UseSqlServer(builder.Configuration.GetConnectionString("PGAS_ePortal_v2"));    
+    {
+        options.UseSqlServer(builder.Configuration.GetConnectionString("PGAS_ePortal_v2"));
     }
     );
 

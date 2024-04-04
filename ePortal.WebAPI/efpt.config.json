@@ -5,9 +5,9 @@
    "DefaultDacpacSchema": null,
    "FilterSchemas": false,
    "IncludeConnectionString": false,
-   "ModelNamespace": null,
-   "OutputContextPath": null,
-   "OutputPath": "Models",
+   "ModelNamespace": "Entities",
+   "OutputContextPath": "Context",
+   "OutputPath": "Entities",
    "PreserveCasingWithRegex": true,
    "ProjectRootNamespace": "ePortal.WebAPI",
    "Schemas": null,
@@ -30,9 +30,13 @@
       {
          "Name": "[dbo].[praise_message]",
          "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[v_clustered_information_system]",
+         "ObjectType": 3
       }
    ],
-   "UiHint": "dmd-joni.pgas_eportal_v2.dbo",
+   "UiHint": "dmd-joni.PGAS_ePortal_v2.dbo",
    "UncountableWords": null,
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": true,

@@ -1,6 +1,6 @@
 {
-  "name": "ePortal.Client",
-  "short_name": "ePortal.Client",
+  "name": "ePortal | Provincial Government of Agusan del Sur",
+  "short_name": "ePortal | PGAS",
   "id": "./",
   "start_url": "./",
   "display": "standalone",
@@ -9,12 +9,12 @@
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "icon-512.png",
+      "src": "Icon/android-chrome-512x512.png",
       "type": "image/png",
       "sizes": "512x512"
     },
     {
-      "src": "icon-192.png",
+      "src": "Icon/android-chrome-512x512.png",
       "type": "image/png",
       "sizes": "192x192"
     }

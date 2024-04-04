@@ -1,46 +1,46 @@
 ﻿@inherits LayoutComponentBase
-<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" DefaultScrollbar="true" />
+<MudThemeProvider Theme="PGASTheme" DefaultScrollbar="true" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Elevation="0">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        <MudText Typo="Typo.h5" Class="ml-3">ePortal</MudText>
-        <MudSpacer />
-        <MudToggleIconButton @bind-Toggled="@_mudThemeProvider.IsDarkMode" Icon="@Icons.Material.Filled.LightMode" Color="@Color.Inherit" Title="Off"
-                             ToggledIcon="@Icons.Material.Filled.DarkMode" ToggledColor="@Color.Inherit" ToggledTitle="On" />
-        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
-    </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
-        <NavMenu />
-    </MudDrawer>
-    <MudMainContent>
-        @Body
-    </MudMainContent>
+        <MudAppBar Elevation="0">
+                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+            <MudImage Fluid="true" Width="200" Src="Objects/pgas eportal.webp"></MudImage>
+            <MudSpacer />
+            <MudIconButton Icon="@Icons.Material.Filled.Email" Color="Color.Tertiary" />
+            <MudIconButton Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Tertiary" />
+        </MudAppBar>
+        <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="0">
+            <NavMenu />
+        </MudDrawer>
+        <MudMainContent>
+            @Body
+        </MudMainContent>
 </MudLayout>
 
 @code {
-    bool _drawerOpen = true;
-    private bool _isDarkMode;
-    private MudThemeProvider _mudThemeProvider;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
+    MudTheme PGASTheme = new MudTheme()
         {
-            _isDarkMode = await _mudThemeProvider.GetSystemPreference();
-            await _mudThemeProvider.WatchSystemPreference(OnSystemPreferenceChanged);
-            StateHasChanged();
-        }
-    }
+            Palette = new PaletteLight()
+            {
+                Primary = Colors.Blue.Default,
+                Secondary = Colors.Yellow.Darken1,
+                Tertiary = Colors.Grey.Darken4,
+                AppbarBackground = Colors.Shades.White,
+                AppbarText = Colors.Shades.Black,
+                TextPrimary = Colors.Shades.Black,
+            },
+            LayoutProperties = new LayoutProperties()
+            {
+                DrawerWidthLeft = "260px",
+                DrawerWidthRight = "300px"
+            }
+        };
 
-    private Task OnSystemPreferenceChanged(bool newValue)
-    {
-        _isDarkMode = newValue;
-        StateHasChanged();
-        return Task.CompletedTask;
-    }
+    bool _drawerOpen = true;
+
+    private MudThemeProvider? _mudThemeProvider;
 
     void DrawerToggle()
     {

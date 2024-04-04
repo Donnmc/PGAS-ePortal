@@ -3,51 +3,209 @@
 @using System.Text.Json
 @using System.Threading.Tasks
 
-<h3>Bible Verses</h3>
-<div class="ml-10 mr-10">
+<MudPaper Class="ma-5" Elevation="0">
+    <MudCarousel Class="mud-width-full" Style="height:400px;" ShowArrows="true" ShowBullets="true" EnableSwipeGesture="true" AutoCycle="true" TData="object">
+        <MudCarouselItem Transition="Transition.Slide" Color="@Color.Primary">
+            <div class="d-flex" style="height:100%">
+                <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
+            </div>
+        </MudCarouselItem>
+        <MudCarouselItem Transition="Transition.Slide" Color="@Color.Secondary">
+            <div class="d-flex" style="height:100%">
+                <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
+            </div>
+        </MudCarouselItem>
+        <MudCarouselItem Transition="Transition.Slide">
+            <div class="d-flex" style="height:100%">
+                <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Color="@Color.Primary" Size="@Size.Large" />
+            </div>
+        </MudCarouselItem>
+    </MudCarousel>
+</MudPaper>
+
+<!--
+Gov and Verse Section
+-->
+<MudStack Class="flex-wrap justify-center pa-5 ma-5" Row="true">
+    <MudCard Elevation="0" Outlined="true" Style="width: 810px">
+        <MudStack Class="flex-wrap" Style="justify-content: flex-start" Row="true">
+            <MudImage Fluid="true" Class="mt-1 ml-1" Width="250" Style="transform: rotateY(180deg);" Src="/Media Files/gov-image.png"></MudImage>
+            <MudStack>
+                <MudText>Governor's SOPA</MudText>
+                <MudText>State of the Province Address</MudText>
+                <MudCard Elevation="0">
+                    <MudCardContent>
+                        <MudText Typo="Typo.h5">Time Left:</MudText>
+                        <MudText Typo="Typo.h3">@displayTime</MudText>
+                    </MudCardContent>
+                </MudCard>
+                <MudText>Santiago B. Cane, Jr.</MudText>
+                <MudText>Provincial Governor</MudText>
+            </MudStack>
+        </MudStack>
+    </MudCard>
     @if (latestVerse != null)
     {
-    <MudTable Items="new List<BibleVerseLatestDTO> { latestVerse }" Hover="true" SortLabel="Sort By" Class="flex-grow-1">
-        <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<BibleVerseLatestDTO, object>(x => x.Verse)">Verse</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<BibleVerseLatestDTO, object>(x => x.Chapter)">Chapter</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<BibleVerseLatestDTO, object>(x => x.Date)">Date</MudTableSortLabel></MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd DataLabel="Verse">@context.Verse</MudTd>
-            <MudTd DataLabel="Chapter">@context.Chapter</MudTd>
-            <MudTd DataLabel="Date">@context.Date?.ToString("yyyy-MM-dd")</MudTd>
-        </RowTemplate>
-        <PagerContent>
-            <MudTablePager PageSizeOptions="new int[] { 10, 25, 50, 100 }" />
-        </PagerContent>
-        </MudTable>
+        <MudCard Class="d-inline pa-2" Outlined="true" class="bi-house-door-fill-nav-menu">
+            <MudText Typo="Typo.h5">Our Daily Word of God </MudText>
+            <MudDivider />
+            <MudText Typo="Typo.subtitle2" Color="Color.Primary">@latestVerse.Chapter</MudText>
+            <MudText Typo="Typo.subtitle1">@latestVerse.Verse</MudText>
+        </MudCard>
     }
     else
     {
-        <p>Loading...</p>
+        <MudCard Class="d-inline pa-5" Outlined="true" Style="width: 400px">
+            <MudCardContent>
+                <MudSkeleton Width="@GetRandomWidth()" Height="@GetRandomHeight()" />
+                <MudSkeleton Width="@GetRandomWidth()" />
+            </MudCardContent>
+        </MudCard>
     }
-</div>
+</MudStack>
+
+<!--
+Information Systems Section
+-->
+<MudStack Class="flex-wrap justify-center" Row="true">
+    @if (groupedClusters != null && groupedClusters.Any())
+    {
+        @foreach (var cluster in groupedClusters)
+        {
+            <MudCard Elevation="0" Outlined="true" class="four-card">
+                <MudCardHeader Class="pa-0">
+                    <MudCardContent>
+                        <MudText Align="Align.Center">
+                            @cluster.Cluster_Name
+                        </MudText>
+                    </MudCardContent>
+                </MudCardHeader>
+                <MudDivider />
+                <MudCardContent Class="d-flex flex-wrap justify-center gap-5">
+                    @foreach (var system in cluster.Information_Systems)
+                    {
+                        <MudTooltip Text="@system.Information_System_Name">
+                            <MudLink Href="@system.Information_System_Link" Target="_blank" Underline="Underline.None">
+                                @{
+                                    // Determine icon based on platform
+                                    string icon;
+                                    if (system.Information_System_Platform == "Web App")
+                                    {
+                                        icon = Icons.Material.Filled.Language;
+                                    }
+                                    else if (system.Information_System_Platform == "Desktop App")
+                                    {
+                                        icon = Icons.Material.Filled.DesktopWindows;
+                                    }
+                                    else
+                                    {
+                                        // Default icon if platform is neither Web App nor Desktop App
+                                        icon = Icons.Material.Filled.HelpOutline;
+                                    }
+                                }
+                                <MudBadge Bordered="true" Overlap="true" Icon="@icon" Color="Color.Primary">
+                                    <MudButton DisableElevation Variant="Variant.Filled" StartIcon="@(typeof(Icons.Material.Filled).GetField(system.Information_System_Icon)?.GetValue(null) as string)" Color="Color.Primary" Size="Size.Small">
+                                        @system.Information_System_Abbreviation
+                                    </MudButton>
+                                </MudBadge>
+                            </MudLink>
+                        </MudTooltip>
+                    }
+                </MudCardContent>
+            </MudCard>
+        }
+    }
+    else
+    {
+        @for (int i = 0; i < 3; i++)
+        {
+            <MudCard Class="pa-5 justify-center" Outlined="true" Style="width:400px">
+                <MudText Align="Align.Center">
+                    <MudSkeleton Width="@GetRandomWidth()" Height="42px;" />
+                    <hr>
+                </MudText>
+                <MudPaper Elevation="0" Row="true" Class="d-flex flex-wrap justify-center gap-2">
+                    <MudSkeleton Width="@GetRandomWidth()" />
+                    <MudSkeleton Width="@GetRandomWidth()" />
+                </MudPaper>
+            </MudCard>
+        }
+    }
+</MudStack>
 
 @code {
+    Random random = new Random();
+
+    string GetRandomWidth()
+    {
+        int width = random.Next(50, 100); // Adjust range as needed
+        return $"{width}%";
+    }
+
+    string GetRandomHeight()
+    {
+        int height = random.Next(20, 100); // Adjust range as needed
+        return $"{height}px";
+    }
 
     public class BibleVerseLatestDTO
     {
-        public string Verse { get; set; }
-        public string Chapter { get; set; }
+        public string Verse { get; set; } = string.Empty;
+        public string Chapter { get; set; } = string.Empty;
         public DateTime? Date { get; set; }
+    }
+
+    public class v_clustered_information_systemDTO
+    {
+        public string Cluster_Name { get; set; } = string.Empty;
+        public string Cluster_Abbreviation { get; set; } = string.Empty;
+        public string Cluster_Icon { get; set; } = string.Empty;
+        public List<InformationSystemDTO>? Information_Systems { get; set; } // Updated to use InformationSystemDTO
+    }
+
+    public class InformationSystemDTO
+    {
+        public string Information_System_Name { get; set; } = string.Empty;
+        public string Information_System_Abbreviation { get; set; } = string.Empty;
+        public string Information_System_Icon { get; set; } = string.Empty;
+        public string Information_System_Link { get; set; } = string.Empty;
+        public string Information_System_Platform { get; set; } = string.Empty;
     }
 
     private const string API_URL = "https://localhost:7049";
 
     private BibleVerseLatestDTO? latestVerse;
+    private List<v_clustered_information_systemDTO>? groupedClusters;
+
+    private string displayTime;
+    private DateTime targetTime = new DateTime(2024, 6, 16, 8, 0, 0); // Specify your target date and time here
+
 
     protected override async Task OnInitializedAsync()
     {
-        await RefreshLatestVerse();
+        UpdateTime();
+        await GetLatestVerse();
+        await GetGroupedClusters();
     }
 
-    private async Task RefreshLatestVerse()
+    private async Task UpdateTime()
+    {
+        while (true)
+        {
+            if (targetTime <= DateTime.UtcNow) // Check if the target date has passed
+            {
+                // Calculate the target date for the next year on June 16
+                targetTime = targetTime.AddYears(1);
+            }
+
+            TimeSpan remainingTime = targetTime - DateTime.UtcNow;
+            displayTime = $"{remainingTime.Days}d {remainingTime.Hours:D2}h {remainingTime.Minutes:D2}m {remainingTime.Seconds:D2}s";
+            await Task.Delay(1000); // Update every second
+            StateHasChanged(); // Notify Blazor to update the UI
+        }
+    }
+
+    private async Task GetLatestVerse()
     {
         try
         {
@@ -56,6 +214,24 @@
             httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
             using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
             latestVerse = await JsonSerializer.DeserializeAsync<BibleVerseLatestDTO>(responseStream,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+        catch (HttpRequestException ex)
+        {
+            // Handle exception, log, or display an error message
+            Console.WriteLine($"Error fetching data: {ex.Message}");
+        }
+    }
+
+    private async Task GetGroupedClusters()
+    {
+        try
+        {
+            using HttpClient httpClient = new HttpClient();
+            HttpResponseMessage httpResponse = await httpClient.GetAsync(API_URL + "/api/v_clustered_information_system");
+            httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
+            using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
+            groupedClusters = await JsonSerializer.DeserializeAsync<List<v_clustered_information_systemDTO>>(responseStream,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
         catch (HttpRequestException ex)

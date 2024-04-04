@@ -1,0 +1,41 @@
+﻿/* Extra Extra Large */
+@media (min-width: 2560px) {
+    .card-size{
+        width: 18%;
+    }
+}
+
+/* Extra Large */
+@media (min-width: 1920px) and (max-width: 2560px) {
+    .four-card {
+        width: 22.5%;
+    }
+}
+
+/* Large */
+@media (min-width: 1280px) and (max-width: 1920px) {
+    .four-card {
+        width: 30%;
+    }
+}
+
+/* Medium */
+@media (min-width: 960px) and (max-width: 1280px) {
+    .four-card {
+        width: 30%;
+    }
+}
+
+/* Small */
+@media (min-width: 600px) and (max-width: 960px) {
+    .four-card {
+        width: 45%;
+    }
+}
+
+/* Extra small */
+@media (max-width: 600px) {
+    .four-card {
+        width: 90%;
+    }
+}

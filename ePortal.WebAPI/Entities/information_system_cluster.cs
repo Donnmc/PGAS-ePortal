@@ -3,15 +3,17 @@
 using System;
 using System.Collections.Generic;
 
-namespace ePortal.WebAPI.Models;
+namespace ePortal.WebAPI.Entities;
 
 public partial class information_system_cluster
 {
     public int id { get; set; }
 
-    public string cluster_name { get; set; }
+    public string name { get; set; }
 
-    public byte[] icon { get; set; }
+    public string abbreviation { get; set; }
+
+    public string icon { get; set; }
 
     public bool? active { get; set; }
 

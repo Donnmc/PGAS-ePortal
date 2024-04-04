@@ -1,11 +1,32 @@
-﻿<MudNavMenu>
-    <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Dashboard</MudNavLink>
-    <MudNavLink Href="https://agusandelsur.gov.ph/" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Language">Agusan del Sur Website</MudNavLink>
-    <MudNavLink Href="/counter" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ExposurePlus1">Counter</MudNavLink>
-    <MudNavLink Href="/weather" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.WbSunny">Weather</MudNavLink>
-    <MudNavGroup Title="Settings" Icon="@Icons.Material.Filled.Settings" Expanded="true">
-        <MudNavLink Href="#" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Person">Users</MudNavLink>
-        <MudNavLink Href="#" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Shield">Security</MudNavLink>
+﻿<MudNavMenu Rounded="true" Margin="Margin.Normal" Class="ma-2 pa-0" Dense="true">
+    <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard" IconColor="Color.Tertiary">Dashboard</MudNavLink>
+    <MudNavLink Href="/employees" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.People" IconColor="Color.Tertiary">Employees</MudNavLink>
+    <MudNavLink Href="/praise-message" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ChatBubble" IconColor="Color.Tertiary">Praise Message</MudNavLink>
+    <MudNavLink Href="/bible-verse" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.MenuBook" IconColor="Color.Tertiary">Bible Verses</MudNavLink>
+    <MudNavLink Href="/files" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Folder" IconColor="Color.Tertiary">Files</MudNavLink>
+    <MudText Class="mt-3" Typo="Typo.subtitle2">External Links</MudText>
+    <MudDivider/>
+    <MudNavLink Href="https://agusandelsur.gov.ph/" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Language" IconColor="Color.Tertiary">Agusan del Sur Website</MudNavLink>
+    <MudNavLink Href="https://mail.pgas.ph/" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Email" IconColor="Color.Tertiary">PGAS Mail</MudNavLink>
+    <MudNavGroup Title="Procurement" Icon="@Icons.Material.Filled.ShoppingCart" Expanded="false" IconColor="Color.Tertiary">
+        <MudNavLink Href="https://pgas.ph/pdm/status" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Document Monitoring</MudNavLink>
+        <MudNavLink Href="https://pgas.ph/eis/wfpsummary" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">WPF Summary</MudNavLink>
+        <MudNavLink Href="https://pgas.ph/epslite/ApprovalPR/wfpDetails#" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Items/WPF</MudNavLink>
+        <MudNavLink Href="https://pgas.ph/pdm/ProcTimelineCalc" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Timeline Calculator</MudNavLink>
+        <MudNavLink Href="https://pgas.ph/spms/calendarofActivities/procurementcalendar" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Proc. Calendar</MudNavLink>
+        <MudNavLink Href="https://pgas.ph/pdm/SuppliersRating" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Suplier Rating</MudNavLink>
     </MudNavGroup>
-    <MudNavLink Href="#" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Info">About</MudNavLink>
+    <MudNavGroup Title="External Tool" Icon="@Icons.Material.Filled.Settings" Expanded="false" IconColor="Color.Tertiary">
+        <MudNavLink Href="https://pgas.ph/paperlessmeeting" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Paperless Meeting</MudNavLink>
+        <MudNavLink Href="https://pgas.ph/hrmis/public/officeutilization" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Performance Rating</MudNavLink>
+        <MudNavLink Href="https://pgas.ph/eomis/public-summary" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">POW Monitoring</MudNavLink>
+        <MudNavLink Href="https://pgas.ph/GIS/ActivityDesign" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Venue Availability</MudNavLink>
+        <MudNavLink Href="https://pgas.ph/eis/ldrrmf" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">LDRRMF Utilization</MudNavLink>
+        <MudNavLink Href="https://pgas.ph/promis3/#!/nbwzrd/mapping" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Project Location</MudNavLink>
+        <MudNavLink Href="https://pgas.ph/promis3/#!/nbwzrd/mapping" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">List of Projects</MudNavLink>
+        <MudNavLink Href="http://192.168.101.57:83/Account/Login?ReturnUrl=%2FReport%2FView%2FTraining%2FProject%2520Profiling%2520Report" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Profiling Report</MudNavLink>
+        <MudNavLink Href="https://pgas.ph/SPMS/home/LPIIDashboard" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">LPII</MudNavLink>
+        <MudNavLink Href="https://pgas.ph/promis3/#!/nbwzrd/home" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Project Status</MudNavLink>
+    </MudNavGroup>
+    <MudNavLink Href="#" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Info" IconColor="Color.Tertiary">About</MudNavLink>
 </MudNavMenu>

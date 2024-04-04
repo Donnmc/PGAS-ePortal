@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ePortal.WebAPI.Models;
+using ePortal.WebAPI.Context;
+using ePortal.WebAPI.DTO;
+using ePortal.WebAPI.Entities;
 
 namespace ePortal.WebAPI.Controllers
 {

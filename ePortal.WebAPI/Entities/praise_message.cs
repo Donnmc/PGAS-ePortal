@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ePortal.WebAPI.Models;
+namespace ePortal.WebAPI.Entities;
 
 public partial class praise_message
 {

@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ePortal.WebAPI", "ePortal.WebAPI\ePortal.WebAPI.csproj", "{DBF12278-05AE-4D6F-9855-0FC57C631CD7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ePortal.WebAPI", "ePortal.WebAPI\ePortal.WebAPI.csproj", "{DBF12278-05AE-4D6F-9855-0FC57C631CD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ePortal.Client", "ePortal.Client\ePortal.Client.csproj", "{BA786EA8-2693-420D-82DF-5B85DF94C310}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ePortal.Client", "ePortal.Client\ePortal.Client.csproj", "{BA786EA8-2693-420D-82DF-5B85DF94C310}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
