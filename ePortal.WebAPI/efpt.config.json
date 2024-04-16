@@ -20,6 +20,18 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[emergency_hotline]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[emergency_hotline_line]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[emergency_hotline_office]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[information_system]",
          "ObjectType": 0
       },
@@ -28,11 +40,35 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[ip_phone_directory]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ip_phone_directory_area]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ip_phone_directory_line]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ip_phone_directory_office]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[praise_message]",
          "ObjectType": 0
       },
       {
          "Name": "[dbo].[v_clustered_information_system]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[dbo].[v_emergency_hotline]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[dbo].[v_ip_phone_directory]",
          "ObjectType": 3
       }
    ],

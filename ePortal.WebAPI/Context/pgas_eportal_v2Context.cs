@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using ePortal.WebAPI.Entities;
 
-namespace ePortal.WebAPI.Context; 
+namespace ePortal.WebAPI.Context;
 
 public partial class pgas_eportal_v2Context : DbContext
 {
@@ -16,13 +16,31 @@ public partial class pgas_eportal_v2Context : DbContext
 
     public virtual DbSet<bible_verses> bible_verses { get; set; }
 
+    public virtual DbSet<emergency_hotline> emergency_hotline { get; set; }
+
+    public virtual DbSet<emergency_hotline_line> emergency_hotline_line { get; set; }
+
+    public virtual DbSet<emergency_hotline_office> emergency_hotline_office { get; set; }
+
     public virtual DbSet<information_system> information_system { get; set; }
 
     public virtual DbSet<information_system_cluster> information_system_cluster { get; set; }
 
+    public virtual DbSet<ip_phone_directory> ip_phone_directory { get; set; }
+
+    public virtual DbSet<ip_phone_directory_area> ip_phone_directory_area { get; set; }
+
+    public virtual DbSet<ip_phone_directory_line> ip_phone_directory_line { get; set; }
+
+    public virtual DbSet<ip_phone_directory_office> ip_phone_directory_office { get; set; }
+
     public virtual DbSet<praise_message> praise_message { get; set; }
 
     public virtual DbSet<v_clustered_information_system> v_clustered_information_system { get; set; }
+
+    public virtual DbSet<v_emergency_hotline> v_emergency_hotline { get; set; }
+
+    public virtual DbSet<v_ip_phone_directory> v_ip_phone_directory { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -32,6 +50,45 @@ public partial class pgas_eportal_v2Context : DbContext
 
             entity.Property(e => e.chapter).HasMaxLength(255);
             entity.Property(e => e.verse).HasMaxLength(255);
+        });
+
+        modelBuilder.Entity<emergency_hotline>(entity =>
+        {
+            entity.Property(e => e.area)
+                .IsRequired()
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.mobile_number)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.line).WithMany(p => p.emergency_hotline)
+                .HasForeignKey(d => d.line_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_emergency_hotline_emergency_hotline_line");
+
+            entity.HasOne(d => d.office).WithMany(p => p.emergency_hotline)
+                .HasForeignKey(d => d.office_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_emergency_hotline_emergency_hotline_office");
+        });
+
+        modelBuilder.Entity<emergency_hotline_line>(entity =>
+        {
+            entity.Property(e => e.line)
+                .IsRequired()
+                .HasMaxLength(20)
+                .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<emergency_hotline_office>(entity =>
+        {
+            entity.Property(e => e.office)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.office_abbreviation)
+                .HasMaxLength(10)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<information_system>(entity =>
@@ -66,6 +123,60 @@ public partial class pgas_eportal_v2Context : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.name)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<ip_phone_directory>(entity =>
+        {
+            entity.Property(e => e.line_number)
+                .IsRequired()
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.office_area)
+                .IsRequired()
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.area).WithMany(p => p.ip_phone_directory)
+                .HasForeignKey(d => d.area_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ip_phone_directory_ip_phone_directory_area");
+
+            entity.HasOne(d => d.line).WithMany(p => p.ip_phone_directory)
+                .HasForeignKey(d => d.line_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ip_phone_directory_ip_phone_directory_line");
+
+            entity.HasOne(d => d.office).WithMany(p => p.ip_phone_directory)
+                .HasForeignKey(d => d.office_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ip_phone_directory_ip_phone_directory_office");
+        });
+
+        modelBuilder.Entity<ip_phone_directory_area>(entity =>
+        {
+            entity.Property(e => e.area)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<ip_phone_directory_line>(entity =>
+        {
+            entity.Property(e => e.line)
+                .IsRequired()
+                .HasMaxLength(20)
+                .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<ip_phone_directory_office>(entity =>
+        {
+            entity.Property(e => e.office)
+                .IsRequired()
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.office_abbreviation)
+                .IsRequired()
                 .HasMaxLength(50)
                 .IsUnicode(false);
         });
@@ -124,6 +235,66 @@ public partial class pgas_eportal_v2Context : DbContext
                 .IsUnicode(false)
                 .HasColumnName("Information System Platform");
             entity.Property(e => e.Information_System___Is_Active_).HasColumnName("Information System - Is Active?");
+        });
+
+        modelBuilder.Entity<v_emergency_hotline>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("v_emergency_hotline");
+
+            entity.Property(e => e.Area)
+                .IsRequired()
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Hotline)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.Line)
+                .IsRequired()
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.Office)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Office_Abbreviation)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("Office Abbreviation");
+        });
+
+        modelBuilder.Entity<v_ip_phone_directory>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("v_ip_phone_directory");
+
+            entity.Property(e => e.Area)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Line)
+                .IsRequired()
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.Line_Number)
+                .IsRequired()
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasColumnName("Line Number");
+            entity.Property(e => e.Office)
+                .IsRequired()
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.Office_Abbreviation)
+                .IsRequired()
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("Office Abbreviation");
+            entity.Property(e => e.Office_Area)
+                .IsRequired()
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("Office Area");
         });
 
         OnModelCreatingPartial(modelBuilder);

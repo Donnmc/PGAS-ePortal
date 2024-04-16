@@ -28,7 +28,7 @@
             <HeaderContent>
                 <MudTh><MudTableSortLabel SortBy="@((BibleVerseDTO x) => x.Verse)">Verse</MudTableSortLabel></MudTh>
                 <MudTh><MudTableSortLabel SortBy="@((BibleVerseDTO x) => x.Chapter)">Chapter</MudTableSortLabel></MudTh>
-                <MudTh><MudT SortBy="@((BibleVerseDTO x) => x.Date)">Date</MudT    ableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="@((BibleVerseDTO x) => x.Date)">Date</MudTableSortLabel></MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd Style="width: 70%" >@context.Verse</MudTd>

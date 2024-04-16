@@ -1,7 +1,10 @@
 ﻿/* Extra Extra Large */
 @media (min-width: 2560px) {
-    .card-size{
+    .four-card {
         width: 18%;
+    }
+    .three-card {
+        width: 22.5%;
     }
 }
 
@@ -10,11 +13,17 @@
     .four-card {
         width: 22.5%;
     }
+    .three-card {
+        width: 30%;
+    }
 }
 
 /* Large */
 @media (min-width: 1280px) and (max-width: 1920px) {
     .four-card {
+        width: 30%;
+    }
+    .three-card {
         width: 30%;
     }
 }
@@ -24,6 +33,9 @@
     .four-card {
         width: 30%;
     }
+    .three-card {
+        width: 45%;
+    }
 }
 
 /* Small */
@@ -31,11 +43,17 @@
     .four-card {
         width: 45%;
     }
+    .three-card {
+        width: 45%;
+    }
 }
 
 /* Extra small */
 @media (max-width: 600px) {
     .four-card {
+        width: 90%;
+    }
+    .three-card {
         width: 90%;
     }
 }

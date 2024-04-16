@@ -1,0 +1,205 @@
+﻿@page "/phone-directory"
+@using System.Text.Json
+
+<MudStack Class="mb-5 mr-5 ml-5 mt-2">
+    <MudTabs Class="pa-0" Outlined="true" Rounded="true" Border="true"
+             ApplyEffectsToContainer="true" PanelClass="pa-6">
+        <MudTabPanel Text="IP Phone Directory" Icon="@Icons.Material.Filled.ContactPhone">
+            @if (ipPhoneDirectory != null && ipPhoneDirectory.Any())
+            {
+                @foreach (var line in ipPhoneDirectory)
+                {
+                    @foreach (var area in line.v_ip_phone_directoryArea)
+                    {
+                        <MudText Class="mt-5" Color="Color.Primary" Typo="Typo.h5" Align="Align.Center">
+                            <b>@area.Area</b>
+                        </MudText>
+                        <MudText Align="Align.Center" Typo="Typo.subtitle1">
+                            @line.Line
+                        </MudText>
+                        <MudDivider />
+                        <MudCardContent Class="d-flex flex-wrap justify-center gap-5">
+                            @foreach (var office in area.v_ip_phone_directoryOffice)
+                            {
+                                <MudCard Elevation="0" Outlined="true" Class="pa-0 four-card align-text-center align-self-start">
+                                    <MudText Class="mt-2" Align="Align.Center">
+                                        <b>@office.Office</b>
+                                    </MudText>
+                                    <MudText Class="mb-2" Align="Align.Center" Typo="Typo.body2" Color="Color.Primary">
+                                        @office.Office_Abbreviation
+                                    </MudText>
+                                    <MudDivider />
+                                    <MudStack Row="true">
+                                        <MudTable Hover="true" Dense="true" Elevation="0" Items="@office.v_ip_phone_directoryOfficeArea" Style="width: 100%">
+                                            <HeaderContent>
+                                                <MudTh>Office</MudTh>
+                                                <MudTh>Extension</MudTh>
+                                            </HeaderContent>
+                                            <RowTemplate>
+                                                <MudTd Datalabel="Office">@context.Office_Area</MudTd>
+                                                <MudTd Datalabel="Extension">@context.Line_Number</MudTd>
+                                            </RowTemplate>
+                                        </MudTable>
+                                    </MudStack>
+                                </MudCard>
+                            }
+                        </MudCardContent>
+                    }
+                }
+            }
+        </MudTabPanel>
+        <MudTabPanel Text="Emergency Hotline" Icon="@Icons.Material.Filled.ContactEmergency">
+            @if (hotlineDirectory != null && hotlineDirectory.Any())
+            {
+                @foreach (var office in hotlineDirectory)
+                {
+                    <MudText Class="mt-5" Color="Color.Primary" Typo="Typo.h5" Align="Align.Center">
+                        <b>@office.Office</b>
+                    </MudText>
+                    <MudText Align="Align.Center" Typo="Typo.subtitle1">
+                        @office.Office_Abbreviation
+                    </MudText>
+                    <MudDivider />
+                    <MudCardContent Class="d-flex flex-wrap justify-center gap-5">
+                        @foreach (var line in office.v_emergency_hotlineLine)
+                        {
+                            <MudCard Elevation="0" Outlined="true" Class="pa-0 three-card align-text-center align-self-start">
+                                <MudText Class="mt-2" Align="Align.Center">
+                                    <b>@line.Line</b>
+                                </MudText>
+                                <MudDivider />
+                                <MudStack Class="d-flex flex-wrap justify-center gap-5 align-center">
+                                    <MudTable Hover="true" Dense="true" Elevation="0" Items="@line.v_emergency_hotlineArea" Style="width: 100%">
+                                        <HeaderContent>
+                                            <MudTh>Area</MudTh>
+                                            <MudTh>Hotline</MudTh>
+                                        </HeaderContent>
+                                        <RowTemplate>
+                                            <MudTd Datalabel="Office">@context.Area</MudTd>
+                                        <MudTd Datalabel="Extension">
+                                            <MudChip Size="Size.Small" Color="Color.Warning" Href="@($"tel:{context.Hotline}")">
+                                                @context.Hotline
+                                            </MudChip>
+                                        </MudTd>
+                                        </RowTemplate>
+                                    </MudTable>
+                                </MudStack>
+                            </MudCard>
+                            }
+                    </MudCardContent>
+                }
+            }
+        </MudTabPanel>
+    </MudTabs>
+</MudStack>
+
+@code {
+    Random random = new Random();
+
+    string GetRandomWidth()
+    {
+        int width = random.Next(50, 100); // Adjust range as needed
+        return $"{width}%";
+    }
+
+    string GetRandomHeight()
+    {
+        int height = random.Next(20, 100); // Adjust range as needed
+        return $"{height}px";
+    }
+
+    public class v_ip_phone_directoryDTO
+    {
+        public string Line { get; set; } = string.Empty;
+
+        public List<v_ip_phone_directoryAreaDTO> v_ip_phone_directoryArea { get; set; }
+    }
+
+    public class v_ip_phone_directoryAreaDTO
+    {
+        public string Area { get; set; }
+        public List<v_ip_phone_directoryOfficeDTO> v_ip_phone_directoryOffice { get; set; }
+
+    }
+
+    public class v_ip_phone_directoryOfficeDTO
+    {
+        public string Office { get; set; }
+        public string Office_Abbreviation { get; set; }
+        public List<v_ip_phone_directoryOfficeAreaDTO> v_ip_phone_directoryOfficeArea { get; set; }
+    }
+
+    public class v_ip_phone_directoryOfficeAreaDTO
+    {
+        public string Office_Area { get; set; }
+        public string Line_Number { get; set; }
+    }
+
+    public class v_emergency_hotlineDTO
+    {
+        public string Office { get; set; }
+
+        public string Office_Abbreviation { get; set; }
+
+        public List<v_emergency_hotlineLineDTO> v_emergency_hotlineLine { get; set; }
+    }
+
+    public class v_emergency_hotlineLineDTO
+    {
+        public string Line { get; set; }
+        public List<v_emergency_hotlineAreaDTO> v_emergency_hotlineArea { get; set; }
+    }
+
+    public class v_emergency_hotlineAreaDTO
+    {
+        public string Area { get; set; }
+
+        public string Hotline { get; set; }
+    }
+
+    private const string API_URL = "https://localhost:7049";
+    private List<v_ip_phone_directoryDTO>? ipPhoneDirectory;
+    private List<v_emergency_hotlineDTO>? hotlineDirectory;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await getIphoneDirectory();
+        await gethotlineDirectory();
+    }
+
+    private async Task getIphoneDirectory()
+    {
+        try
+        {
+            using HttpClient httpClient = new HttpClient();
+            HttpResponseMessage httpResponse = await httpClient.GetAsync(API_URL + "/api/v_ip_phone_directory");
+            httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
+            using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
+            ipPhoneDirectory = await JsonSerializer.DeserializeAsync<List<v_ip_phone_directoryDTO>>(responseStream,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+        catch (HttpRequestException ex)
+        {
+            // Handle exception, log, or display an error message
+            Console.WriteLine($"Error fetching data: {ex.Message}");
+        }
+    }
+
+    private async Task gethotlineDirectory()
+    {
+        try
+        {
+            using HttpClient httpClient = new HttpClient();
+            HttpResponseMessage httpResponse = await httpClient.GetAsync(API_URL + "/api/v_emergency_hotline");
+            httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
+            using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
+            hotlineDirectory = await JsonSerializer.DeserializeAsync<List<v_emergency_hotlineDTO>>(responseStream,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+        catch (HttpRequestException ex)
+        {
+            // Handle exception, log, or display an error message
+            Console.WriteLine($"Error fetching data: {ex.Message}");
+        }
+    }
+}
