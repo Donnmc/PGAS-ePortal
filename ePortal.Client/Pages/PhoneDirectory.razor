@@ -47,6 +47,12 @@
                     }
                 }
             }
+            else
+            {
+                <MudStack Class="d-flex align-center mt-5">
+                    <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+                </MudStack>
+            }
         </MudTabPanel>
         <MudTabPanel Text="Emergency Hotline" Icon="@Icons.Material.Filled.ContactEmergency">
             @if (hotlineDirectory != null && hotlineDirectory.Any())
@@ -77,7 +83,7 @@
                                         <RowTemplate>
                                             <MudTd Datalabel="Office">@context.Area</MudTd>
                                         <MudTd Datalabel="Extension">
-                                            <MudChip Size="Size.Small" Color="Color.Warning" Href="@($"tel:{context.Hotline}")">
+                                            <MudChip Size="Size.Small" Color="Color.Warning" Href="@("tel: "+context.Hotline)">
                                                 @context.Hotline
                                             </MudChip>
                                         </MudTd>
@@ -89,25 +95,17 @@
                     </MudCardContent>
                 }
             }
+            else
+            {
+                <MudStack Class="d-flex align-center mt-5">
+                    <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+                </MudStack>
+            }
         </MudTabPanel>
     </MudTabs>
 </MudStack>
 
 @code {
-    Random random = new Random();
-
-    string GetRandomWidth()
-    {
-        int width = random.Next(50, 100); // Adjust range as needed
-        return $"{width}%";
-    }
-
-    string GetRandomHeight()
-    {
-        int height = random.Next(20, 100); // Adjust range as needed
-        return $"{height}px";
-    }
-
     public class v_ip_phone_directoryDTO
     {
         public string Line { get; set; } = string.Empty;

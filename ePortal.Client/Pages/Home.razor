@@ -23,11 +23,9 @@
     </MudCarousel>
 </MudPaper>
 
-<!--
-Gov and Verse Section
--->
+<!-- Gov and Verse Section -->
 <MudStack Class="flex-wrap justify-center" Row="true">
-    <MudCard Elevation="0" Outlined="true" Style="width: 60%">
+    <MudCard Elevation="0" Outlined="true" Style="width: 61%">
         <MudStack Class="flex-wrap" Style="justify-content: flex-start" Row="true">
             <MudImage Fluid="true" Class="mt-1 ml-1" Width="250" Style="transform: rotateY(180deg);" Src="/Media Files/gov-image.png"></MudImage>
             <MudStack>
@@ -44,24 +42,21 @@ Gov and Verse Section
             </MudStack>
         </MudStack>
     </MudCard>
-    @if (latestVerse != null)
-    {
-        <MudCard Class="d-inline pa-2" Outlined="true" Style="width: 30%">
-            <MudText Typo="Typo.h5">Our Daily Word of God </MudText>
-            <MudDivider />
+    <MudCard Class="d-inline pa-2" Outlined="true" Style="width: 30%">
+        <MudText Typo="Typo.h5">Our Daily Word of God </MudText>
+        <MudDivider />
+        @if (latestVerse != null)
+        {
             <MudText Typo="Typo.subtitle2" Color="Color.Primary">@latestVerse.Chapter</MudText>
             <MudText Typo="Typo.subtitle1">@latestVerse.Verse</MudText>
-        </MudCard>
-    }
-    else
-    {
-        <MudCard Class="d-inline pa-5" Outlined="true" Style="width: 30%">
-            <MudCardContent>
-                <MudSkeleton Width="@GetRandomWidth()" Height="@GetRandomHeight()" />
-                <MudSkeleton Width="@GetRandomWidth()" />
-            </MudCardContent>
-        </MudCard>
-    }
+        }
+        else
+        {
+            <MudStack Class="d-flex align-center mt-5">
+                <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+            </MudStack>
+        }
+    </MudCard>
 </MudStack>
 
 <!--
@@ -81,35 +76,29 @@ Information Systems Section
                     </MudCardContent>
                 </MudCardHeader>
                 <MudDivider />
-                <MudCardContent Class="d-flex flex-wrap justify-center gap-5">
+                <MudCardContent Class="d-flex flex-wrap justify-center gap-3">
                     @foreach (var system in cluster.Information_Systems)
                     {
-                        <MudTooltip Text="@system.Information_System_Name">
+                        if (system.Information_System_Platform == "Web App")
+                        {
                             <MudLink Href="@system.Information_System_Link" Target="_blank" Underline="Underline.None">
-                                @{
-                                    // Determine icon based on platform
-                                    string icon;
-                                    if (system.Information_System_Platform == "Web App")
-                                    {
-                                        icon = Icons.Material.Filled.Language;
-                                    }
-                                    else if (system.Information_System_Platform == "Desktop App")
-                                    {
-                                        icon = Icons.Material.Filled.DesktopWindows;
-                                    }
-                                    else
-                                    {
-                                        // Default icon if platform is neither Web App nor Desktop App
-                                        icon = Icons.Material.Filled.HelpOutline;
-                                    }
-                                }
-                                <MudBadge Bordered="true" Overlap="true" Icon="@icon" Color="Color.Primary">
+                                <MudTooltip Text="@system.Information_System_Name">
+                                    <MudButton DisableElevation Variant="Variant.Filled" StartIcon="@(typeof(Icons.Material.Filled).GetField(system.Information_System_Icon)?.GetValue(null) as string)" Color="Color.Primary" Size="Size.Small">
+                                        @system.Information_System_Abbreviation
+                                    </MudButton>
+                                </MudTooltip>
+                            </MudLink>
+                        }
+                        else if (system.Information_System_Platform == "Desktop App")
+                        {
+                            <MudTooltip Text="@(system.Information_System_Name+" ("+system.Information_System_Platform+")")">
+                                <MudBadge Bordered="true" Overlap="true" Icon="@Icons.Material.Filled.DesktopWindows" Color="Color.Primary">
                                     <MudButton DisableElevation Variant="Variant.Filled" StartIcon="@(typeof(Icons.Material.Filled).GetField(system.Information_System_Icon)?.GetValue(null) as string)" Color="Color.Primary" Size="Size.Small">
                                         @system.Information_System_Abbreviation
                                     </MudButton>
                                 </MudBadge>
-                            </MudLink>
-                        </MudTooltip>
+                            </MudTooltip>
+                        }
                     }
                 </MudCardContent>
             </MudCard>
@@ -117,19 +106,11 @@ Information Systems Section
     }
     else
     {
-        @for (int i = 0; i < 3; i++)
-        {
-            <MudCard Elevation="0" Outlined="true" class="four-card">
-                <MudText Align="Align.Center">
-                    <MudSkeleton Width="@GetRandomWidth()" Height="42px;" />
-                    <hr>
-                </MudText>
-                <MudPaper Elevation="0" Row="true" Class="d-flex flex-wrap justify-center gap-2">
-                    <MudSkeleton Width="@GetRandomWidth()" />
-                    <MudSkeleton Width="@GetRandomWidth()" />
-                </MudPaper>
-            </MudCard>
-        }
+        <MudCard Elevation="0" Outlined="true" Class="four-card">
+            <MudStack Class="d-flex align-center mt-5">
+                <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+            </MudStack>
+        </MudCard>
     }
 </MudStack>
 
