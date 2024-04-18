@@ -1,26 +1,40 @@
 ﻿@page "/phone-directory"
 @using System.Text.Json
 
+<!-- Page Title -->
+<PageTitle>Phone Directory | ePortal | Provincial Government of Agusan del Sur</PageTitle>
+
+<!-- MudStack for layout -->
 <MudStack Class="mb-5 mr-5 ml-5 mt-2">
+    <!-- MudTabs for tabbed content -->
     <MudTabs Class="pa-0" Outlined="true" Rounded="true" Border="true"
              ApplyEffectsToContainer="true" PanelClass="pa-6">
+        <!-- Tab Panel for IP Phone Directory -->
         <MudTabPanel Text="IP Phone Directory" Icon="@Icons.Material.Filled.ContactPhone">
+            <!-- Check if data is available -->
             @if (ipPhoneDirectory != null && ipPhoneDirectory.Any())
             {
+                <!-- Loop through each line -->
                 @foreach (var line in ipPhoneDirectory)
                 {
+                    <!-- Loop through each area in the line -->
                     @foreach (var area in line.v_ip_phone_directoryArea)
                     {
+                        <!-- Display area name -->
                         <MudText Class="mt-5" Color="Color.Primary" Typo="Typo.h5" Align="Align.Center">
                             <b>@area.Area</b>
                         </MudText>
+                        <!-- Display line number -->
                         <MudText Align="Align.Center" Typo="Typo.subtitle1">
                             @line.Line
                         </MudText>
                         <MudDivider />
+                        <!-- MudCardContent for office cards -->
                         <MudCardContent Class="d-flex flex-wrap justify-center gap-5">
+                            <!-- Loop through each office in the area -->
                             @foreach (var office in area.v_ip_phone_directoryOffice)
                             {
+                                <!-- Display office information -->
                                 <MudCard Elevation="0" Outlined="true" Class="pa-0 four-card align-text-center align-self-start">
                                     <MudText Class="mt-2" Align="Align.Center">
                                         <b>@office.Office</b>
@@ -29,12 +43,16 @@
                                         @office.Office_Abbreviation
                                     </MudText>
                                     <MudDivider />
+                                    <!-- MudStack for table -->
                                     <MudStack Row="true">
+                                        <!-- MudTable for office area and extension -->
                                         <MudTable Hover="true" Dense="true" Elevation="0" Items="@office.v_ip_phone_directoryOfficeArea" Style="width: 100%">
+                                            <!-- Table header -->
                                             <HeaderContent>
                                                 <MudTh>Office</MudTh>
                                                 <MudTh>Extension</MudTh>
                                             </HeaderContent>
+                                            <!-- Row template -->
                                             <RowTemplate>
                                                 <MudTd Datalabel="Office">@context.Office_Area</MudTd>
                                                 <MudTd Datalabel="Extension">@context.Line_Number</MudTd>
@@ -49,54 +67,69 @@
             }
             else
             {
+                <!-- Display loading indicator if no data available -->
                 <MudStack Class="d-flex align-center mt-5">
                     <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
                 </MudStack>
             }
         </MudTabPanel>
+        <!-- Tab Panel for Emergency Hotline -->
         <MudTabPanel Text="Emergency Hotline" Icon="@Icons.Material.Filled.ContactEmergency">
+            <!-- Check if hotline data is available -->
             @if (hotlineDirectory != null && hotlineDirectory.Any())
             {
+                <!-- Loop through each office in the hotline directory -->
                 @foreach (var office in hotlineDirectory)
                 {
+                    <!-- Display office name -->
                     <MudText Class="mt-5" Color="Color.Primary" Typo="Typo.h5" Align="Align.Center">
                         <b>@office.Office</b>
                     </MudText>
+                    <!-- Display office abbreviation -->
                     <MudText Align="Align.Center" Typo="Typo.subtitle1">
                         @office.Office_Abbreviation
                     </MudText>
                     <MudDivider />
+                    <!-- MudCardContent for hotline cards -->
                     <MudCardContent Class="d-flex flex-wrap justify-center gap-5">
+                        <!-- Loop through each line in the office -->
                         @foreach (var line in office.v_emergency_hotlineLine)
                         {
+                            <!-- Display hotline information -->
                             <MudCard Elevation="0" Outlined="true" Class="pa-0 three-card align-text-center align-self-start">
                                 <MudText Class="mt-2" Align="Align.Center">
                                     <b>@line.Line</b>
                                 </MudText>
                                 <MudDivider />
+                                <!-- MudStack for hotline table -->
                                 <MudStack Class="d-flex flex-wrap justify-center gap-5 align-center">
+                                    <!-- MudTable for area and hotline -->
                                     <MudTable Hover="true" Dense="true" Elevation="0" Items="@line.v_emergency_hotlineArea" Style="width: 100%">
+                                        <!-- Table header -->
                                         <HeaderContent>
                                             <MudTh>Area</MudTh>
                                             <MudTh>Hotline</MudTh>
                                         </HeaderContent>
+                                        <!-- Row template -->
                                         <RowTemplate>
                                             <MudTd Datalabel="Office">@context.Area</MudTd>
-                                        <MudTd Datalabel="Extension">
-                                            <MudChip Size="Size.Small" Color="Color.Warning" Href="@("tel: "+context.Hotline)">
-                                                @context.Hotline
-                                            </MudChip>
-                                        </MudTd>
+                                            <MudTd Datalabel="Extension">
+                                                <!-- Display hotline as a clickable chip -->
+                                                <MudChip Size="Size.Small" Color="Color.Warning" Href="@("tel: "+context.Hotline)">
+                                                    @context.Hotline
+                                                </MudChip>
+                                            </MudTd>
                                         </RowTemplate>
                                     </MudTable>
                                 </MudStack>
                             </MudCard>
-                            }
+                        }
                     </MudCardContent>
                 }
             }
             else
             {
+                <!-- Display loading indicator if no hotline data available -->
                 <MudStack Class="d-flex align-center mt-5">
                     <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
                 </MudStack>
@@ -106,65 +139,67 @@
 </MudStack>
 
 @code {
+    // API URL for data retrieval
+    private const string API_URL = "https://localhost:7049";
+
+    // DTO classes for IP Phone Directory
     public class v_ip_phone_directoryDTO
     {
         public string Line { get; set; } = string.Empty;
-
         public List<v_ip_phone_directoryAreaDTO> v_ip_phone_directoryArea { get; set; }
     }
 
     public class v_ip_phone_directoryAreaDTO
     {
-        public string Area { get; set; }
+        public string Area { get; set; } = string.Empty;
         public List<v_ip_phone_directoryOfficeDTO> v_ip_phone_directoryOffice { get; set; }
 
     }
 
     public class v_ip_phone_directoryOfficeDTO
     {
-        public string Office { get; set; }
-        public string Office_Abbreviation { get; set; }
+        public string Office { get; set; } = string.Empty;
+        public string Office_Abbreviation { get; set; } = string.Empty;
         public List<v_ip_phone_directoryOfficeAreaDTO> v_ip_phone_directoryOfficeArea { get; set; }
     }
 
     public class v_ip_phone_directoryOfficeAreaDTO
     {
-        public string Office_Area { get; set; }
-        public string Line_Number { get; set; }
+        public string Office_Area { get; set; } = string.Empty;
+        public string Line_Number { get; set; } = string.Empty;
     }
 
+    // DTO classes for Emergency Hotline
     public class v_emergency_hotlineDTO
     {
-        public string Office { get; set; }
-
-        public string Office_Abbreviation { get; set; }
-
+        public string Office { get; set; } = string.Empty;
+        public string Office_Abbreviation { get; set; } = string.Empty;
         public List<v_emergency_hotlineLineDTO> v_emergency_hotlineLine { get; set; }
     }
 
     public class v_emergency_hotlineLineDTO
     {
-        public string Line { get; set; }
+        public string Line { get; set; } = string.Empty;
         public List<v_emergency_hotlineAreaDTO> v_emergency_hotlineArea { get; set; }
     }
 
     public class v_emergency_hotlineAreaDTO
     {
-        public string Area { get; set; }
-
-        public string Hotline { get; set; }
+        public string Area { get; set; } = string.Empty;
+        public string Hotline { get; set; } = string.Empty;
     }
 
-    private const string API_URL = "https://localhost:7049";
     private List<v_ip_phone_directoryDTO>? ipPhoneDirectory;
     private List<v_emergency_hotlineDTO>? hotlineDirectory;
 
+    // Initialization method to fetch data
     protected override async Task OnInitializedAsync()
     {
         await getIphoneDirectory();
         await gethotlineDirectory();
     }
 
+    // Method to fetch IP Phone Directory data
     private async Task getIphoneDirectory()
     {
         try
@@ -183,6 +218,7 @@
         }
     }
 
+    // Method to fetch Emergency Hotline data
     private async Task gethotlineDirectory()
     {
         try

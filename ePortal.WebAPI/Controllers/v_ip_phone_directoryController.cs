@@ -17,13 +17,13 @@ namespace ePortal.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<v_ip_phone_directoryDTO>>> GetPhoneDirectory()
+        public async Task<ActionResult<IEnumerable<v_ip_phone_directoryLineDTO>>> GetPhoneDirectory()
         {
             var directory = await _context.v_ip_phone_directory.ToListAsync();
 
             var mappedPhoneDirectory = directory
                 .GroupBy(d => new { d.Line })
-                .Select(area => new v_ip_phone_directoryDTO
+                .Select(area => new v_ip_phone_directoryLineDTO
                 {
                     //line
                     Line = area.Key.Line,
@@ -42,7 +42,7 @@ namespace ePortal.WebAPI.Controllers
                             Office_Abbreviation = office_area.Key.Office_Abbreviation,
                             v_ip_phone_directoryOfficeArea = office_area
                             .GroupBy(i => new { i.Office_Area, i.Line_Number })
-                            .Select(ip_phone => new v_ip_phone_directoryOfficeAreaDTO
+                            .Select(ip_phone => new v_ip_phone_directoryDTO
                             { 
                                 //ip-phone
                                 Office_Area = ip_phone.Key.Office_Area,

@@ -1,4 +1,6 @@
-﻿     <MudNavMenu Rounded="true" Margin="Margin.Normal" Class="ma-2 pa-0" Dense="true">
+﻿@using System.Text.Json
+
+<MudNavMenu Rounded="true" Margin="Margin.Normal" Class="ma-2 pa-0" Dense="true">
     <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard" IconColor="Color.Tertiary">Dashboard</MudNavLink>
     <MudNavLink Href="/employees" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.People" IconColor="Color.Tertiary">Employees</MudNavLink>
     <MudNavLink Href="/phone-directory" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.LocalPhone" IconColor="Color.Tertiary">Phone Directory</MudNavLink>
@@ -6,28 +8,99 @@
     <MudNavLink Href="/bible-verse" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.MenuBook" IconColor="Color.Tertiary">Bible Verses</MudNavLink>
     <MudNavLink Href="/files" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Folder" IconColor="Color.Tertiary">Files</MudNavLink>
     <MudText Class="mt-3" Typo="Typo.subtitle2">External Links</MudText>
+
+    <!--Dynamic External nav menu-->
     <MudDivider/>
-    <MudNavLink Href="https://agusandelsur.gov.ph/" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Language" IconColor="Color.Tertiary">Agusan del Sur Website</MudNavLink>
-    <MudNavLink Href="https://mail.pgas.ph/" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Email" IconColor="Color.Tertiary">PGAS Mail</MudNavLink>
-    <MudNavGroup Title="Procurement" Icon="@Icons.Material.Filled.ShoppingCart" Expanded="false" IconColor="Color.Tertiary">
-        <MudNavLink Href="https://pgas.ph/pdm/status" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Document Monitoring</MudNavLink>
-        <MudNavLink Href="https://pgas.ph/eis/wfpsummary" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">WPF Summary</MudNavLink>
-        <MudNavLink Href="https://pgas.ph/epslite/ApprovalPR/wfpDetails#" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Items/WPF</MudNavLink>
-        <MudNavLink Href="https://pgas.ph/pdm/ProcTimelineCalc" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Timeline Calculator</MudNavLink>
-        <MudNavLink Href="https://pgas.ph/spms/calendarofActivities/procurementcalendar" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Proc. Calendar</MudNavLink>
-        <MudNavLink Href="https://pgas.ph/pdm/SuppliersRating" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Suplier Rating</MudNavLink>
-    </MudNavGroup>
-    <MudNavGroup Title="External Tool" Icon="@Icons.Material.Filled.Settings" Expanded="false" IconColor="Color.Tertiary">
-        <MudNavLink Href="https://pgas.ph/paperlessmeeting" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Paperless Meeting</MudNavLink>
-        <MudNavLink Href="https://pgas.ph/hrmis/public/officeutilization" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Performance Rating</MudNavLink>
-        <MudNavLink Href="https://pgas.ph/eomis/public-summary" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">POW Monitoring</MudNavLink>
-        <MudNavLink Href="https://pgas.ph/GIS/ActivityDesign" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Venue Availability</MudNavLink>
-        <MudNavLink Href="https://pgas.ph/eis/ldrrmf" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">LDRRMF Utilization</MudNavLink>
-        <MudNavLink Href="https://pgas.ph/promis3/#!/nbwzrd/mapping" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Project Location</MudNavLink>
-        <MudNavLink Href="https://pgas.ph/promis3/#!/nbwzrd/mapping" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">List of Projects</MudNavLink>
-        <MudNavLink Href="http://192.168.101.57:83/Account/Login?ReturnUrl=%2FReport%2FView%2FTraining%2FProject%2520Profiling%2520Report" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Profiling Report</MudNavLink>
-        <MudNavLink Href="https://pgas.ph/SPMS/home/LPIIDashboard" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">LPII</MudNavLink>
-        <MudNavLink Href="https://pgas.ph/promis3/#!/nbwzrd/home" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Project Status</MudNavLink>
-    </MudNavGroup>
-    <MudNavLink Href="#" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Info" IconColor="Color.Tertiary">About</MudNavLink>
+    @if (externalLinks != null && externalLinks.Any())
+    {
+        @foreach (var parentlink in externalLinks)
+        {
+            if (parentlink.Parent_List_Link != null)
+            {
+                <MudNavLink Href="@parentlink.Parent_List_Link" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@(typeof(Icons.Material.Filled).GetField(parentlink.Parent_List_Icon)?.GetValue(null) as string)" IconColor="Color.Tertiary">@parentlink.Parent_List_Name</MudNavLink>
+            }
+            else
+            {
+                <MudNavGroup Title="@parentlink.Parent_List_Name" Icon="@Icons.Material.Filled.Settings" Expanded="false" IconColor="Color.Tertiary">
+                    @foreach (var childlink in parentlink.v_external_linkChildList)
+                    {
+                        if (childlink.Child_List_Name != null)
+                        {
+                            DateTime currentDate = DateTime.UtcNow;
+                            DateTime oneMonthAgo = currentDate.AddMonths(-1);
+                            String newNotification = "New";
+                            if (childlink.Child_List_Date_Created > oneMonthAgo)
+                            {
+                                <MudNavLink Href="@childlink.Child_List_Link" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@(typeof(Icons.Material.Filled).GetField(childlink.Child_List_Icon)?.GetValue(null) as string)" IconColor="Color.Tertiary">                                        
+                                <MudBadge Content="newNotification" Style="width: 87%" Bordered="true" Overlap="true" Color="Color.Secondary">
+                                        @childlink.Child_List_Name
+                                    </MudBadge>
+                                </MudNavLink>
+                            }
+                            else
+                            {
+                                <MudNavLink Href="@childlink.Child_List_Link" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@(typeof(Icons.Material.Filled).GetField(childlink.Child_List_Icon)?.GetValue(null) as string)" IconColor="Color.Tertiary">@childlink.Child_List_Name</MudNavLink>
+                            }
+                        }
+                    }
+                </MudNavGroup>
+            }
+        }
+    }
 </MudNavMenu>
+
+@code {
+    public class v_external_linkParentListDTO
+    {
+        public string Parent_List_Name { get; set; }
+
+        public string Parent_List_Icon { get; set; }
+
+        public string Parent_List_Link { get; set; }
+
+        public DateOnly? Parent_List_Date_Created { get; set; }
+
+        public int? Parent_List_Order { get; set; }
+        public List<v_external_linkChildListDTO> v_external_linkChildList { get; set; }
+    }
+
+    public class v_external_linkChildListDTO
+    {
+        public string Child_List_Name { get; set; }
+
+        public string Child_List_Link { get; set; }
+
+        public string Child_List_Icon { get; set; }
+
+        public DateTime? Child_List_Date_Created { get; set; }
+
+        public int? Child_List_Order { get; set; }
+    }
+
+    private const string API_URL = "https://localhost:7049";
+
+    private List<v_external_linkParentListDTO>? externalLinks;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetexternalLinks();
+    }
+
+    private async Task GetexternalLinks()
+    {
+        try
+        {
+            using HttpClient httpClient = new HttpClient();
+            HttpResponseMessage httpResponse = await httpClient.GetAsync(API_URL + "/api/v_external_link");
+            httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
+            using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
+            externalLinks = await JsonSerializer.DeserializeAsync<List<v_external_linkParentListDTO>>(responseStream,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+        catch (HttpRequestException ex)
+        {
+            // Handle exception, log, or display an error message
+            Console.WriteLine($"Error fetching data: {ex.Message}");
+        }
+    }
+}

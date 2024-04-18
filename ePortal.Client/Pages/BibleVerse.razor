@@ -3,51 +3,68 @@
 @using System.Text.Json
 @using System.Threading.Tasks
 
+<!-- Page Title -->
+<PageTitle>Bible Verses | ePortal | Provincial Government of Agusan del Sur</PageTitle>
+
+<!-- Display latest Bible verse -->
 <MudStack Class="ma-5 justify-center" Style="width: 400px">
     @if (latestVerse != null)
     {
+        <!-- Display latest Bible verse in a MudCard -->
         <MudCard Outlined="true">
             <MudCardContent>
                 <MudText>@latestVerse.Chapter</MudText>
                 <MudText Typo="Typo.body2">@latestVerse.Verse</MudText>
             </MudCardContent>
             <MudCardActions>
+                <!-- Display date of the latest verse -->
                 <MudButton Variant="Variant.Text" Color="Color.Primary">@latestVerse.Date?.ToString("yyyy-MM-dd")</MudButton>
             </MudCardActions>
         </MudCard>
     }
     else
     {
+        <!-- Display a loading indicator if data is not available -->
         <MudProgressCircular Color="Color.Default" Indeterminate="true" />
     }
 </MudStack>
+
+<!-- Display all Bible verses in a MudTable -->
 <MudStack Class="ma-5">
     @if (getAllVerses != null)
     {
+        <!-- Display MudTable if data is available -->
         <MudTable Style="overflow-x: auto" Dense="true" Striped="true" Elevation="0" Outlined="true" Items="getAllVerses" Hover="true" SortLabel="Sort By" Class="flex-grow-1">
             <HeaderContent>
+                <!-- Define table column headers for Verse, Chapter, and Date -->
                 <MudTh><MudTableSortLabel SortBy="@((BibleVerseDTO x) => x.Verse)">Verse</MudTableSortLabel></MudTh>
                 <MudTh><MudTableSortLabel SortBy="@((BibleVerseDTO x) => x.Chapter)">Chapter</MudTableSortLabel></MudTh>
                 <MudTh><MudTableSortLabel SortBy="@((BibleVerseDTO x) => x.Date)">Date</MudTableSortLabel></MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd Style="width: 70%" >@context.Verse</MudTd>
+                <!-- Define table row template for Verse, Chapter, and Date -->
+                <MudTd Style="width: 70%">@context.Verse</MudTd>
                 <MudTd Style="width: 20%">@context.Chapter</MudTd>
                 <MudTd Style="width: 10%">@context.Date?.ToString("yyyy-MM-dd")</MudTd>
             </RowTemplate>
             <PagerContent>
+                <!-- Display table pager for pagination -->
                 <MudTablePager PageSizeOptions="new int[] { 10, 25, 50, 100 }" />
             </PagerContent>
         </MudTable>
     }
     else
     {
+        <!-- Display a loading indicator if data is not available -->
         <MudProgressCircular Color="Color.Default" Indeterminate="true" />
     }
 </MudStack>
 
 @code {
+    // Get API URL
+    private const string API_URL = "https://localhost:7049";
 
+    // DTO class for individual Bible verses
     public class BibleVerseDTO
     {
         public string Verse { get; set; } = string.Empty;
@@ -56,6 +73,7 @@
         public bool? Archive { get; set; }
     }
 
+    // DTO class for the latest Bible verse
     public class BibleVerseLatestDTO
     {
         public string Verse { get; set; } = string.Empty;
@@ -63,18 +81,16 @@
         public DateTime? Date { get; set; }
     }
 
-    private const string API_URL = "https://localhost:7049";
-
-    private List<BibleVerseDTO>? getAllVerses;
-    private BibleVerseLatestDTO? latestVerse;
+    private List<BibleVerseDTO>? getAllVerses; // List to store all Bible verses
+    private BibleVerseLatestDTO? latestVerse; // Latest Bible verse
 
     protected override async Task OnInitializedAsync()
     {
-        await RefreshLatestVerse();
-        await GetAllVerses();
+        await RefreshLatestVerse(); // Fetch the latest Bible verse
+        await GetAllVerses(); // Fetch all Bible verses
     }
 
-
+    // Method to fetch all Bible verses from the API
     private async Task GetAllVerses()
     {
         try
@@ -93,6 +109,7 @@
         }
     }
 
+    // Method to refresh the latest Bible verse from the API
     private async Task RefreshLatestVerse()
     {
         try

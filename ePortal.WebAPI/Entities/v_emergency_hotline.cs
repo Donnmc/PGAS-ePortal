@@ -7,11 +7,11 @@ namespace ePortal.WebAPI.Entities;
 
 public partial class v_emergency_hotline
 {
-    public string Line { get; set; }
-
     public string Office { get; set; }
 
     public string Office_Abbreviation { get; set; }
+
+    public string Line { get; set; }
 
     public string Area { get; set; }
 

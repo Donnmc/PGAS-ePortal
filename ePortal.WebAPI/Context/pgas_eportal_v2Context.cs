@@ -22,6 +22,10 @@ public partial class pgas_eportal_v2Context : DbContext
 
     public virtual DbSet<emergency_hotline_office> emergency_hotline_office { get; set; }
 
+    public virtual DbSet<external_link_child> external_link_child { get; set; }
+
+    public virtual DbSet<external_link_parent> external_link_parent { get; set; }
+
     public virtual DbSet<information_system> information_system { get; set; }
 
     public virtual DbSet<information_system_cluster> information_system_cluster { get; set; }
@@ -39,6 +43,8 @@ public partial class pgas_eportal_v2Context : DbContext
     public virtual DbSet<v_clustered_information_system> v_clustered_information_system { get; set; }
 
     public virtual DbSet<v_emergency_hotline> v_emergency_hotline { get; set; }
+
+    public virtual DbSet<v_external_link> v_external_link { get; set; }
 
     public virtual DbSet<v_ip_phone_directory> v_ip_phone_directory { get; set; }
 
@@ -88,6 +94,36 @@ public partial class pgas_eportal_v2Context : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.office_abbreviation)
                 .HasMaxLength(10)
+                .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<external_link_child>(entity =>
+        {
+            entity.HasKey(e => e.id).HasName("PK_external_links");
+
+            entity.Property(e => e.icon)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.link).IsUnicode(false);
+            entity.Property(e => e.name)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.parent).WithMany(p => p.external_link_child)
+                .HasForeignKey(d => d.parent_id)
+                .HasConstraintName("FK_external_link_child_external_link_parent");
+        });
+
+        modelBuilder.Entity<external_link_parent>(entity =>
+        {
+            entity.HasKey(e => e.id).HasName("PK_external_link_parent1");
+
+            entity.Property(e => e.icon)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.link).IsUnicode(false);
+            entity.Property(e => e.name)
+                .HasMaxLength(100)
                 .IsUnicode(false);
         });
 
@@ -261,6 +297,40 @@ public partial class pgas_eportal_v2Context : DbContext
                 .HasMaxLength(10)
                 .IsUnicode(false)
                 .HasColumnName("Office Abbreviation");
+        });
+
+        modelBuilder.Entity<v_external_link>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("v_external_link");
+
+            entity.Property(e => e.Child_List_Date_Created).HasColumnName("Child List Date Created");
+            entity.Property(e => e.Child_List_Icon)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("Child List Icon");
+            entity.Property(e => e.Child_List_Link)
+                .IsUnicode(false)
+                .HasColumnName("Child List Link");
+            entity.Property(e => e.Child_List_Name)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("Child List Name");
+            entity.Property(e => e.Child_List_Order).HasColumnName("Child List Order");
+            entity.Property(e => e.Parent_List_Date_Created).HasColumnName("Parent List Date Created");
+            entity.Property(e => e.Parent_List_Icon)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("Parent List Icon");
+            entity.Property(e => e.Parent_List_Link)
+                .IsUnicode(false)
+                .HasColumnName("Parent List Link");
+            entity.Property(e => e.Parent_List_Name)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("Parent List Name");
+            entity.Property(e => e.Parent_List_Order).HasColumnName("Parent List Order");
         });
 
         modelBuilder.Entity<v_ip_phone_directory>(entity =>
