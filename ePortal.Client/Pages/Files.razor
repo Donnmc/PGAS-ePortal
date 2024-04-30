@@ -1,5 +1,7 @@
 ﻿@page "/files"
 @inject ISnackbar Snackbar
+@using Microsoft.AspNetCore.Components.Forms
+@using System.IO
 
 <PageTitle>File Management | ePortal | Provincial Government of Agusan del Sur</PageTitle>
 <MudStack Class="ma-5">
@@ -59,10 +61,10 @@
 </MudStack>
 
 @code {
-#nullable enable
     private const string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full z-10";
     private string _dragClass = DefaultDragClass;
     private readonly List<string> _fileNames = new();
+    private IReadOnlyList<IBrowserFile>? _files;
 
     private async Task Clear()
     {
@@ -74,23 +76,46 @@
     private void OnInputFileChanged(InputFileChangeEventArgs e)
     {
         ClearDragClass();
-        var files = e.GetMultipleFiles();
-        foreach (var file in files)
+        _files = e.GetMultipleFiles();
+        foreach (var file in _files)
         {
             _fileNames.Add(file.Name);
         }
     }
 
-    private void Upload()
+    private async Task Upload()
     {
-        // Upload the files here
+        var uploadFolderPath = @"C:\Users\jonis\source\repos\PGAS ePortal\ePortal.Client\wwwroot\Media Files";
+
+        // Check if the upload folder exists, create it if not
+        if (!Directory.Exists(uploadFolderPath))
+        {
+            Directory.CreateDirectory(uploadFolderPath);
+        }
+
+        foreach (var file in _files)
+        {
+            var fileName = Path.GetFileName(file.Name);
+            var filePath = Path.Combine(uploadFolderPath, fileName);
+
+            // Save the actual file content
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.OpenReadStream().CopyToAsync(fileStream);
+            }
+        }
+
         Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
-        Snackbar.Add("TODO: Upload your files!");
+        Snackbar.Add("Files uploaded successfully!");
     }
 
     private void SetDragClass()
-        => _dragClass = $"{DefaultDragClass} mud-border-primary";
+    {
+        _dragClass = $"{DefaultDragClass} mud-border-primary";
+    }
 
     private void ClearDragClass()
-        => _dragClass = DefaultDragClass;
+    {
+        _dragClass = DefaultDragClass;
+    }
 }

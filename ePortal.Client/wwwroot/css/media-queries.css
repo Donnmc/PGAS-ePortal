@@ -6,6 +6,22 @@
     .three-card {
         width: 22.5%;
     }
+    .two-thirds-card {
+        width: 61%;
+    }
+
+    .one-thirds-card {
+        width: 30%;
+    }
+    .gov-image {
+        width: 32.5%;
+    }
+    .gov-details {
+        width: 62.5%;
+    }
+    .employee-card {
+        width: 18%;
+    }
 }
 
 /* Extra Large */
@@ -15,6 +31,23 @@
     }
     .three-card {
         width: 30%;
+    }
+    .two-thirds-card {
+        width: 61%;
+    }
+
+    .one-thirds-card {
+        width: 30%;
+    }
+    .gov-image {
+        width: 32.5%;
+    }
+
+    .gov-details {
+        width: 62.5%;
+    }
+    .employee-card {
+        width: 22.5%;
     }
 }
 
@@ -26,6 +59,23 @@
     .three-card {
         width: 30%;
     }
+    .two-thirds-card {
+        width: 61%;
+    }
+
+    .one-thirds-card {
+        width: 30%;
+    }
+    .gov-image {
+        width: 32.5%;
+    }
+
+    .gov-details {
+        width: 62.5%;
+    }
+    .employee-card {
+        width: 22.5%;
+    }
 }
 
 /* Medium */
@@ -35,6 +85,26 @@
     }
     .three-card {
         width: 45%;
+    }
+    .two-thirds-card {
+        width: 90%;
+    }
+
+    .one-thirds-card {
+        width: 90%;
+    }
+    .gov-image {
+        width: 32.5%;
+    }
+
+    .gov-details {
+        width: 62.5%;
+    }
+    .employee-card {
+        width: 45%;
+    }
+    .employee-card {
+        width: 30%;
     }
 }
 
@@ -46,6 +116,23 @@
     .three-card {
         width: 45%;
     }
+    .two-thirds-card {
+        width: 90%;
+    }
+
+    .one-thirds-card {
+        width: 90%;
+    }
+    .gov-image {
+        width: 32.5%;
+    }
+
+    .gov-details {
+        width: 62.5%;
+    }
+    .employee-card {
+        width: 45%;
+    }
 }
 
 /* Extra small */
@@ -55,5 +142,20 @@
     }
     .three-card {
         width: 90%;
+    }
+    .two-thirds-card {
+        width: 90%;
+    }
+    .one-thirds-card {
+        width: 90%;
+    }
+    .gov-image {
+        width: 90%;
+    }
+    .gov-details {
+        width: 90%;
+    }
+    .employee-card {
+        width: 45%;
     }
 }

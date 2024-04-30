@@ -1,8 +1,7 @@
 ﻿{
    "CodeGenerationMode": 4,
-   "ContextClassName": "pgas_eportal_v2Context",
+   "ContextClassName": "pmisContext",
    "ContextNamespace": null,
-   "DefaultDacpacSchema": null,
    "FilterSchemas": false,
    "IncludeConnectionString": false,
    "ModelNamespace": "Entities",
@@ -16,75 +15,11 @@
    "T4TemplatePath": null,
    "Tables": [
       {
-         "Name": "[dbo].[bible_verses]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[emergency_hotline]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[emergency_hotline_line]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[emergency_hotline_office]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[external_link_child]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[external_link_parent]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[information_system]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[information_system_cluster]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[ip_phone_directory]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[ip_phone_directory_area]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[ip_phone_directory_line]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[ip_phone_directory_office]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[praise_message]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[v_clustered_information_system]",
-         "ObjectType": 3
-      },
-      {
-         "Name": "[dbo].[v_emergency_hotline]",
-         "ObjectType": 3
-      },
-      {
-         "Name": "[dbo].[v_external_link]",
-         "ObjectType": 3
-      },
-      {
-         "Name": "[dbo].[v_ip_phone_directory]",
+         "Name": "[dbo].[m_vwGetAllEmployee_Minified]",
          "ObjectType": 3
       }
    ],
-   "UiHint": "dmd-joni.PGAS_ePortal_v2.dbo",
+   "UiHint": null,
    "UncountableWords": null,
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": true,

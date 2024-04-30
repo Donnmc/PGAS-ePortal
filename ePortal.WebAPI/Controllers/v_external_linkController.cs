@@ -33,16 +33,15 @@ namespace ePortal.WebAPI.Controllers
                     Parent_List_Date_Created = parent.Key.Parent_List_Date_Created,
                     Parent_List_Order = parent.Key.Parent_List_Order,
                     v_external_linkChildList = parent
-                    .GroupBy(c => new { c.Child_List_Name, c.Child_List_Icon, c.Child_List_Link, c.Child_List_Date_Created, c.Child_List_Order})
-                    .OrderBy(c => c.Key.Child_List_Order)
+                    .OrderBy(c => c.Child_List_Order)
                     .Select(child => new v_external_linkChildListDTO
                     {
                         //child
-                        Child_List_Name = child.Key.Child_List_Name,
-                        Child_List_Icon = child.Key.Child_List_Icon,
-                        Child_List_Link = child.Key.Child_List_Link,
-                        Child_List_Date_Created = child.Key.Child_List_Date_Created,
-                        Child_List_Order = child.Key.Child_List_Order
+                        Child_List_Name = child.Child_List_Name,
+                        Child_List_Icon = child.Child_List_Icon,
+                        Child_List_Link = child.Child_List_Link,
+                        Child_List_Date_Created = child.Child_List_Date_Created,
+                        Child_List_Order = child.Child_List_Order
                     }).ToList()
                 }).ToList();
 

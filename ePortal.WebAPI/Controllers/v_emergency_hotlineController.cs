@@ -35,12 +35,11 @@ namespace ePortal.WebAPI.Controllers
                         //line
                         Line = line.Key.Line,
                         v_emergency_hotlineArea = line
-                        .GroupBy(a => new { a.Area, a.Hotline })
                         .Select(hotline => new v_emergency_hotlineDTO
                         {
                             //hotline
-                            Area = hotline.Key.Area,
-                            Hotline = hotline.Key.Hotline
+                            Area = hotline.Area,
+                            Hotline = hotline.Hotline
                         }).ToList()
                     }).ToList()
                 }).ToList();

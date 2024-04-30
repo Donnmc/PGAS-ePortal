@@ -11,41 +11,55 @@
 
     <!--Dynamic External nav menu-->
     <MudDivider/>
+            <!-- Check if data is available -->
     @if (externalLinks != null && externalLinks.Any())
     {
-        @foreach (var parentlink in externalLinks)
+        @if (externalLinks != null && externalLinks.Any())
         {
-            if (parentlink.Parent_List_Link != null)
+            @foreach (var parentlink in externalLinks)
             {
-                <MudNavLink Href="@parentlink.Parent_List_Link" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@(typeof(Icons.Material.Filled).GetField(parentlink.Parent_List_Icon)?.GetValue(null) as string)" IconColor="Color.Tertiary">@parentlink.Parent_List_Name</MudNavLink>
-            }
-            else
-            {
-                <MudNavGroup Title="@parentlink.Parent_List_Name" Icon="@Icons.Material.Filled.Settings" Expanded="false" IconColor="Color.Tertiary">
-                    @foreach (var childlink in parentlink.v_external_linkChildList)
-                    {
-                        if (childlink.Child_List_Name != null)
+                if (parentlink.Parent_List_Link != null)
+                {
+                    <MudNavLink Href="@parentlink.Parent_List_Link" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@(typeof(Icons.Material.Filled).GetField(parentlink.Parent_List_Icon)?.GetValue(null) as string)" IconColor="Color.Tertiary">@parentlink.Parent_List_Name</MudNavLink>
+                }
+                else
+                {
+                    <MudNavGroup Title="@parentlink.Parent_List_Name" Icon="@Icons.Material.Filled.Settings" Expanded="false" IconColor="Color.Tertiary">
+                        @foreach (var childlink in parentlink.v_external_linkChildList)
                         {
-                            DateTime currentDate = DateTime.UtcNow;
-                            DateTime oneMonthAgo = currentDate.AddMonths(-1);
-                            String newNotification = "New";
-                            if (childlink.Child_List_Date_Created > oneMonthAgo)
+                            if (childlink.Child_List_Name != null)
                             {
-                                <MudNavLink Href="@childlink.Child_List_Link" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@(typeof(Icons.Material.Filled).GetField(childlink.Child_List_Icon)?.GetValue(null) as string)" IconColor="Color.Tertiary">                                        
-                                <MudBadge Content="newNotification" Style="width: 87%" Bordered="true" Overlap="true" Color="Color.Secondary">
-                                        @childlink.Child_List_Name
-                                    </MudBadge>
-                                </MudNavLink>
-                            }
-                            else
-                            {
-                                <MudNavLink Href="@childlink.Child_List_Link" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@(typeof(Icons.Material.Filled).GetField(childlink.Child_List_Icon)?.GetValue(null) as string)" IconColor="Color.Tertiary">@childlink.Child_List_Name</MudNavLink>
+                                DateTime currentDate = DateTime.UtcNow;
+                                DateTime oneMonthAgo = currentDate.AddMonths(-1);
+                                String newNotification = "New";
+                                if (childlink.Child_List_Date_Created > oneMonthAgo)
+                                {
+                                    <MudNavLink Href="@childlink.Child_List_Link" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@(typeof(Icons.Material.Filled).GetField(childlink.Child_List_Icon)?.GetValue(null) as string)" IconColor="Color.Tertiary">                                        
+                                    <MudBadge Content="newNotification" Style="width: 87%" Bordered="true" Overlap="true" Color="Color.Secondary">
+                                            @childlink.Child_List_Name
+                                        </MudBadge>
+                                    </MudNavLink>
+                                }
+                                else
+                                {
+                                    <MudNavLink Href="@childlink.Child_List_Link" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@(typeof(Icons.Material.Filled).GetField(childlink.Child_List_Icon)?.GetValue(null) as string)" IconColor="Color.Tertiary">@childlink.Child_List_Name</MudNavLink>
+                                }
                             }
                         }
-                    }
-                </MudNavGroup>
+                    </MudNavGroup>
+                }
             }
         }
+    }
+    else
+    {
+        <MudStack Class="pl-5 pt-2" Spacing="2">
+            <MudSkeleton Width="50%" />
+            <MudSkeleton Width="35%" />
+            <MudSkeleton Width="60%" />
+            <MudSkeleton Width="57%" />
+            <MudSkeleton Width="80%" />
+        </MudStack>
     }
 </MudNavMenu>
 

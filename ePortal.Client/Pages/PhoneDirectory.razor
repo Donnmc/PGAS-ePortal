@@ -139,20 +139,20 @@
 </MudStack>
 
 @code {
-    // API URL for data retrieval
-    private const string API_URL = "https://localhost:7049";
+    // Get API URL
+    private string API_URL = APIVariable.PGASePortalAPI;
 
     // DTO classes for IP Phone Directory
     public class v_ip_phone_directoryDTO
     {
         public string Line { get; set; } = string.Empty;
-        public List<v_ip_phone_directoryAreaDTO> v_ip_phone_directoryArea { get; set; }
+        public List<v_ip_phone_directoryAreaDTO>? v_ip_phone_directoryArea { get; set; }
     }
 
     public class v_ip_phone_directoryAreaDTO
     {
         public string Area { get; set; } = string.Empty;
-        public List<v_ip_phone_directoryOfficeDTO> v_ip_phone_directoryOffice { get; set; }
+        public List<v_ip_phone_directoryOfficeDTO>? v_ip_phone_directoryOffice { get; set; }
 
     }
 
@@ -160,7 +160,7 @@
     {
         public string Office { get; set; } = string.Empty;
         public string Office_Abbreviation { get; set; } = string.Empty;
-        public List<v_ip_phone_directoryOfficeAreaDTO> v_ip_phone_directoryOfficeArea { get; set; }
+        public List<v_ip_phone_directoryOfficeAreaDTO>? v_ip_phone_directoryOfficeArea { get; set; }
     }
 
     public class v_ip_phone_directoryOfficeAreaDTO
@@ -174,13 +174,13 @@
     {
         public string Office { get; set; } = string.Empty;
         public string Office_Abbreviation { get; set; } = string.Empty;
-        public List<v_emergency_hotlineLineDTO> v_emergency_hotlineLine { get; set; }
+        public List<v_emergency_hotlineLineDTO>? v_emergency_hotlineLine { get; set; }
     }
 
     public class v_emergency_hotlineLineDTO
     {
         public string Line { get; set; } = string.Empty;
-        public List<v_emergency_hotlineAreaDTO> v_emergency_hotlineArea { get; set; }
+        public List<v_emergency_hotlineAreaDTO>? v_emergency_hotlineArea { get; set; }
     }
 
     public class v_emergency_hotlineAreaDTO

@@ -41,12 +41,11 @@ namespace ePortal.WebAPI.Controllers
                             Office = office_area.Key.Office,
                             Office_Abbreviation = office_area.Key.Office_Abbreviation,
                             v_ip_phone_directoryOfficeArea = office_area
-                            .GroupBy(i => new { i.Office_Area, i.Line_Number })
                             .Select(ip_phone => new v_ip_phone_directoryDTO
                             { 
                                 //ip-phone
-                                Office_Area = ip_phone.Key.Office_Area,
-                                Line_Number = ip_phone.Key.Line_Number
+                                Office_Area = ip_phone.Office_Area,
+                                Line_Number = ip_phone.Line_Number
                             }).ToList()
                         }).ToList()
                     }).ToList()

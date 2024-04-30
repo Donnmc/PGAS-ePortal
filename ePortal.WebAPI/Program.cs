@@ -9,11 +9,19 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//SQL Connection
+//SQL Connection pgas_eportal_v2
 builder.Services.AddDbContext<ePortal.WebAPI.Context.pgas_eportal_v2Context>(
     options =>
     {
         options.UseSqlServer(builder.Configuration.GetConnectionString("PGAS_ePortal_v2"));
+    }
+    );
+
+//SQL Connection pmisContext
+builder.Services.AddDbContext<ePortal.WebAPI.Context.pmisContext>(
+    options =>
+    {
+        options.UseSqlServer(builder.Configuration.GetConnectionString("PMIS"));
     }
     );
 
