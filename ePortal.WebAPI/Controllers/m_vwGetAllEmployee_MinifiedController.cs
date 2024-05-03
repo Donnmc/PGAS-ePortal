@@ -21,34 +21,37 @@ namespace ePortal.WebAPI.Controllers
         {
             var employee = await _context.m_vwGetAllEmployee_Minified.ToListAsync();
 
+            var statusOrder = new[] {
+                "Elected",
+                "Permanent",
+                "Casual",
+                "Job Order",
+                "Contract of Service",
+                "Coterminous",
+                "Temporary",
+                "Detailed"
+            };
+
             var mappedEmployee = employee
                 .Where(o => o.isactive == true)
-                .GroupBy(o => new
-                {
-                    o.OfficeName,
-                    o.OfficeAbbr,
-                    o.EmpName,
-                    o.SwipeId,
-                    o.eid,
-                    o.Position,
-                    o.SG,
-                    o.Status,
-                    o.isactive
-                })
-                .OrderBy(o => o.Key.OfficeName).ThenByDescending(e => e.Key.SG).ThenByDescending(e => e.Key.Status)
+                .OrderBy(o => o.OfficeName) // Order by OfficeName
+                .ThenBy(e =>  // Order statuses in the desired order (descending)
+                    Array.IndexOf(statusOrder, e.Status) // Get index based on the order
+                )
+                .ThenByDescending(e => e.SG) // Order by SG (descending)
                 .Select(office => new m_vwGetAllEmployee_MinifiedDTO
                 {
                     //Office
-                    OfficeName = office.Key.OfficeName,
-                    OfficeAbbr = office.Key.OfficeAbbr,
+                    OfficeName = office.OfficeName,
+                    OfficeAbbr = office.OfficeAbbr,
                     //Employee
-                    EmpName = office.Key.EmpName,
-                    SwipID = office.Key.SwipeId,
-                    eid = office.Key.eid,
-                    Position = office.Key.Position,
-                    SG = office.Key.SG,
-                    Status = office.Key.Status,
-                    isactive = office.Key.isactive
+                    EmpName = office.EmpName,
+                    SwipID = office.SwipeId,
+                    eid = office.eid,
+                    Position = office.Position,
+                    SG = office.SG,
+                    Status = office.Status,
+                    isactive = office.isactive
                 }).ToList();
 
             return mappedEmployee;
@@ -56,69 +59,55 @@ namespace ePortal.WebAPI.Controllers
 
         [HttpGet("query")]
         public async Task<ActionResult<IEnumerable<m_vwGetAllEmployee_MinifiedDTO>>> SearchEmployees(
-        string searchOfficeName = null,
-        string searchOfficeAbbr = null,
-        string searchEmpName = null,
-        string searchSwipID = null)
+        string? searchDetails = null)
         {
             var query = _context.m_vwGetAllEmployee_Minified.AsQueryable();
 
-            // Apply search filters
-            if (!string.IsNullOrEmpty(searchOfficeName))
+            if (!string.IsNullOrEmpty(searchDetails))
             {
-                query = query.Where(e => e.OfficeName.Contains(searchOfficeName));
-            }
-
-            if (!string.IsNullOrEmpty(searchOfficeAbbr))
-            {
-                query = query.Where(e => e.OfficeAbbr.Contains(searchOfficeAbbr));
-            }
-
-            if (!string.IsNullOrEmpty(searchEmpName))
-            {
-                query = query.Where(e => e.EmpName.Contains(searchEmpName));
-            }
-
-            if (!string.IsNullOrEmpty(searchSwipID))
-            {
-                query = query.Where(e => e.SwipeId.Contains(searchSwipID));
+                query = query.Where(e =>
+                    e.OfficeName.Contains(searchDetails) ||
+                    e.OfficeAbbr.Contains(searchDetails) ||
+                    e.Position.Contains(searchDetails) ||
+                    e.EmpName.Contains(searchDetails) ||
+                    e.SwipeId.Contains(searchDetails));
             }
 
             var employee = await query.Where(e => e.isactive == true).ToListAsync();
 
+            var statusOrder = new[] {
+                "Elected",
+                "Permanent",
+                "Casual",
+                "Job Order",
+                "Contract of Service",
+                "Coterminous",
+                "Temporary",
+                "Detailed"
+            };
             var mappedEmployee = employee
                 .Where(o => o.isactive == true)
-                .GroupBy(o => new
-                {
-                    o.OfficeName,
-                    o.OfficeAbbr,
-                    o.EmpName,
-                    o.SwipeId,
-                    o.eid,
-                    o.Position,
-                    o.SG,
-                    o.Status,
-                    o.isactive
-                })
-                .OrderBy(o => o.Key.OfficeName).OrderByDescending(e => e.Key.SG).OrderByDescending(e => e.Key.Status)
+                .OrderBy(o => o.OfficeName) // Order by OfficeName
+                .ThenBy(e =>  // Order statuses in the desired order (descending)
+                    Array.IndexOf(statusOrder, e.Status) // Get index based on the order
+                )
+                .ThenByDescending(e => e.SG) // Order by SG (descending)
                 .Select(office => new m_vwGetAllEmployee_MinifiedDTO
                 {
                     //Office
-                    OfficeName = office.Key.OfficeName,
-                    OfficeAbbr = office.Key.OfficeAbbr,
+                    OfficeName = office.OfficeName,
+                    OfficeAbbr = office.OfficeAbbr,
                     //Employee
-                    EmpName = office.Key.EmpName,
-                    SwipID = office.Key.SwipeId,
-                    eid = office.Key.eid,
-                    Position = office.Key.Position,
-                    SG = office.Key.SG,
-                    Status = office.Key.Status,
-                    isactive = office.Key.isactive
+                    EmpName = office.EmpName,
+                    SwipID = office.SwipeId,
+                    eid = office.eid,
+                    Position = office.Position,
+                    SG = office.SG,
+                    Status = office.Status,
+                    isactive = office.isactive
                 }).ToList();
 
             return mappedEmployee;
         }
-
-
     }
 }

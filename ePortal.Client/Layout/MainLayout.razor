@@ -4,19 +4,19 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-        <MudAppBar Elevation="0">
-                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-            <MudImage Fluid="true" Width="200" Src="Objects/pgas eportal.webp"></MudImage>
-            <MudSpacer />
-            <MudIconButton Icon="@Icons.Material.Filled.Email" Color="Color.Tertiary" />
-            <MudIconButton Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Tertiary" />
-        </MudAppBar>
-        <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="0">
-            <NavMenu />
-        </MudDrawer>
-        <MudMainContent>
-            @Body
-        </MudMainContent>
+    <MudAppBar Elevation="0">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudImage Fluid="true" Width="200" Src="Objects/pgas eportal.webp"></MudImage>
+        <MudSpacer />
+        <MudIconButton Icon="@Icons.Material.Filled.Email" Color="Color.Tertiary" />
+        <MudIconButton Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Tertiary" />
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="0">
+        <NavMenu />
+    </MudDrawer>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
 </MudLayout>
 
 @code {
