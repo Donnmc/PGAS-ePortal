@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject IDialogService DialogService
 <MudThemeProvider Theme="PGASTheme" DefaultScrollbar="true" />
 <MudDialogProvider />
 <MudSnackbarProvider />
@@ -8,11 +9,16 @@
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudImage Fluid="true" Width="200" Src="Objects/pgas eportal.webp"></MudImage>
         <MudSpacer />
-        <MudIconButton Icon="@Icons.Material.Filled.Email" Color="Color.Tertiary" />
-        <MudIconButton Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Tertiary" />
+        <MudBadge Icon="@Icons.Material.Filled.Login" Origin="Origin.CenterLeft" Style="z-index: 1; margin-top: -5px" Bordered="true" Overlap="true" Color="Color.Primary">
+            <MudIconButton Class="pa-0" Size="Size.Large" OnClick="OpenDialog" Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Tertiary">
+            </MudIconButton>
+        </MudBadge>
     </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="0">
-        <NavMenu />
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Anchor="Anchor.Start" Elevation="0">
+        <LeftNavMenu />
+    </MudDrawer>
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Anchor="Anchor.End" Elevation="0">
+        <RightNavMenu />
     </MudDrawer>
     <MudMainContent>
         @Body
@@ -45,5 +51,11 @@
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
+    }
+
+    private void OpenDialog()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        DialogService.Show<Dialogues.Login>("", options);
     }
 }

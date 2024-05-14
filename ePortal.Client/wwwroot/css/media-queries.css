@@ -1,5 +1,8 @@
 ﻿/* Extra Extra Large */
 @media (min-width: 2560px) {
+    .search-bar {
+        width: 50%;
+    }
     .four-card {
         width: 18%;
     }
@@ -7,11 +10,10 @@
         width: 22.5%;
     }
     .two-thirds-card {
-        width: 61%;
+        width: 65%;
     }
-
     .one-thirds-card {
-        width: 30%;
+        width: 35%;
     }
     .gov-image {
         width: 32.5%;
@@ -21,11 +23,20 @@
     }
     .employee-card {
         width: 18%;
+    }
+    .mobile-flex-wrap {
+        flex-wrap: nowrap;
+    }
+    .main-content-body {
+        width: 70%;
     }
 }
 
 /* Extra Large */
 @media (min-width: 1920px) and (max-width: 2560px) {
+    .search-bar {
+        width: 50%;
+    }
     .four-card {
         width: 22.5%;
     }
@@ -33,11 +44,10 @@
         width: 30%;
     }
     .two-thirds-card {
-        width: 61%;
+        width: 65%;
     }
-
     .one-thirds-card {
-        width: 30%;
+        width: 35%;
     }
     .gov-image {
         width: 32.5%;
@@ -48,11 +58,20 @@
     }
     .employee-card {
         width: 22.5%;
+    }
+    .mobile-flex-wrap {
+        flex-wrap: nowrap;
+    }
+    .main-content-body {
+        width: 70%;
     }
 }
 
 /* Large */
 @media (min-width: 1280px) and (max-width: 1920px) {
+    .search-bar {
+        width: 50%;
+    }
     .four-card {
         width: 30%;
     }
@@ -60,26 +79,33 @@
         width: 30%;
     }
     .two-thirds-card {
-        width: 61%;
+        width: 65%;
     }
-
     .one-thirds-card {
-        width: 30%;
+        width: 35%;
     }
     .gov-image {
         width: 32.5%;
     }
-
     .gov-details {
         width: 62.5%;
     }
     .employee-card {
         width: 22.5%;
     }
+    .mobile-flex-wrap {
+        flex-wrap: nowrap;
+    }
+    .main-content-body {
+        width: 70%;
+    }
 }
 
 /* Medium */
 @media (min-width: 960px) and (max-width: 1280px) {
+    .search-bar {
+        width: 50%;
+    }
     .four-card {
         width: 30%;
     }
@@ -87,11 +113,11 @@
         width: 45%;
     }
     .two-thirds-card {
-        width: 90%;
+        width: 100%;
     }
 
     .one-thirds-card {
-        width: 90%;
+        width: 100%;
     }
     .gov-image {
         width: 32.5%;
@@ -105,23 +131,32 @@
     }
     .employee-card {
         width: 30%;
+    }
+    .mobile-flex-wrap {
+        flex-wrap: wrap;
+    }
+    .main-content-body {
+        width: 80%;
     }
 }
 
 /* Small */
 @media (min-width: 600px) and (max-width: 960px) {
+    .search-bar {
+        width: 90%;
+    }
     .four-card {
-        width: 45%;
+        width: 50%;
     }
     .three-card {
-        width: 45%;
+        width: 50%;
     }
     .two-thirds-card {
-        width: 90%;
+        width: 100%;
     }
 
     .one-thirds-card {
-        width: 90%;
+        width: 100%;
     }
     .gov-image {
         width: 32.5%;
@@ -132,30 +167,42 @@
     }
     .employee-card {
         width: 45%;
+    }
+    .mobile-flex-wrap {
+        flex-wrap: wrap;
+    }
+    .main-content-body {
+        width: 100%;
     }
 }
 
 /* Extra small */
 @media (max-width: 600px) {
     .four-card {
-        width: 90%;
+        width: 100%;
     }
     .three-card {
-        width: 90%;
+        width: 100%;
     }
     .two-thirds-card {
-        width: 90%;
+        width: 100%;
     }
     .one-thirds-card {
-        width: 90%;
+        width: 100%;
     }
     .gov-image {
-        width: 90%;
+        width: 100%;
     }
     .gov-details {
-        width: 90%;
+        width: 100%;
     }
     .employee-card {
-        width: 45%;
+        width: 50%;
+    }
+    .mobile-flex-wrap {
+        flex-wrap:wrap;
+    }
+    .main-content-body {
+        width: 100%;
     }
 }

@@ -17,11 +17,19 @@ builder.Services.AddDbContext<ePortal.WebAPI.Context.pgas_eportal_v2Context>(
     }
     );
 
-//SQL Connection pmisContext
+//SQL Connection pmis
 builder.Services.AddDbContext<ePortal.WebAPI.Context.pmisContext>(
     options =>
     {
         options.UseSqlServer(builder.Configuration.GetConnectionString("PMIS"));
+    }
+    );
+
+//SQL Connection others
+builder.Services.AddDbContext<ePortal.WebAPI.Context.othersContext>(
+    options =>
+    {
+        options.UseSqlServer(builder.Configuration.GetConnectionString("Others"));
     }
     );
 

@@ -1,0 +1,113 @@
+﻿@using System.Text.Json
+<!-- Bible Verse -->
+
+<MudContainer MaxWidth="MaxWidth.False">
+    <MudGrid Spacing="1">
+        <MudItem xs="12">
+            <MudPaper Outlined Class="ma-1">
+                <MudText Class="ma-1" Align="Align.Center" Typo="Typo.subtitle1">
+                    @TimeShortFormat | @TimeLongFormat
+                </MudText>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12">
+            <MudPaper Outlined Class="ma-1">
+                <MudText Class="ma-1" Align="Align.Center" Typo="Typo.body1">Our Daily Word of God </MudText>
+                <MudDivider />
+                @if (latestVerse != null)
+                {
+                    <MudCardContent Class="pa-5">
+                        <!-- Display the latest Bible verse -->
+                        <MudText Typo="Typo.subtitle2" Color="Color.Primary">@latestVerse.Chapter</MudText>
+                        <MudText Typo="Typo.subtitle1">@latestVerse.Verse</MudText>
+                    </MudCardContent>
+                }
+                else
+                {
+                    <MudCardContent Class="pa-5">
+                        <!-- Display the latest Bible verse -->
+                        <MudSkeleton Width="40%" />
+                        <MudSkeleton />
+                        <MudSkeleton Width="70%" />
+                    </MudCardContent>
+                }
+            </MudPaper>
+        </MudItem>
+        <!-- Weather Forecast -->
+        <MudItem xs="12">
+            <MudCard Outlined Class="ma-1 pa-1">
+                <a class="weatherwidget-io rounded" href="https://forecast7.com/en/8d05126d06/agusan-del-sur/"
+                   data-label_1="Agusan del Sur" data-label_2="7 Day Weather Forecast" data-theme="pure"
+                   data-accent="">Agusan del Sur Weather Forecast</a>
+                <script>
+                    !function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = 'https://weatherwidget.io/js/widget.min.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'weatherwidget-io-js');
+                </script>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+@code {
+
+    private readonly string API_URL = APIVariable.PGASePortalAPI;
+    private BibleVerseLatestDTO? latestVerse;
+    private string TimeLongFormat { get; set; }
+    private string TimeShortFormat { get; set; }
+
+
+    // DTO class for the latest Bible verse
+    public class BibleVerseLatestDTO
+    {
+        public string Verse { get; set; } = string.Empty;
+        public string Chapter { get; set; } = string.Empty;
+        public DateTime? Date { get; set; }
+    }
+    // Initialization method to fetch data and update UI elements
+    protected override async Task OnInitializedAsync()
+    {
+        UpdateClock();
+        await GetLatestVerse(); // Fetch the latest Bible verse
+    }
+
+
+    private async Task UpdateClock()
+    {
+        while (true)
+        {
+            // Get the current UTC time
+            var now = DateTime.UtcNow;
+
+            // Set the timezone offset for the Philippines (UTC+8)
+            var timeZoneOffset = TimeSpan.FromHours(8);
+            now = now.Add(timeZoneOffset);
+
+            // Format the time as HH:mm:ss
+            TimeShortFormat = now.ToString("hh:mm:ss tt");
+
+            // Format the time as long date and time (e.g., Monday, April 1, 2024 12:00:00 AM)
+            TimeLongFormat = now.ToString("dddd, MMMM d, yyyy");
+
+            // Update the clock every second
+            StateHasChanged();
+            await Task.Delay(1000);
+        }
+    }
+
+    // Method to fetch the latest Bible verse from the API
+    private async Task GetLatestVerse()
+    {
+        try
+        {
+            using HttpClient httpClient = new HttpClient();
+            HttpResponseMessage httpResponse = await httpClient.GetAsync(API_URL + "/api/bible_verses/latest")!;
+            httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
+            using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
+            latestVerse = await JsonSerializer.DeserializeAsync<BibleVerseLatestDTO>(responseStream,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+        catch (HttpRequestException ex)
+        {
+            // Handle exception, log, or display an error message
+            Console.WriteLine($"Error fetching data: {ex.Message}");
+        }
+    }
+}

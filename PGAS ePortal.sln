@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ePortal.WebAPI", "ePortal.WebAPI\ePortal.WebAPI.csproj", "{DBF12278-05AE-4D6F-9855-0FC57C631CD7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PGAS.WebAPI", "ePortal.WebAPI\PGAS.WebAPI.csproj", "{DBF12278-05AE-4D6F-9855-0FC57C631CD7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ePortal.Client", "ePortal.Client\ePortal.Client.csproj", "{BA786EA8-2693-420D-82DF-5B85DF94C310}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PGAS.ePortal.Client", "ePortal.Client\PGAS.ePortal.Client.csproj", "{BA786EA8-2693-420D-82DF-5B85DF94C310}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FTPServer", "FTPServer\FTPServer.csproj", "{E824C429-9A85-4FC3-831D-314BDB033B78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{BA786EA8-2693-420D-82DF-5B85DF94C310}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA786EA8-2693-420D-82DF-5B85DF94C310}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA786EA8-2693-420D-82DF-5B85DF94C310}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E824C429-9A85-4FC3-831D-314BDB033B78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E824C429-9A85-4FC3-831D-314BDB033B78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E824C429-9A85-4FC3-831D-314BDB033B78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E824C429-9A85-4FC3-831D-314BDB033B78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

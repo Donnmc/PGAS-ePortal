@@ -47,7 +47,7 @@ public partial class pgas_eportal_v2Context : DbContext
     public virtual DbSet<v_external_link> v_external_link { get; set; }
 
     public virtual DbSet<v_ip_phone_directory> v_ip_phone_directory { get; set; }
-    public virtual DbSet<m_vwGetAllEmployee_Minified> m_vwGetAllEmployee_Minified { get; set; }
+    public virtual DbSet<t_doc_office_vw> m_vwGetAllEmployee_Minified { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -366,28 +366,6 @@ public partial class pgas_eportal_v2Context : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("Office Area");
-        });
-
-        modelBuilder.Entity<m_vwGetAllEmployee_Minified>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("m_vwGetAllEmployee_Minified");
-
-            entity.Property(e => e.eid);
-            entity.Property(e => e.SwipeId);
-            entity.Property(e => e.EmpName);
-            entity.Property(e => e.EmpFullName);
-            entity.Property(e => e.Department);
-            entity.Property(e => e.OfficeAbbr);
-            entity.Property(e => e.OfficeName);
-            entity.Property(e => e.Position);
-            entity.Property(e => e.SG);
-            entity.Property(e => e.employmentstatus_id);
-            entity.Property(e => e.Status);
-            entity.Property(e => e.isShifty);
-            entity.Property(e => e.isactive);
-
         });
 
         OnModelCreatingPartial(modelBuilder);

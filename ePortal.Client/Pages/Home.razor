@@ -3,164 +3,220 @@
 @using System.Text.Json
 @using System.Threading.Tasks
 
-<!-- MudCarousel for displaying images/icons -->
-<MudPaper Class="ma-5" Elevation="0">
-    <MudCarousel Class="mud-width-full" Style="height:400px;" ShowArrows="true" ShowBullets="true" EnableSwipeGesture="true" AutoCycle="true" TData="object">
-        <!-- MudCarouselItem 1 -->
-        <MudCarouselItem Transition="Transition.Slide" Color="@Color.Primary">
-            <div class="d-flex" style="height:100%">
-                <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
-            </div>
-        </MudCarouselItem>
-        <!-- MudCarouselItem 2 -->
-        <MudCarouselItem Transition="Transition.Slide" Color="@Color.Secondary">
-            <div class="d-flex" style="height:100%">
-                <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
-            </div>
-        </MudCarouselItem>
-        <!-- MudCarouselItem 3 -->
-        <MudCarouselItem Transition="Transition.Slide">
-            <div class="d-flex" style="height:100%">
-                <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Color="@Color.Primary" Size="@Size.Large" />
-            </div>
-        </MudCarouselItem>
-    </MudCarousel>
-</MudPaper>
-
-<MudDivider />
-
-<!-- Gov and Verse Section -->
-<MudStack Class="flex-wrap justify-center ma-5" Row="true">
-    <MudCard Elevation="0" Outlined="true" Class="two-thirds-card">
-        <MudStack Class="flex-wrap align-end" Style="justify-content: flex-start" Row="true">
-            <!-- Governor's SOPA Section -->
-            <MudImage Fluid="true" Class="mt-1 ml-1 gov-image" Style="transform: rotateY(180deg);" Src="/Media Files/gov-image.png"></MudImage>
-            <MudStack Class="pa-10 gov-details">
-                <MudText Style="margin-bottom: -15px" Typo="Typo.h3"><b>Santiago B. Cane, Jr.</b></MudText>
-                <MudText Typo="Typo.h5">Provincial Governor</MudText>
-                <MudDivider/>
-                <!-- Countdown timer -->
-                <MudStack Row=true>
-                    <MudButton Href="https://agusandelsur.gov.ph/governor/" Target="_blank" Size="Size.Small" DisableElevation Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Person" Color="Color.Primary">
-                        Profile
-                    </MudButton>
-                    <MudButton Href="https://pgas.ph/eportal/Content/GovernorsCorner/PGAS/ELA2023.jpg" Target="_blank" Size="Size.Small" DisableElevation Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.StickyNote2" Color="Color.Primary">
-                        Plans and Programs
-                    </MudButton>
+<MudContainer MaxWidth="MaxWidth.False">
+    <MudGrid Spacing="5">
+        <!-- Carousel -->
+        <MudItem xs="12" md="9">
+            <MudPaper Outlined Class="ma-1" Style="height: 98%">
+                <MudCarousel Class="mud-width-full rounded max-height" ShowArrows="true" ShowBullets="true" EnableSwipeGesture="true" AutoCycle="true" TData="object">
+                    <!-- MudCarouselItem 1 -->
+                    <MudCarouselItem Transition="Transition.Slide" Color="@Color.Primary">
+                        <div class="d-flex" style="height:100%">
+                            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
+                        </div>
+                    </MudCarouselItem>
+                    <!-- MudCarouselItem 2 -->
+                    <MudCarouselItem Transition="Transition.Slide" Color="@Color.Secondary">
+                        <div class="d-flex" style="height:100%">
+                            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
+                        </div>
+                    </MudCarouselItem>
+                    <!-- MudCarouselItem 3 -->
+                    <MudCarouselItem Transition="Transition.Slide">
+                        <div class="d-flex" style="height:100%">
+                            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Color="@Color.Primary" Size="@Size.Large" />
+                        </div>
+                    </MudCarouselItem>
+                </MudCarousel>
+            </MudPaper>
+        </MudItem>
+        <!-- Governor -->
+        <MudItem xs="12" md="3">
+            <MudPaper Outlined Class="ma-1"> 
+                <MudImage Src="/Media Files/gov-image.png" Style="width: 100%" ObjectPosition="ObjectPosition.Top" ObjectFit="ObjectFit.Cover" />
+                <MudStack Class="pa-1" Spacing="0" AlignItems="AlignItems.Center">
+                    <MudText Typo="Typo.h5"><b>Santiago B. Cane, Jr.</b></MudText>
+                    <MudText Typo="Typo.body2">Provincial Governor</MudText>
                 </MudStack>
-                <MudDivider />
-                <MudChip Variant="Variant.Outlined" Color="Color.Dark">
-                    Upcoming SOPA: @displayTime
-                </MudChip>
-            </MudStack>
-        </MudStack>
-    </MudCard>
-    <!-- Daily Word of God Section -->
-    <MudCard Class="d-inline pa-0 align-self-start one-thirds-card" Outlined="true">
-        <MudText Class="ma-2" Typo="Typo.h5">Our Daily Word of God </MudText>
+                <MudDivider/>
+                <MudStack Row Class="ma-1" Spacing="1" Justify="Justify.Center">
+                    <MudButton Href="https://agusandelsur.gov.ph/governor/" Target="_blank" Variant="Variant.Filled" DisableElevation Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Person">Profile</MudButton>
+                    <MudButton Href="https://pgas.ph/eportal/Content/GovernorsCorner/PGAS/ELA2023.jpg" Target="_blank" Variant="Variant.Filled" DisableElevation Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Book">Plans and Programs</MudButton>
+                </MudStack>
+            </MudPaper>
+        </MudItem>
         <MudDivider />
-        @if (latestVerse != null)
-        {
-            <MudCardContent Class="pa-5">
-                <!-- Display the latest Bible verse -->
-                <MudText Typo="Typo.subtitle2" Color="Color.Primary">@latestVerse.Chapter</MudText>
-                <MudText Typo="Typo.subtitle1">@latestVerse.Verse</MudText>
-            </MudCardContent>
-        }
-        else
-        {
-            <MudCardContent Class="pa-5">
-                <!-- Display the latest Bible verse -->
-                <MudSkeleton Width="40%" />
-                <MudSkeleton />
-                <MudSkeleton Width="70%"/>
-            </MudCardContent>
-        }
-    </MudCard>
-</MudStack>
+        <MudItem xs="12" md="5">
+            <MudCard Outlined Class="max-height ma-1">
 
-<MudDivider/>
-
-<!--
-Information Systems Section
--->
-<MudStack Class="flex-wrap justify-center ma-5" Row="true">
-    <!-- Check if information systems data is available -->
-    @if (informationSystems != null && informationSystems.Any())
-    {
-        <!-- Iterate over each cluster of information systems -->
-        @foreach (var cluster in informationSystems)
-        {
-            <!-- Display a card for each cluster -->
-            <MudCard Elevation="0" Outlined="true" Class="four-card">
-                    <!-- Display the cluster name in the card header -->
-                    <MudCardContent>
-                        <MudText Align="Align.Center">
-                        <b>@cluster.Cluster_Name</b>
-                        </MudText>
-                    </MudCardContent>
-                <MudDivider />
-                <MudCardContent Class="d-flex flex-wrap justify-center gap-3">
-                    <!-- Iterate over each information system in the cluster -->
-                    @foreach (var system in cluster.Information_Systems)
-                    {
-                        <!-- Display a button or badge for each information system -->
-                        @if (system.Information_System_Platform == "Web App")
-                        {
-                            <!-- Display a button for web apps with a tooltip -->
-                            <MudLink Href="@system.Information_System_Link" Target="_blank" Underline="Underline.None">
-                                <MudTooltip Text="@system.Information_System_Name">
-                                    <MudButton DisableElevation Variant="Variant.Filled" StartIcon="@(typeof(Icons.Material.Filled).GetField(system.Information_System_Icon)?.GetValue(null) as string)" Color="Color.Primary" Size="Size.Small">
-                                        @system.Information_System_Abbreviation
-                                    </MudButton>
-                                </MudTooltip>
-                            </MudLink>
-                        }
-                        else if (system.Information_System_Platform == "Desktop App")
-                        {
-                            <!-- Display a badge for desktop apps with a tooltip -->
-                            <MudTooltip Text="@(system.Information_System_Name+" ("+system.Information_System_Platform+")")">
-                                <MudBadge Bordered="true" Overlap="true" Icon="@Icons.Material.Filled.DesktopWindows" Color="Color.Tertiary">
-                                    <MudButton DisableElevation Variant="Variant.Filled" StartIcon="@(typeof(Icons.Material.Filled).GetField(system.Information_System_Icon)?.GetValue(null) as string)" Color="Color.Primary" Size="Size.Small">
-                                        @system.Information_System_Abbreviation
-                                    </MudButton>
-                                </MudBadge>
-                            </MudTooltip>
-                        }
-                    }
-                </MudCardContent>
             </MudCard>
-        }
-    }
-    else
-    {
-        <!-- Display a loading indicator if data is not available -->
-        <MudCard Elevation="0" Outlined="true" Class="four-card">
-            <MudStack Class="d-flex align-center mt-5">
-                <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+        </MudItem>
+        <MudItem xs="12" md="7">
+            <MudTabs Outlined Border ApplyEffectsToContainer Centered Class="max-height ma-1" Rounded PanelClass="pa-2">
+                <MudTabPanel Text="Memorandum">
+                    <MudText>Content One</MudText>
+                </MudTabPanel>
+                <MudTabPanel Text="Notices">
+                    <MudText>Content Two</MudText>
+                </MudTabPanel>
+                <MudTabPanel Text="Executive Order">
+                    <MudText>Content Three</MudText>
+                </MudTabPanel>
+                <MudTabPanel Text="Administrative Order">
+                    <MudText>Content Four</MudText>
+                </MudTabPanel>
+            </MudTabs>
+        </MudItem>
+        <!-- Employees -->
+        <MudItem xs="12">
+            <MudStack Class="d-flex flex-nowrap justify-left overflow-auto gap-5 pa-1" Row="true">
+                @if (allPgasEmployees != null && allPgasEmployees.Any())
+                {
+                    <MudVirtualize Items="allPgasEmployees" Context="employee">
+                        <MudPaper Outlined Style="width: 170px">
+                            <MudImage Src="@("https://pgas.ph/hris/Content/images/photos/"+ employee.eid +".png")" onerror="this.src='Objects/agusan del sur.webp'"
+                                      Height="220" ObjectPosition="ObjectPosition.Top" ObjectFit="ObjectFit.Cover"
+                                      Class="rounded-t" Style="margin-bottom: -12px; width: 168px">
+                            </MudImage>
+                            <MudStack Spacing="0" Class="overflow-hidden">
+                                <MudStack Spacing="0" Class="pa-2">
+                                    <MudTooltip Arrow="true" Color="Color.Tertiary" Placement="Placement.Top" Text="@employee.EmpName">
+                                        <MudText Typo="Typo.body1" Style="max-width: 160px; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><b>@employee.EmpName</b></MudText>
+                                    </MudTooltip>
+                                    <MudTooltip Arrow="true" Color="Color.Tertiary" Placement="Placement.Top" Text="@employee.Position">
+                                        <MudText Typo="Typo.body2" Style="max-width: 160px; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">@employee.Position</MudText>
+                                    </MudTooltip>
+                                </MudStack>
+                                <MudDivider />
+                                <MudPaper Elevation="0" Class="d-flex flex-wrap justify-center flex-grow-1 rounded-b pa-1">
+                                    <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Shades.Black}")">
+                                        @employee.SwipID
+                                    </MudChip>
+                                    <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Yellow.Darken3}")">
+                                        @employee.OfficeAbbr
+                                    </MudChip>
+                                    @if (employee.Status == "Elected")
+                                    {
+                                        <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Amber.Lighten1}")">@employee.Status</MudChip>
+                                    }
+                                    else if (employee.Status == "Permanent")
+                                    {
+                                        <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Blue.Lighten1}")">@employee.Status</MudChip>
+                                    }
+                                    else if (employee.Status == "Casual")
+                                    {
+                                        <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Cyan.Lighten1}")">@employee.Status</MudChip>
+                                    }
+                                    else if (employee.Status == "Job Order")
+                                    {
+                                        <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Teal.Lighten1}")">@employee.Status</MudChip>
+                                    }
+                                    else if (employee.Status == "Contract of Service")
+                                    {
+                                        <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Green.Lighten1}")">@employee.Status</MudChip>
+                                    }
+                                    else if (employee.Status == "Coterminous")
+                                    {
+                                        <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.DeepOrange.Lighten1}")">@employee.Status</MudChip>
+                                    }
+                                    else if (employee.Status == "Temporary")
+                                    {
+                                        <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Red.Lighten1}")">@employee.Status</MudChip>
+                                    }
+                                    else if (employee.Status == "Detailed")
+                                    {
+                                        <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Orange.Lighten1}")">@employee.Status</MudChip>
+                                    }
+                                </MudPaper>
+                            </MudStack>
+                        </MudPaper>
+                    </MudVirtualize>
+                }
+                else
+                {
+                    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+                }
             </MudStack>
-        </MudCard>
-    }
-</MudStack>
+        </MudItem>
+        <MudDivider />
+        <!-- Information Systems -->
+        <MudItem>
+            <MudGrid Justify="Justify.Center">
+                <!-- Check if information systems data is available -->
+                @if (informationSystems != null && informationSystems.Any())
+                {
+                    <!-- Iterate over each cluster of information systems -->
+                    @foreach (var cluster in informationSystems)
+                    {
+                        <!-- Display a card for each cluster -->
+                        <MudItem xs="6" md="4">
+                            <MudCard Class="max-height ma-1" Outlined>
+                                <!-- Display the cluster name in the card header -->
+                                <MudCardContent>
+                                    <MudText Align="Align.Center">
+                                        <b>@cluster.Cluster_Name</b>
+                                    </MudText>
+                                </MudCardContent>
+                                <MudDivider />
+                                <MudCardContent Class="d-flex flex-wrap justify-center gap-3">
+                                    <!-- Iterate over each information system in the cluster -->
+                                    @foreach (var system in cluster.Information_Systems)
+                                    {
+                                        <!-- Display a button or badge for each information system -->
+                                        @if (system.Information_System_Platform == "Web App")
+                                        {
+                                            <!-- Display a button for web apps with a tooltip -->
+                                            <MudLink Href="@system.Information_System_Link" Target="_blank" Underline="Underline.None">
+                                                <MudTooltip Text="@system.Information_System_Name">
+                                                    <MudButton DisableElevation Variant="Variant.Filled" StartIcon="@(typeof(Icons.Material.Filled).GetField(system.Information_System_Icon)?.GetValue(null) as string)" Color="Color.Primary" Size="Size.Small">
+                                                        @system.Information_System_Abbreviation
+                                                    </MudButton>
+                                                </MudTooltip>
+                                            </MudLink>
+                                        }
+                                        else if (system.Information_System_Platform == "Desktop App")
+                                        {
+                                            <!-- Display a badge for desktop apps with a tooltip -->
+                                            <MudTooltip Text="@(system.Information_System_Name+" ("+system.Information_System_Platform+")")">
+                                                <MudBadge Bordered="true" Overlap="true" Icon="@Icons.Material.Filled.DesktopWindows" Color="Color.Tertiary">
+                                                    <MudButton DisableElevation Variant="Variant.Filled" StartIcon="@(typeof(Icons.Material.Filled).GetField(system.Information_System_Icon)?.GetValue(null) as string)" Color="Color.Primary" Size="Size.Small">
+                                                        @system.Information_System_Abbreviation
+                                                    </MudButton>
+                                                </MudBadge>
+                                            </MudTooltip>
+                                        }
+                                    }
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                    }
+                }
+                else
+                {
+                    <!-- Display a loading indicator if data is not available -->
+                    <MudCard Elevation="0" Outlined="true" Class="four-card">
+                        <MudStack Class="d-flex align-center mt-5">
+                            <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+                        </MudStack>
+                    </MudCard>
+                }
+            </MudGrid>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
 
 @code {
     // Get API URL
-    private string API_URL = APIVariable.PGASePortalAPI;
+    private readonly string API_URL = APIVariable.PGASePortalAPI;
+    private List<m_vwGetAllEmployee_MinifiedDTO>? allPgasEmployees = new();
+    private string TimeLongFormat { get; set; }
+    private string TimeShortFormat { get; set; }
 
     // Initialization method to fetch data and update UI elements
     protected override async Task OnInitializedAsync()
     {
-        UpdateTime(); // Start updating the countdown timer
-        await GetLatestVerse(); // Fetch the latest Bible verse
         await GetGroupedClusters(); // Fetch grouped information systems
-    }
-
-    // DTO class for the latest Bible verse
-    public class BibleVerseLatestDTO
-    {
-        public string Verse { get; set; } = string.Empty;
-        public string Chapter { get; set; } = string.Empty;
-        public DateTime? Date { get; set; }
+        await randomEmployees();
     }
 
     // DTO class for clustered information systems
@@ -182,48 +238,23 @@ Information Systems Section
         public string Information_System_Platform { get; set; } = string.Empty;
     }
 
+    public class m_vwGetAllEmployee_MinifiedDTO
+    {
+        // Office
+        public string? OfficeName { get; set; }
+        public string? OfficeAbbr { get; set; }
+        // Employee Details
+        public string? EmpName { get; set; }
+        public long? eid { get; set; }
+        public string? SwipID { get; set; }
+        public string? Position { get; set; }
+        public int? SG { get; set; }
+        public string? Status { get; set; }
+        public bool? isactive { get; set; }
+    }
+
     // Variables for storing data and UI elements
-    private BibleVerseLatestDTO? latestVerse;
     private List<v_clustered_information_systemDTO>? informationSystems;
-    private string? displayTime;
-    private DateTime targetTime = new DateTime(2024, 6, 16, 8, 0, 0); // Specify your target date and time here (Year, Month, Day, Hour, Minute, Sec)
-
-    // Method to update the countdown timer every second
-    private async Task UpdateTime()
-    {
-        while (true)
-        {
-            if (targetTime <= DateTime.UtcNow) // Check if the target date has passed
-            {
-                // Calculate the target date for the next year on June 16
-                targetTime = targetTime.AddYears(1);
-            }
-
-            TimeSpan remainingTime = targetTime - DateTime.UtcNow;
-            displayTime = $"{remainingTime.Days}d {remainingTime.Hours:D2}h {remainingTime.Minutes:D2}m {remainingTime.Seconds:D2}s";
-            await Task.Delay(1000); // Update every second
-            StateHasChanged(); // Notify Blazor to update the UI
-        }
-    }
-
-    // Method to fetch the latest Bible verse from the API
-    private async Task GetLatestVerse()
-    {
-        try
-        {
-            using HttpClient httpClient = new HttpClient();
-            HttpResponseMessage httpResponse = await httpClient.GetAsync(API_URL + "/api/bible_verses/latest")!;
-            httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
-            using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
-            latestVerse = await JsonSerializer.DeserializeAsync<BibleVerseLatestDTO>(responseStream,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-        }
-        catch (HttpRequestException ex)
-        {
-            // Handle exception, log, or display an error message
-            Console.WriteLine($"Error fetching data: {ex.Message}");
-        }
-    }
 
     // Method to fetch grouped information systems from the API
     private async Task GetGroupedClusters()
@@ -236,6 +267,32 @@ Information Systems Section
             using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
             informationSystems = await JsonSerializer.DeserializeAsync<List<v_clustered_information_systemDTO>>(responseStream,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+        catch (HttpRequestException ex)
+        {
+            // Handle exception, log, or display an error message
+            Console.WriteLine($"Error fetching data: {ex.Message}");
+        }
+    }
+
+    private async Task randomEmployees()
+    {
+        try
+        {
+            using HttpClient httpClient = new HttpClient();
+            HttpResponseMessage httpResponse = await httpClient.GetAsync(API_URL + "/api/m_vwGetAllEmployee_Minified")!;
+            httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
+            using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
+            allPgasEmployees = await JsonSerializer.DeserializeAsync<List<m_vwGetAllEmployee_MinifiedDTO>>(responseStream,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            // Shuffle the list randomly
+            var random = new Random();
+            var shuffledEmployees = allPgasEmployees?.OrderBy(x => random.Next()).ToList();
+
+            // Select only 15 employees
+            var selectedEmployees = shuffledEmployees?.Take(50).ToList();
+
+            allPgasEmployees = selectedEmployees;
         }
         catch (HttpRequestException ex)
         {
