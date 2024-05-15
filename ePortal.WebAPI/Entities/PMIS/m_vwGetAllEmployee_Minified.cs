@@ -2,17 +2,13 @@
 
 public partial class m_vwGetAllEmployee_Minified
 {
-    public long eid { get; set; }
-    public string SwipeId { get; set; }
-    public string EmpName { get; set; }
-    public string EmpFullName { get; set; }
-    public int? Department { get; set; }
-    public string OfficeAbbr { get; set; }
-    public string OfficeName { get; set; }
-    public string Position { get; set; }
+    public string? OfficeName { get; set; }
+    public string? OfficeAbbr { get; set; }
+    public string? EmpName { get; set; }
+    public long? eid { get; set; }
+    public string? SwipeID { get; set; }
+    public string? Position { get; set; }
     public int? SG { get; set; }
-    public byte? employmentstatus_id { get; set; }
-    public string Status { get; set; }
-    public int isShifty { get; set; }
+    public string? Status { get; set; }
     public bool? isactive { get; set; }
 }

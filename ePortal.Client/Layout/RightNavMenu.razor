@@ -2,47 +2,55 @@
 <!-- Bible Verse -->
 
 <MudContainer MaxWidth="MaxWidth.False">
-    <MudGrid Spacing="1">
+    <MudGrid Spacing="2">
         <MudItem xs="12">
-            <MudPaper Outlined Class="ma-1">
-                <MudText Class="ma-1" Align="Align.Center" Typo="Typo.subtitle1">
-                    @TimeShortFormat | @TimeLongFormat
-                </MudText>
+            <MudPaper Outlined Class="mud-border-dark">
+                <MudStack Class="pa-1" Spacing="0">
+                    <MudText Style="font-size: 14px" Align="Align.Center" Typo="Typo.subtitle1">
+                        <b>@TimeShortFormat</b>
+                    </MudText>
+                    <MudDivider />
+                    <MudText Style="font-size: 12px" Align="Align.Center" Typo="Typo.subtitle1">
+                        @TimeLongFormat
+                    </MudText>
+                </MudStack>
             </MudPaper>
         </MudItem>
         <MudItem xs="12">
-            <MudPaper Outlined Class="ma-1">
-                <MudText Class="ma-1" Align="Align.Center" Typo="Typo.body1">Our Daily Word of God </MudText>
-                <MudDivider />
-                @if (latestVerse != null)
-                {
-                    <MudCardContent Class="pa-5">
-                        <!-- Display the latest Bible verse -->
-                        <MudText Typo="Typo.subtitle2" Color="Color.Primary">@latestVerse.Chapter</MudText>
-                        <MudText Typo="Typo.subtitle1">@latestVerse.Verse</MudText>
-                    </MudCardContent>
-                }
-                else
-                {
-                    <MudCardContent Class="pa-5">
-                        <!-- Display the latest Bible verse -->
-                        <MudSkeleton Width="40%" />
-                        <MudSkeleton />
-                        <MudSkeleton Width="70%" />
-                    </MudCardContent>
-                }
+            <MudPaper Outlined Class="mud-border-dark">
+                <MudStack Class="pa-1" Spacing="0">
+                    <MudText Class="ma-1" Align="Align.Center" Typo="Typo.body1">Our Daily Word of God </MudText>
+                    <MudDivider />
+                    <MudStack Class="pa-2">
+                        @if (latestVerse != null)
+                        {
+                            <!-- Display the latest Bible verse -->
+                            <MudText Typo="Typo.subtitle2" Color="Color.Primary" Style="font-size: 12px">@latestVerse.Chapter</MudText>
+                            <MudText Typo="Typo.subtitle1" Style="font-size: 12px">@latestVerse.Verse</MudText>
+                        }
+                        else
+                        {
+                            <MudCardContent Class="pa-5">
+                                <!-- Display the latest Bible verse -->
+                                <MudSkeleton Width="40%" />
+                                <MudSkeleton />
+                                <MudSkeleton Width="70%" />
+                            </MudCardContent>
+                        }
+                    </MudStack>
+                </MudStack>
             </MudPaper>
         </MudItem>
         <!-- Weather Forecast -->
         <MudItem xs="12">
-            <MudCard Outlined Class="ma-1 pa-1">
+            <MudPaper Outlined Class="mud-border-dark">
                 <a class="weatherwidget-io rounded" href="https://forecast7.com/en/8d05126d06/agusan-del-sur/"
                    data-label_1="Agusan del Sur" data-label_2="7 Day Weather Forecast" data-theme="pure"
                    data-accent="">Agusan del Sur Weather Forecast</a>
                 <script>
                     !function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = 'https://weatherwidget.io/js/widget.min.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'weatherwidget-io-js');
                 </script>
-            </MudCard>
+            </MudPaper>
         </MudItem>
     </MudGrid>
 </MudContainer>

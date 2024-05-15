@@ -1,5 +1,5 @@
 ﻿using ePortal.WebAPI.Context;
-using ePortal.WebAPI.DTO.PMIS;
+using ePortal.WebAPI.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +17,7 @@ namespace ePortal.WebAPI.Controllers.PMIS
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<m_vwGetAllEmployee_MinifiedDTO>>> GetEmployees()
+        public async Task<ActionResult<IEnumerable<m_vwGetAllEmployee_Minified>>> GetEmployees()
         {
             var employee = await _context.m_vwGetAllEmployee_Minified.ToListAsync();
 
@@ -39,14 +39,14 @@ namespace ePortal.WebAPI.Controllers.PMIS
                     Array.IndexOf(statusOrder, e.Status) // Get index based on the order
                 )
                 .ThenByDescending(e => e.SG) // Order by SG (descending)
-                .Select(office => new m_vwGetAllEmployee_MinifiedDTO
+                .Select(office => new m_vwGetAllEmployee_Minified
                 {
                     //Office
                     OfficeName = office.OfficeName,
                     OfficeAbbr = office.OfficeAbbr,
                     //Employee
                     EmpName = office.EmpName,
-                    SwipID = office.SwipeId,
+                    SwipeID = office.SwipeID,
                     eid = office.eid,
                     Position = office.Position,
                     SG = office.SG,
@@ -58,7 +58,7 @@ namespace ePortal.WebAPI.Controllers.PMIS
         }
 
         [HttpGet("query")]
-        public async Task<ActionResult<IEnumerable<m_vwGetAllEmployee_MinifiedDTO>>> SearchEmployees(
+        public async Task<ActionResult<IEnumerable<m_vwGetAllEmployee_Minified>>> SearchEmployees(
         string? searchDetails = null)
         {
             var query = _context.m_vwGetAllEmployee_Minified.AsQueryable();
@@ -70,7 +70,7 @@ namespace ePortal.WebAPI.Controllers.PMIS
                     e.OfficeAbbr.Contains(searchDetails) ||
                     e.Position.Contains(searchDetails) ||
                     e.EmpName.Contains(searchDetails) ||
-                    e.SwipeId.Contains(searchDetails));
+                    e.SwipeID.Contains(searchDetails));
             }
 
             var employee = await query.Where(e => e.isactive == true).ToListAsync();
@@ -92,14 +92,14 @@ namespace ePortal.WebAPI.Controllers.PMIS
                     Array.IndexOf(statusOrder, e.Status) // Get index based on the order
                 )
                 .ThenByDescending(e => e.SG) // Order by SG (descending)
-                .Select(office => new m_vwGetAllEmployee_MinifiedDTO
+                .Select(office => new m_vwGetAllEmployee_Minified
                 {
                     //Office
                     OfficeName = office.OfficeName,
                     OfficeAbbr = office.OfficeAbbr,
                     //Employee
                     EmpName = office.EmpName,
-                    SwipID = office.SwipeId,
+                    SwipeID = office.SwipeID,
                     eid = office.eid,
                     Position = office.Position,
                     SG = office.SG,

@@ -21,17 +21,13 @@ public partial class pmisContext : DbContext
                 .ToView("m_vwGetAllEmployee_Minified");
 
             entity.Property(e => e.eid);
-            entity.Property(e => e.SwipeId);
+            entity.Property(e => e.SwipeID);
             entity.Property(e => e.EmpName);
-            entity.Property(e => e.EmpFullName);
-            entity.Property(e => e.Department);
             entity.Property(e => e.OfficeAbbr);
             entity.Property(e => e.OfficeName);
             entity.Property(e => e.Position);
             entity.Property(e => e.SG);
-            entity.Property(e => e.employmentstatus_id);
             entity.Property(e => e.Status);
-            entity.Property(e => e.isShifty);
             entity.Property(e => e.isactive);
 
         });

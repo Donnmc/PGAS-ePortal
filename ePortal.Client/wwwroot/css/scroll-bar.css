@@ -11,7 +11,7 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #bcbcbc;
+    background: rgba(66,66,66,1);
 }
     /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {

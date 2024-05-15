@@ -10,15 +10,16 @@ public partial class othersContext : DbContext
     {
     }
 
-    public virtual DbSet<t_doc_office_vw> t_doc_public_vw { get; set; }
+    public virtual DbSet<eportal_docs_view> eportal_docs_view { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<t_doc_office_vw>(entity =>
+
+        modelBuilder.Entity<eportal_docs_view>(entity =>
         {
             entity
                 .HasNoKey()
-                .ToView("t_doc_office_vw");
+                .ToView("eportal_docs_view");
 
             entity.Property(e => e.title);
             entity.Property(e => e.description);
@@ -27,7 +28,6 @@ public partial class othersContext : DbContext
             entity.Property(e => e.docdate);
             entity.Property(e => e.docid);
         });
-
         OnModelCreatingPartial(modelBuilder);
     }
 

@@ -39,7 +39,7 @@
                                         <MudDivider />
                                         <MudPaper Height="100%" Elevation="0" Class="rounded-lg" Style="background-color:ghostwhite">
                                             <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Shades.Black}")">
-                                                @employee.SwipID
+                                                @employee.SwipeID
                                             </MudChip>
                                             <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Blue.Default}")">
                                                 @employee.OfficeAbbr
@@ -133,7 +133,7 @@
                                             <MudDivider />
                                             <MudPaper Height="100%" Elevation="0" Class="rounded-lg" Style="background-color:ghostwhite">
                                                 <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Shades.Black}")">
-                                                    @employee.SwipID
+                                                    @employee.SwipeID
                                                 </MudChip>
                                                 <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Blue.Default}")">
                                                     @employee.OfficeAbbr
@@ -220,7 +220,7 @@
         // Employee Details
         public string? EmpName { get; set; }
         public long? eid { get; set; }
-        public string? SwipID { get; set; }
+        public string? SwipeID { get; set; }
         public string? Position { get; set; }
         public int? SG { get; set; }
         public string? Status { get; set; }
