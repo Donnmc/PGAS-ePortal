@@ -6,7 +6,7 @@
         <MudItem xs="12">
             <MudPaper Outlined Class="mud-border-dark">
                 <MudStack Class="pa-1" Spacing="0">
-                    <MudText Style="font-size: 14px" Align="Align.Center" Typo="Typo.subtitle1">
+                    <MudText Align="Align.Center" Typo="Typo.subtitle1">
                         <b>@TimeShortFormat</b>
                     </MudText>
                     <MudDivider />
@@ -56,17 +56,17 @@
 </MudContainer>
 @code {
 
-    private readonly string API_URL = APIVariable.PGASePortalAPI;
+    private readonly string API_URL = APIService.PGASePortalAPI;
     private BibleVerseLatestDTO? latestVerse;
-    private string TimeLongFormat { get; set; }
-    private string TimeShortFormat { get; set; }
+    private string? TimeLongFormat { get; set; }
+    private string? TimeShortFormat { get; set; }
 
 
     // DTO class for the latest Bible verse
     public class BibleVerseLatestDTO
     {
-        public string Verse { get; set; } = string.Empty;
-        public string Chapter { get; set; } = string.Empty;
+        public string? Verse { get; set; }
+        public string? Chapter { get; set; }
         public DateTime? Date { get; set; }
     }
     // Initialization method to fetch data and update UI elements

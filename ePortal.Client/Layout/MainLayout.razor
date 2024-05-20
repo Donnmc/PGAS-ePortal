@@ -1,18 +1,37 @@
 ﻿@inherits LayoutComponentBase
 @inject IDialogService DialogService
+@inject UserService UserService
+
 <MudThemeProvider Theme="PGASTheme" DefaultScrollbar="true" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
     <MudAppBar Elevation="0">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@DrawerToggle" />
         <MudImage Fluid="true" Width="200" Src="Objects/pgas eportal.webp"></MudImage>
         <MudSpacer />
-        <MudBadge Icon="@Icons.Material.Filled.Login" Origin="Origin.CenterLeft" Style="z-index: 1; margin-top: -5px" Bordered="true" Overlap="true" Color="Color.Primary">
-            <MudIconButton Class="pa-0" Size="Size.Large" OnClick="OpenDialog" Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Tertiary">
-            </MudIconButton>
-        </MudBadge>
+        @if (UserService.eid != null)
+        {
+            <MudAvatar Variant="Variant.Outlined" Class="mud-border-dark">
+                <MudImage Class="cursor-pointer"
+                          Style="image-rendering: optimizeSpeed"
+                          ObjectFit="ObjectFit.ScaleDown"
+                          Src="@($"https://pgas.ph/hris/Content/images/photos/{UserService.eid}.png")"
+                          onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';"
+                          @onclick="OpenUserDialog">
+                </MudImage>
+            </MudAvatar>
+        }
+        else
+        {
+            <MudBadge Class="cursor-pointer" Content="@("Login")" OnClick="OpenLoginDialog" Origin="Origin.BottomCenter" Style="margin-top: -5px" Bordered="true" Overlap="true" Color="Color.Primary">
+                <MudAvatar Variant="Variant.Outlined" Class="mud-border-dark">
+                    <MudIconButton Class="pa-0" Size="Size.Large" OnClick="OpenLoginDialog" Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Tertiary">
+                    </MudIconButton>
+                </MudAvatar>
+            </MudBadge>
+        }
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Anchor="Anchor.Start" Elevation="0">
         <LeftNavMenu />
@@ -30,6 +49,7 @@
         {
             Palette = new PaletteLight()
             {
+                LinesInputs = Colors.Shades.Black,
                 Primary = Colors.Blue.Default,
                 Secondary = Colors.Yellow.Darken1,
                 Tertiary = Colors.Grey.Darken4,
@@ -46,16 +66,32 @@
 
     bool _drawerOpen = true;
 
-    private MudThemeProvider? _mudThemeProvider;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await UserService.LoadUserSession();
+        UserService.OnChange += StateHasChanged;
+    }
 
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
     }
 
-    private void OpenDialog()
+    private void OpenLoginDialog()
     {
         var options = new DialogOptions { CloseOnEscapeKey = true };
         DialogService.Show<Dialogues.Login>("", options);
+    }
+
+    private void OpenUserDialog()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        DialogService.Show<Dialogues.UserPanel>("", options);
+    }
+
+    public void Dispose()
+    {
+        UserService.OnChange -= StateHasChanged;
     }
 }

@@ -70,7 +70,8 @@ namespace ePortal.WebAPI.Controllers.PMIS
                     e.OfficeAbbr.Contains(searchDetails) ||
                     e.Position.Contains(searchDetails) ||
                     e.EmpName.Contains(searchDetails) ||
-                    e.SwipeID.Contains(searchDetails));
+                    e.SwipeID.Contains(searchDetails) ||
+                    e.eid.ToString().Contains(searchDetails));
             }
 
             var employee = await query.Where(e => e.isactive == true).ToListAsync();
@@ -108,6 +109,33 @@ namespace ePortal.WebAPI.Controllers.PMIS
                 }).ToList();
 
             return mappedEmployee;
+        }
+
+        [HttpGet("{eid}")]
+        public async Task<ActionResult<m_vwGetAllEmployee_Minified>> GetEmployeeById(long eid)
+        {
+            var employee = await _context.m_vwGetAllEmployee_Minified // Replace YourEmployeeTable with your actual table name
+                .Where(e => e.eid == eid)
+                .Select(e => new m_vwGetAllEmployee_Minified
+                {
+                    OfficeName = e.OfficeName,
+                    OfficeAbbr = e.OfficeAbbr,
+                    EmpName = e.EmpName,
+                    eid = e.eid,
+                    SwipeID = e.SwipeID,
+                    Position = e.Position,
+                    SG = e.SG,
+                    Status = e.Status,
+                    isactive = e.isactive
+                })
+                .FirstOrDefaultAsync();
+
+            if (employee == null)
+            {
+                return NotFound();
+            }
+
+            return employee;
         }
     }
 }

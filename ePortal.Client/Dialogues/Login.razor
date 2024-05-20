@@ -1,41 +1,79 @@
-﻿<MudDialog Style="width: 300px">
+﻿@using System.Net.Http.Json
+@using System.Text.Json
+@inject UserService UserService
+@inject NavigationManager NavigationManager
+
+<MudDialog Style="width: 300px">
     <DialogContent>
         <MudTextField T="string" @bind-Value="email" Label="PGAS Email" Variant="Variant.Outlined"
                       HelperText="firstname.lastname@pgas.ph"></MudTextField>
         <MudSpacer />
         <MudTextField T="string" @bind-Value="password" Label="Password" InputType="@PasswordInput" Required Variant="Variant.Outlined"
-                      Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonTestclick" 
+                      Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="@TogglePasswordVisibility"
                       AdornmentAriaLabel="Show Password"></MudTextField>
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="Cancel">Cancel</MudButton>
-        <MudButton Color="Color.Primary" OnClick="Submit">Login</MudButton>
+        <MudButton OnClick="@Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="@loginUser">Login</MudButton>
     </DialogActions>
 </MudDialog>
+
 @code {
     [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
     private string? email = "";
     private string? password = "";
 
+    public class eportalUser
+    {
+        public long? eid { get; set; }
+        public string? SwipEmployeeID { get; set; }
+        public string? email { get; set; }
+        public string? password { get; set; }
+    }
+
+    private bool isShow;
+    private InputType PasswordInput = InputType.Password;
+    private string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    void TogglePasswordVisibility()
+    {
+        isShow = !isShow;
+        PasswordInputIcon = isShow ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff;
+        PasswordInput = isShow ? InputType.Text : InputType.Password;
+    }
+
     void Submit() => MudDialog?.Close(DialogResult.Ok(true));
     void Cancel() => MudDialog?.Cancel();
-    bool isShow;
-    InputType PasswordInput = InputType.Password;
-    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
 
-    void ButtonTestclick()
+    private void ReloadPage()
     {
-        @if (isShow)
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+    }
+    private async Task loginUser()
+    {
+        try
         {
-            isShow = false;
-            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
-            PasswordInput = InputType.Password;
+            using HttpClient httpClient = new HttpClient();
+            HttpResponseMessage response = await httpClient.GetAsync($"{APIService.PGASePortalAPI}/api/eportalUser/login/{email}/{password}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var user = await response.Content.ReadFromJsonAsync<eportalUser>();
+                if (user != null)
+                {
+                    UserService.eid = user.eid;
+                    Submit();
+                    ReloadPage();
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Login failed: {response.ReasonPhrase}");
+            }
         }
-        else
+        catch (HttpRequestException ex)
         {
-            isShow = true;
-            PasswordInputIcon = Icons.Material.Filled.Visibility;
-            PasswordInput = InputType.Text;
+            Console.WriteLine($"Error logging in: {ex.Message}");
         }
     }
 }

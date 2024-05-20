@@ -11,6 +11,7 @@ public partial class pmisContext : DbContext
     }
 
     public virtual DbSet<m_vwGetAllEmployee_Minified> m_vwGetAllEmployee_Minified { get; set; }
+    public virtual DbSet<eportalUser> eportalUser { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -29,6 +30,20 @@ public partial class pmisContext : DbContext
             entity.Property(e => e.SG);
             entity.Property(e => e.Status);
             entity.Property(e => e.isactive);
+
+        });
+
+        OnModelCreatingPartial(modelBuilder);
+        modelBuilder.Entity<eportalUser>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("eportalUser");
+
+            entity.Property(e => e.eid);
+            entity.Property(e => e.SwipEmployeeID);
+            entity.Property(e => e.username);
+            entity.Property(e => e.passcode);
 
         });
 

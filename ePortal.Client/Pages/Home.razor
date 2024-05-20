@@ -2,6 +2,8 @@
 @using System.Net.Http
 @using System.Text.Json
 @using System.Threading.Tasks
+@inject UserService UserService
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <MudContainer MaxWidth="MaxWidth.False">
     <MudGrid Spacing="5">
@@ -37,7 +39,17 @@
                 <MudItem xs="12">
                     <MudPaper Outlined Class="mud-border-dark">
                         <MudStack Class="pa-1" Spacing="0" AlignItems="AlignItems.Center">
-                            <MudText Typo="Typo.h5">Announcements</MudText>
+                            <MudGrid>
+                                <MudItem xs="2"></MudItem>
+                                <MudItem xs="8">
+                                    <MudText Align="Align.Center"><b>Announcements</b></MudText>
+                                </MudItem>
+                                <MudItem xs="2">
+                                    <MudStack Row Justify="Justify.FlexEnd">
+                                        <MudIconButton Class="pa-0 ma-0" OnClick="@(async () => await refreshAnnouncements())" Icon="@Icons.Material.Filled.Refresh"></MudIconButton>
+                                    </MudStack>
+                                </MudItem>
+                            </MudGrid>
                             <MudDivider />
                             @{
                                 DateTime currentDate = DateTime.UtcNow;
@@ -49,12 +61,11 @@
                     </MudPaper>
                 </MudItem>
                 <!-- Announcement Lists -->
-                <MudItem xs="12" Style="height: 40vh" Class="overflow-auto">
+                <MudItem xs="12" Style="height: 40vh" Class="overflow-auto">                    
                     @if (announcementForTheMonth != null && announcementForTheMonth.Any())
                     {
                         DateTime currentDate = DateTime.UtcNow;
-                        DateTime oneWeekAgo = currentDate.AddDays(-1);
-                        String newNotification = "New";
+                        DateTime oneWeekAgo = currentDate.AddDays(-7);
                         <MudGrid Justify="Justify.Center" Class="rounded-lg" Spacing="2">
                             <MudVirtualize Items="announcementForTheMonth" Context="announcement">
                                 @if (announcement.docdate > oneWeekAgo)
@@ -66,11 +77,11 @@
                                                 <MudStack Spacing="0" Wrap="Wrap.NoWrap" Style="width: 100%">
                                                     <MudStack Row Justify="Justify.SpaceBetween">
                                                         <MudStack Row Spacing="2" Style="width: 100%" AlignItems="AlignItems.End">
-                                                            <MudText>@announcement.doctype</MudText>
+                                                            <MudText Typo="Typo.body2"><b>@announcement.doctype</b></MudText>
                                                             <MudDivider Vertical="true" FlexItem="true" />
-                                                            <MudText Typo="Typo.caption">@(announcement.docdate?.ToString("MMMM dd, yyyy") ?? "No Date")</MudText>
+                                                            <MudText Style="font-size: 12px">@(announcement.docdate?.ToString("MMMM dd, yyyy") ?? "No Date")</MudText>
                                                         </MudStack>
-                                                        <MudChip Class="pa-1" Color="Color.Secondary" Size="Size.Small">@newNotification</MudChip>
+                                                        <MudChip Class="pa-2" Style="@($"color: {Colors.Shades.Black}; background: {Colors.Yellow.Default}")" Size="Size.Small">New</MudChip>
                                                     </MudStack>
                                                     <MudDivider />
                                                     <MudStack Spacing="1" Class="pt-2" AlignItems="AlignItems.Start">
@@ -83,7 +94,7 @@
                                                     </MudStack>
                                                     <MudStack Row Spacing="1" AlignItems="AlignItems.Center">
                                                         <MudText Style="font-size: 12px">Attachment: </MudText>
-                                                        <MudButton Href="@("https://pgas.ph/dts/public/read?docid="+announcement.docid)" Target="_blank" StartIcon="@Icons.Material.Filled.Attachment" Class="pa-1" Style="font-size: 12px" Variant="Variant.Text">@announcement.docid</MudButton>
+                                                        <MudButton Href="@("https://pgas.ph/dts/public/read?docid="+announcement.docid)" Target="_blank" StartIcon="@Icons.Material.Filled.Attachment" IconColor="Color.Primary" Class="pa-1" Style="font-size: 12px" Variant="Variant.Text">@announcement.docid</MudButton>
                                                     </MudStack>
                                                 </MudStack>
                                             </MudStack>
@@ -99,7 +110,7 @@
                                                 <MudStack Spacing="0" Wrap="Wrap.NoWrap" Style="width: 100%">
                                                     <MudStack Row Justify="Justify.SpaceBetween">
                                                         <MudStack Row Spacing="2" Style="width: 100%" AlignItems="AlignItems.End">
-                                                            <MudText>@announcement.doctype</MudText>
+                                                            <MudText Typo="Typo.body2"><b>@announcement.doctype</b></MudText>
                                                             <MudDivider Vertical="true" FlexItem="true" />
                                                             <MudText Typo="Typo.caption">@(announcement.docdate?.ToString("MMMM dd, yyyy") ?? "No Date")</MudText>
                                                         </MudStack>
@@ -115,7 +126,7 @@
                                                     </MudStack>
                                                     <MudStack Row Spacing="1" AlignItems="AlignItems.Center">
                                                         <MudText Style="font-size: 12px">Attachment: </MudText>
-                                                        <MudButton Href="@("https://pgas.ph/dts/public/read?docid="+announcement.docid)" Target="_blank" StartIcon="@Icons.Material.Filled.Attachment" Class="pa-1" Style="font-size: 12px" Variant="Variant.Text">@announcement.docid</MudButton>
+                                                        <MudButton Href="@("https://pgas.ph/dts/public/read?docid="+announcement.docid)" Target="_blank" StartIcon="@Icons.Material.Filled.Attachment" IconColor="Color.Primary" Class="pa-1" Style="font-size: 12px" Variant="Variant.Text">@announcement.docid</MudButton>
                                                     </MudStack>
                                                 </MudStack>
                                             </MudStack>
@@ -125,14 +136,20 @@
                             </MudVirtualize>
                         </MudGrid>
                     }
+                    else if (isLoading == false)
+                    {
+                        <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+                    }
                     else
                     {
                         <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
                     }
+
                 </MudItem>
             </MudGrid>
         </MudItem>
 
+        <MudDivider />
         <!-- Employees
         <MudItem xs="12">
             <MudStack Class="d-flex flex-nowrap justify-left overflow-auto gap-5 pa-1" Row="true">
@@ -229,8 +246,7 @@
                 @if (informationSystems != null && informationSystems.Any())
                 {
                     <!-- Iterate over each cluster of information systems -->
-                    @foreach (var cluster in informationSystems)
-                    {
+                    <MudVirtualize Items="informationSystems" Context="cluster">
                         <!-- Display a card for each cluster -->
                         <MudItem xs="6" md="4">
                             <MudPaper Outlined Class="mud-border-dark max-height">
@@ -240,40 +256,44 @@
                                         <b>@cluster.Cluster_Name</b>
                                     </MudText>
                                     <MudDivider />
-                                    <MudStack Row Class="flex-wrap justify-center pt-2" Spacing="2">
-
+                                    <MudStack Row Class="flex-wrap justify-center pt-1" Spacing="2">
                                         <!-- Iterate over each information system in the cluster -->
-                                        @foreach (var system in cluster.Information_Systems)
-                                        {
+                                        <MudVirtualize Items="cluster.Information_Systems" Context="system">
                                             <!-- Display a button or badge for each information system -->
                                             @if (system.Information_System_Platform == "Web App")
                                             {
-                                                <!-- Display a button for web apps with a tooltip -->
-                                                <MudLink Href="@system.Information_System_Link" Target="_blank" Underline="Underline.None">
-                                                    <MudTooltip Text="@system.Information_System_Name">
-                                                        <MudButton DisableElevation Variant="Variant.Filled" StartIcon="@(typeof(Icons.Material.Filled).GetField(system.Information_System_Icon)?.GetValue(null) as string)" Color="Color.Primary" Size="Size.Small">
-                                                            @system.Information_System_Abbreviation
-                                                        </MudButton>
-                                                    </MudTooltip>
-                                                </MudLink>
+                                                <MudTooltip Text="@system.Information_System_Name">
+                                                    <MudPaper Width="100%" Outlined Class="mud-border-dark">
+                                                        <MudLink Href="@system.Information_System_Link" Target="_blank" Color="Color.Tertiary" Underline="Underline.None">
+                                                            <MudButton Size="Size.Small" IconColor="Color.Primary"
+                                                                       StartIcon="@(typeof(Icons.Material.Filled).GetField(system.Information_System_Icon)?.GetValue(null) as string)">
+                                                                @system.Information_System_Abbreviation
+                                                            </MudButton>
+                                                        </MudLink>
+                                                    </MudPaper>
+                                                </MudTooltip>
                                             }
                                             else if (system.Information_System_Platform == "Desktop App")
                                             {
-                                                <!-- Display a badge for desktop apps with a tooltip -->
-                                                <MudTooltip Text="@(system.Information_System_Name+" ("+system.Information_System_Platform+")")">
+                                                <MudTooltip Text="@(system.Information_System_Name + " (" + system.Information_System_Platform + ")")">
                                                     <MudBadge Bordered="true" Overlap="true" Icon="@Icons.Material.Filled.DesktopWindows" Color="Color.Tertiary">
-                                                        <MudButton DisableElevation Variant="Variant.Filled" StartIcon="@(typeof(Icons.Material.Filled).GetField(system.Information_System_Icon)?.GetValue(null) as string)" Color="Color.Primary" Size="Size.Small">
-                                                            @system.Information_System_Abbreviation
-                                                        </MudButton>
+                                                        <MudPaper Width="100%" Outlined Class="mud-border-dark">
+                                                            <MudLink Href="@system.Information_System_Link" Target="_blank" Color="Color.Tertiary" Underline="Underline.None">
+                                                                <MudButton DisableRipple Class="pointer-events-none" Size="Size.Small" IconColor="Color.Primary"
+                                                                           StartIcon="@(typeof(Icons.Material.Filled).GetField(system.Information_System_Icon)?.GetValue(null) as string)">
+                                                                    @system.Information_System_Abbreviation
+                                                                </MudButton>
+                                                            </MudLink>
+                                                        </MudPaper>
                                                     </MudBadge>
                                                 </MudTooltip>
                                             }
-                                        }
+                                        </MudVirtualize>
                                     </MudStack>
                                 </MudStack>
                             </MudPaper>
                         </MudItem>
-                    }
+                    </MudVirtualize>
                 }
                 else
                 {
@@ -286,7 +306,10 @@
 
 @code {
     // Get API URL
-    private readonly string API_URL = APIVariable.PGASePortalAPI;
+    private readonly string API_URL = APIService.PGASePortalAPI;
+    private Timer? timer;
+    private bool isLoading = true;
+    private bool loaded = true;
 
     // Variables for storing data and UI elements
     private List<v_clustered_information_systemDTO>? informationSystems;
@@ -298,7 +321,7 @@
         public string Cluster_Name { get; set; } = string.Empty;
         public string Cluster_Abbreviation { get; set; } = string.Empty;
         public string Cluster_Icon { get; set; } = string.Empty;
-        public List<InformationSystemDTO>? Information_Systems { get; set; } // Updated to use InformationSystemDTO
+        public List<InformationSystemDTO>? Information_Systems { get; set; }
     }
 
     public class InformationSystemDTO
@@ -335,12 +358,73 @@
         public DateTime? docdate { get; set; }
     }
 
+    private async Task refreshAnnouncements()
+    {
+        isLoading = true;
+        await localStorage.RemoveItemAsync("announcementForTheMonth");
+        announcementForTheMonth = null;
+        StateHasChanged();
+        await officeViewAnnouncementsForTheMonth();
+        StateHasChanged();
+    }
+
+    private async Task timedRefresh()
+    {
+        if (loaded == false)
+        {
+            await localStorage.RemoveItemAsync("announcementForTheMonth");
+            announcementForTheMonth = null;
+            StateHasChanged();
+            await officeViewAnnouncementsForTheMonth();
+            StateHasChanged();
+        }
+    }
+
+    private async Task setInitialize()
+    {
+        loaded = false;    
+    }
+
     // Initialization method to fetch data and update UI elements
     protected override async Task OnInitializedAsync()
     {
-        await Task.Run(() => randomEmployees()); // Fetch random employees
-        await Task.Run(() => GetGroupedClusters()); // Fetch grouped information systems
-        await Task.Run(() => officeViewAnnouncementsForTheMonth()); // Fetch office announcements for the month
+        if (loaded == true)
+        {
+            timer = new Timer(async _ => await setInitialize(), null, TimeSpan.Zero, TimeSpan.FromSeconds(1)); // set initialized loaded value to false
+        }
+
+        timer = new Timer(async _ => await timedRefresh(), null, TimeSpan.Zero, TimeSpan.FromMinutes(5)); // Set to refresh every 5 minute
+
+        try
+        {
+            if (await localStorage.ContainKeyAsync("informationSystems"))
+            {
+                var jsonString = await localStorage.GetItemAsync<string>("informationSystems");
+                informationSystems = JsonSerializer.Deserialize<List<v_clustered_information_systemDTO>>(jsonString);
+            }
+            else
+            {
+                await GetGroupedClusters();
+            }
+
+            if (await localStorage.ContainKeyAsync("announcementForTheMonth"))
+            {
+                var jsonString = await localStorage.GetItemAsync<string>("announcementForTheMonth");
+                announcementForTheMonth = JsonSerializer.Deserialize<List<t_doc_office_vw>>(jsonString);
+            }
+            else
+            {
+                await officeViewAnnouncementsForTheMonth();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching data: {ex.Message}");
+        }
+        finally
+        {
+            await base.OnInitializedAsync();
+        }
     }
 
     // Method to fetch grouped information systems from the API
@@ -351,9 +435,14 @@
             using HttpClient httpClient = new HttpClient();
             HttpResponseMessage httpResponse = await httpClient.GetAsync(API_URL + "/api/v_clustered_information_system")!;
             httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
+
             using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
-            informationSystems = await JsonSerializer.DeserializeAsync<List<v_clustered_information_systemDTO>>(responseStream,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            informationSystems = await JsonSerializer.DeserializeAsync<List<v_clustered_information_systemDTO>>(responseStream, options);
+
+            var jsonString = JsonSerializer.Serialize(informationSystems);
+            await localStorage.SetItemAsync("informationSystems", jsonString);
+
         }
         catch (HttpRequestException ex)
         {
@@ -370,9 +459,11 @@
             using HttpClient httpClient = new HttpClient();
             HttpResponseMessage httpResponse = await httpClient.GetAsync(API_URL + "/api/m_vwGetAllEmployee_Minified")!;
             httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
+
             using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
-            allPgasEmployees = await JsonSerializer.DeserializeAsync<List<m_vwGetAllEmployee_MinifiedDTO>>(responseStream,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            allPgasEmployees = await JsonSerializer.DeserializeAsync<List<m_vwGetAllEmployee_MinifiedDTO>>(responseStream, options);
+
             // Shuffle the list randomly
             var random = new Random();
             var shuffledEmployees = allPgasEmployees?.OrderBy(x => random.Next()).ToList();
@@ -394,18 +485,25 @@
     {
         try
         {
+            isLoading = true;
             using HttpClient httpClient = new HttpClient();
             HttpResponseMessage httpResponse = await httpClient.GetAsync(API_URL + "/api/eportal_docs_view/officeViewAnnouncements")!;
             httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
             using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
-            announcementForTheMonth = await JsonSerializer.DeserializeAsync<List<t_doc_office_vw>>(responseStream,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            announcementForTheMonth = await JsonSerializer.DeserializeAsync<List<t_doc_office_vw>>(responseStream, options);
+
+            var jsonString = JsonSerializer.Serialize(announcementForTheMonth);
+            await localStorage.SetItemAsync("announcementForTheMonth", jsonString);
+            isLoading = false;
+
         }
         catch (HttpRequestException ex)
         {
             // Handle exception, log, or display an error message
             Console.WriteLine($"Error fetching data: {ex.Message}");
         }
+
     }
 
     // Method to truncate text to a specified length

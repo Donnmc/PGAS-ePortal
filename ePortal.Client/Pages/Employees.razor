@@ -10,8 +10,8 @@
 <MudContainer MaxWidth="MaxWidth.False">
     <MudGrid Spacing="5">
         <!-- Search Bar -->
-        <MudItem Class="ml-1 mr-1" xs="12">
-            <MudTextField Clearable @bind-Value="query" T="string" Immediate="true" Label="Search"
+        <MudItem xs="12" md="6">
+            <MudTextField Class="mud-border-dark" Clearable @bind-Value="query" T="string" Immediate="true" Label="Search"
                           HelperText="Office Name | Office Abbreviation | Employee Name | Employee ID | Position"
                           Variant="Variant.Outlined" OnKeyDown="HandleKeyDown" OnAdornmentClick="selectEmployee"
                           AdornmentIcon="@Icons.Material.Filled.Search" Adornment="Adornment.End" AdornmentColor="Color.Primary">
@@ -24,11 +24,11 @@
                 {
                     <MudVirtualize Items="pgasEmployee" Context="employee">
                         <MudItem xs="12" sm="6" md="4" xxl="3">
-                            <MudCard Class="ma-1" Outlined>
+                            <MudCard Outlined Class="mud-border-dark">
                                 <MudStack Row="true" Class="justify-start" Spacing="0">
                                     <MudStack Class="justify-center">
-                                        <MudImage Src="@("https://pgas.ph/hris/Content/images/photos/"+ employee.eid + ".png")" onerror="this.src='Objects/agusan del sur.webp'" Height="150" Width="120"
-                                                  ObjectFit="ObjectFit.Cover" Class="rounded-l">
+                                        <MudImage Style="image-rendering: optimizeSpeed;" Src="@("https://pgas.ph/hris/Content/images/photos/"+ employee.eid + ".png")" onerror="this.src='Objects/agusan del sur.webp'" Height="150" Width="120"
+                                                  ObjectFit="ObjectFit.Cover" ObjectPosition="ObjectPosition.Top" Class="rounded-l-sm">
                                         </MudImage>
                                     </MudStack>
                                     <MudDivider Vertical="true" FlexItem />
@@ -118,14 +118,14 @@
                     {
                         <MudVirtualize Items="allPgasEmployees" Context="employee">
                             <MudItem xs="12" sm="6" md="4" xxl="3">
-                                <MudCard Class="ma-1" Outlined>
+                                <MudCard Outlined Class="mud-border-dark">
                                     <MudStack Row="true" Class="justify-start" Spacing="0">
                                         <MudStack Class="justify-center">
-                                            <MudImage Src="@("https://pgas.ph/hris/Content/images/photos/"+ employee.eid +".png")" onerror="this.src='Objects/agusan del sur.webp'" Height="150" Width="120"
-                                                      ObjectPosition="ObjectPosition.Top" ObjectFit="ObjectFit.Cover" Class="rounded-l">
+                                            <MudImage Style="image-rendering: optimizeSpeed" Src="@("https://pgas.ph/hris/Content/images/photos/"+ employee.eid +".png")" onerror="this.src='Objects/agusan del sur.webp'" Height="150" Width="120"
+                                                      ObjectFit="ObjectFit.Cover"  ObjectPosition="ObjectPosition.Top" Class="rounded-l-sm">
                                             </MudImage>
                                         </MudStack>
-                                        <MudDivider Vertical="true" FlexItem/>
+                                        <MudDivider Vertical="true" FlexItem />
                                         <MudStack Class="ma-1" Style="width: 100%" Spacing="1">
                                             <MudText Class="m-0" Typo="Typo.body1"><b>@employee.EmpName</b></MudText>
                                             <MudText Class="m-0" Style="font-size: 12px" Typo="Typo.body2">@employee.Position</MudText>
@@ -189,7 +189,7 @@
 
 @code {
     // Get API URL
-    private readonly string API_URL = APIVariable.PGASePortalAPI;
+    private readonly string API_URL = APIService.PGASePortalAPI;
     private List<m_vwGetAllEmployee_MinifiedDTO>? allPgasEmployees = new();
     private List<m_vwGetAllEmployee_MinifiedDTO>? pgasEmployee;
     private List<string>? distinctOfficeNames;
