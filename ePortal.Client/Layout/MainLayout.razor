@@ -1,23 +1,27 @@
-﻿@inherits LayoutComponentBase
+﻿@using System.Net.Http
+@using System.Text.Json
+@using System.Threading.Tasks
+@inherits LayoutComponentBase
 @inject IDialogService DialogService
 @inject UserService UserService
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <MudThemeProvider Theme="PGASTheme" DefaultScrollbar="true" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Elevation="0">
+    <MudAppBar Style="background-color: rgba(255, 255, 255, 0.8);backdrop-filter: blur(10px)" Elevation="0">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@DrawerToggle" />
         <MudImage Fluid="true" Width="200" Src="Objects/pgas eportal.webp"></MudImage>
         <MudSpacer />
-        @if (UserService.eid != null)
+        @if (eid?.eid != null)
         {
             <MudAvatar Variant="Variant.Outlined" Class="mud-border-dark">
                 <MudImage Class="cursor-pointer"
                           Style="image-rendering: optimizeSpeed"
                           ObjectFit="ObjectFit.ScaleDown"
-                          Src="@($"https://pgas.ph/hris/Content/images/photos/{UserService.eid}.png")"
+                          Src="@($"https://pgas.ph/hris/Content/images/photos/{eid.eid}.png")"
                           onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';"
                           @onclick="OpenUserDialog">
                 </MudImage>
@@ -43,8 +47,9 @@
         @Body
     </MudMainContent>
 </MudLayout>
-
 @code {
+    private UserService.eportalUser? eid;
+
     MudTheme PGASTheme = new MudTheme()
         {
             Palette = new PaletteLight()
@@ -66,11 +71,22 @@
 
     bool _drawerOpen = true;
 
-
     protected override async Task OnInitializedAsync()
     {
-        await UserService.LoadUserSession();
-        UserService.OnChange += StateHasChanged;
+        UserService.OnUserChanged += UpdateUser;
+        await UpdateUserAsync();
+    }
+
+    private async Task UpdateUserAsync()
+    {
+        eid = await UserService.GetCurrentUserAsync();
+        StateHasChanged();
+    }
+
+    private void UpdateUser()
+    {
+        // Calling the async method from a non-async method
+        _ = UpdateUserAsync();
     }
 
     void DrawerToggle()
@@ -88,10 +104,5 @@
     {
         var options = new DialogOptions { CloseOnEscapeKey = true };
         DialogService.Show<Dialogues.UserPanel>("", options);
-    }
-
-    public void Dispose()
-    {
-        UserService.OnChange -= StateHasChanged;
     }
 }

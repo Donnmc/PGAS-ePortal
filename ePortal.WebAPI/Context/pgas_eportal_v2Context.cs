@@ -10,8 +10,6 @@ public partial class pgas_eportal_v2Context : DbContext
     {
     }
 
-    public virtual DbSet<bible_verses> bible_verses { get; set; }
-
     public virtual DbSet<emergency_hotline> emergency_hotline { get; set; }
 
     public virtual DbSet<emergency_hotline_line> emergency_hotline_line { get; set; }
@@ -46,14 +44,6 @@ public partial class pgas_eportal_v2Context : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<bible_verses>(entity =>
-        {
-            entity.HasKey(e => e.id).HasName("PK__daily_wo__3213E83F71C8AD45");
-
-            entity.Property(e => e.chapter).HasMaxLength(255);
-            entity.Property(e => e.verse).HasMaxLength(255);
-        });
-
         modelBuilder.Entity<emergency_hotline>(entity =>
         {
             entity.Property(e => e.area)

@@ -59,8 +59,13 @@ namespace ePortal.WebAPI.Controllers.PMIS
 
         [HttpGet("query")]
         public async Task<ActionResult<IEnumerable<m_vwGetAllEmployee_Minified>>> SearchEmployees(
-        string? searchDetails = null)
+        [FromQuery] string? searchDetails = null)
         {
+            if (string.IsNullOrWhiteSpace(searchDetails))
+            {
+                return BadRequest("Search details cannot be null or empty.");
+            }
+
             var query = _context.m_vwGetAllEmployee_Minified.AsQueryable();
 
             if (!string.IsNullOrEmpty(searchDetails))
@@ -74,7 +79,7 @@ namespace ePortal.WebAPI.Controllers.PMIS
                     e.eid.ToString().Contains(searchDetails));
             }
 
-            var employee = await query.Where(e => e.isactive == true).ToListAsync();
+            var employee = await query.ToListAsync();
 
             var statusOrder = new[] {
                 "Elected",

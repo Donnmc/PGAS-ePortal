@@ -1,5 +1,4 @@
 ﻿@using System.Text.Json
-<!-- Bible Verse -->
 
 <MudContainer MaxWidth="MaxWidth.False">
     <MudGrid Spacing="2">
@@ -13,31 +12,6 @@
                     <MudText Style="font-size: 12px" Align="Align.Center" Typo="Typo.subtitle1">
                         @TimeLongFormat
                     </MudText>
-                </MudStack>
-            </MudPaper>
-        </MudItem>
-        <MudItem xs="12">
-            <MudPaper Outlined Class="mud-border-dark">
-                <MudStack Class="pa-1" Spacing="0">
-                    <MudText Class="ma-1" Align="Align.Center" Typo="Typo.body1">Our Daily Word of God </MudText>
-                    <MudDivider />
-                    <MudStack Class="pa-2">
-                        @if (latestVerse != null)
-                        {
-                            <!-- Display the latest Bible verse -->
-                            <MudText Typo="Typo.subtitle2" Color="Color.Primary" Style="font-size: 12px">@latestVerse.Chapter</MudText>
-                            <MudText Typo="Typo.subtitle1" Style="font-size: 12px">@latestVerse.Verse</MudText>
-                        }
-                        else
-                        {
-                            <MudCardContent Class="pa-5">
-                                <!-- Display the latest Bible verse -->
-                                <MudSkeleton Width="40%" />
-                                <MudSkeleton />
-                                <MudSkeleton Width="70%" />
-                            </MudCardContent>
-                        }
-                    </MudStack>
                 </MudStack>
             </MudPaper>
         </MudItem>

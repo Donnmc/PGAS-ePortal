@@ -1,7 +1,8 @@
 ﻿@using System.Net.Http.Json
 @using System.Text.Json
 @inject UserService UserService
-@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <MudDialog Style="width: 300px">
     <DialogContent>
@@ -19,17 +20,11 @@
 </MudDialog>
 
 @code {
+    private readonly string API_URL = APIService.PGASePortalAPI;
     [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
+    private int loginAttempts = 0;
     private string? email = "";
     private string? password = "";
-
-    public class eportalUser
-    {
-        public long? eid { get; set; }
-        public string? SwipEmployeeID { get; set; }
-        public string? email { get; set; }
-        public string? password { get; set; }
-    }
 
     private bool isShow;
     private InputType PasswordInput = InputType.Password;
@@ -45,35 +40,43 @@
     void Submit() => MudDialog?.Close(DialogResult.Ok(true));
     void Cancel() => MudDialog?.Cancel();
 
-    private void ReloadPage()
-    {
-        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
-    }
     private async Task loginUser()
     {
         try
         {
             using HttpClient httpClient = new HttpClient();
-            HttpResponseMessage response = await httpClient.GetAsync($"{APIService.PGASePortalAPI}/api/eportalUser/login/{email}/{password}");
+            HttpResponseMessage httpResponse = await httpClient.GetAsync($"{API_URL}/api/eportalUser/login/{email}/{password}");
+            httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
 
-            if (response.IsSuccessStatusCode)
-            {
-                var user = await response.Content.ReadFromJsonAsync<eportalUser>();
-                if (user != null)
-                {
-                    UserService.eid = user.eid;
-                    Submit();
-                    ReloadPage();
-                }
-            }
-            else
-            {
-                Console.WriteLine($"Login failed: {response.ReasonPhrase}");
-            }
+            using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var eid = await JsonSerializer.DeserializeAsync<UserService.eportalUser>(responseStream, options);
+
+            await UserService.SetCurrentUserAsync(eid);
+            Submit();
+
+            Snackbar.Clear();
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomStart;
+            Snackbar.Configuration.SnackbarVariant = Variant.Outlined;
+            Snackbar.Add("Logged-in", Severity.Success);
         }
         catch (HttpRequestException ex)
         {
             Console.WriteLine($"Error logging in: {ex.Message}");
+            Snackbar.Clear();
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+            Snackbar.Configuration.SnackbarVariant = Variant.Outlined;
+            Snackbar.Add("User does not Exist", Severity.Error);
+
+            loginAttempts++;
+
+            if (loginAttempts >= 3)
+            {
+                Snackbar.Clear();
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+                Snackbar.Configuration.SnackbarVariant = Variant.Outlined;
+                Snackbar.Add("Connect with IT Support", Severity.Warning);
+            }
         }
     }
 }

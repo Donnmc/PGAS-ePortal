@@ -3,28 +3,32 @@
 @using System.Text.Json
 @using System.Threading.Tasks
 @using System.Timers
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <PageTitle>Employees | ePortal | Provincial Government of Agusan del Sur</PageTitle>
 
-
-<MudContainer MaxWidth="MaxWidth.False">
-    <MudGrid Spacing="5">
-        <!-- Search Bar -->
-        <MudItem xs="12" md="6">
-            <MudTextField Class="mud-border-dark" Clearable @bind-Value="query" T="string" Immediate="true" Label="Search"
+<MudGrid Spacing="5" Class="pl-2 pr-2 pb-2">
+    <!-- Search Bar -->O
+    <MudItem xs="12" md="6">
+        <MudStack Row AlignItems="AlignItems.Start">
+            <MudTextField Class="mud-border-dark pa-0" Clearable @bind-Value="query" T="string" Immediate="false" Label="Search"
                           HelperText="Office Name | Office Abbreviation | Employee Name | Employee ID | Position"
-                          Variant="Variant.Outlined" OnKeyDown="HandleKeyDown" OnAdornmentClick="selectEmployee"
-                          AdornmentIcon="@Icons.Material.Filled.Search" Adornment="Adornment.End" AdornmentColor="Color.Primary">
+                          Variant="Variant.Outlined" OnKeyUp="selectEmployee" OnAdornmentClick="selectEmployee"
+                          AdornmentIcon="@Icons.Material.Filled.Search" Adornment="Adornment.End" Required
+                          AdornmentAriaLabel="Search" IconSize="Size.Medium" AdornmentColor="Color.Primary">
             </MudTextField>
-        </MudItem>
-        <!-- Employees -->
-        <MudItem xs="12">
-            <MudGrid Justify="Justify.Center">
-                @if (pgasEmployee != null && pgasEmployee.Any())
+        </MudStack>
+    </MudItem>
+    <!-- Employees -->
+    <MudItem xs="12">
+        <MudGrid Justify="Justify.Center">
+            @if (pgasEmployee != null && pgasEmployee.Any())
+            {
+                if (!string.IsNullOrEmpty(query))
                 {
                     <MudVirtualize Items="pgasEmployee" Context="employee">
                         <MudItem xs="12" sm="6" md="4" xxl="3">
-                            <MudCard Outlined Class="mud-border-dark">
+                            <MudPaper Outlined Class="mud-border-dark">
                                 <MudStack Row="true" Class="justify-start" Spacing="0">
                                     <MudStack Class="justify-center">
                                         <MudImage Style="image-rendering: optimizeSpeed;" Src="@("https://pgas.ph/hris/Content/images/photos/"+ employee.eid + ".png")" onerror="this.src='Objects/agusan del sur.webp'" Height="150" Width="120"
@@ -44,173 +48,54 @@
                                             <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Blue.Default}")">
                                                 @employee.OfficeAbbr
                                             </MudChip>
-                                            @if (employee.Status == "Elected")
+                                            @foreach (var status in new[]
+                                    { "Elected", "Permanent", "Casual", "Job Order",
+                                    "Contract of Service", "Coterminous", "Temporary",
+                                    "Detailed" })
                                             {
-                                                <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Amber.Lighten1}")">
-                                                    @employee.Status
-                                                </MudChip>
+                                                var color = status switch
+                                                {
+                                                    "Elected" => Colors.Amber.Lighten1,
+                                                    "Permanent" => Colors.LightBlue.Lighten1,
+                                                    "Casual" => Colors.Cyan.Lighten1,
+                                                    "Job Order" => Colors.Teal.Lighten1,
+                                                    "Contract of Service" => Colors.Green.Lighten1,
+                                                    "Coterminous" => Colors.DeepOrange.Lighten1,
+                                                    "Temporary" => Colors.Red.Lighten1,
+                                                    "Detailed" => Colors.Orange.Lighten1,
+                                                    _ => Colors.Shades.Black
+                                                };
+                                                if (employee.Status == status)
+                                                {
+                                                    <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{color}")">
+                                                        @employee.Status
+                                                    </MudChip>
+                                                }
                                             }
-                                            else if (employee.Status == "Permanent")
-                                            {
-                                                <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.LightBlue.Lighten1}")">
-                                                    @employee.Status
-                                                </MudChip>
-                                            }
-                                            else if (employee.Status == "Casual")
-                                            {
-                                                <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Cyan.Lighten1}")">
-                                                    @employee.Status
-                                                </MudChip>
-                                            }
-                                            else if (employee.Status == "Job Order")
-                                            {
-                                                <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Teal.Lighten1}")">
-                                                    @employee.Status
-                                                </MudChip>
-                                            }
-                                            else if (employee.Status == "Contract of Service")
-                                            {
-                                                <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Green.Lighten1}")">
-                                                    @employee.Status
-                                                </MudChip>
-                                            }
-                                            else if (employee.Status == "Coterminous")
-                                            {
-                                                <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.DeepOrange.Lighten1}")">
-                                                    @employee.Status
-                                                </MudChip>
-                                            }
-                                            else if (employee.Status == "Temporary")
-                                            {
-                                                <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Red.Lighten1}")">
-                                                    @employee.Status
-                                                </MudChip>
-                                            }
-                                            else if (employee.Status == "Detailed")
-                                            {
-                                                <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Orange.Lighten1}")">
-                                                    @employee.Status
-                                                </MudChip>
-                                            }
-                                            @if (@employee.isactive == true)
-                                            {
-                                                <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.LightGreen.Default}")">
-                                                    Active
-                                                </MudChip>
-                                            }
-                                            else
-                                            {
-                                                <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Red.Default}")">
-                                                    Inactive
-                                                </MudChip>
-                                            }
-
                                         </MudPaper>
                                     </MudStack>
                                 </MudStack>
-                            </MudCard>
+                            </MudPaper>
                         </MudItem>
                     </MudVirtualize>
                 }
                 else
                 {
-                    @if (allPgasEmployees != null && allPgasEmployees.Any())
-                    {
-                        <MudVirtualize Items="allPgasEmployees" Context="employee">
-                            <MudItem xs="12" sm="6" md="4" xxl="3">
-                                <MudCard Outlined Class="mud-border-dark">
-                                    <MudStack Row="true" Class="justify-start" Spacing="0">
-                                        <MudStack Class="justify-center">
-                                            <MudImage Style="image-rendering: optimizeSpeed" Src="@("https://pgas.ph/hris/Content/images/photos/"+ employee.eid +".png")" onerror="this.src='Objects/agusan del sur.webp'" Height="150" Width="120"
-                                                      ObjectFit="ObjectFit.Cover"  ObjectPosition="ObjectPosition.Top" Class="rounded-l-sm">
-                                            </MudImage>
-                                        </MudStack>
-                                        <MudDivider Vertical="true" FlexItem />
-                                        <MudStack Class="ma-1" Style="width: 100%" Spacing="1">
-                                            <MudText Class="m-0" Typo="Typo.body1"><b>@employee.EmpName</b></MudText>
-                                            <MudText Class="m-0" Style="font-size: 12px" Typo="Typo.body2">@employee.Position</MudText>
-                                            <MudText Class="m-0" Style="font-size: 13px" Typo="Typo.body2">@employee.OfficeName</MudText>
-                                            <MudDivider />
-                                            <MudPaper Height="100%" Elevation="0" Class="rounded-lg" Style="background-color:ghostwhite">
-                                                <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Shades.Black}")">
-                                                    @employee.SwipeID
-                                                </MudChip>
-                                                <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Blue.Default}")">
-                                                    @employee.OfficeAbbr
-                                                </MudChip>
-                                                @if (employee.Status == "Elected")
-                                                {
-                                                    <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Amber.Lighten1}")">@employee.Status</MudChip>
-                                                }
-                                                else if (employee.Status == "Permanent")
-                                                {
-                                                    <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Blue.Lighten1}")">@employee.Status</MudChip>
-                                                }
-                                                else if (employee.Status == "Casual")
-                                                {
-                                                    <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Cyan.Lighten1}")">@employee.Status</MudChip>
-                                                }
-                                                else if (employee.Status == "Job Order")
-                                                {
-                                                    <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Teal.Lighten1}")">@employee.Status</MudChip>
-                                                }
-                                                else if (employee.Status == "Contract of Service")
-                                                {
-                                                    <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Green.Lighten1}")">@employee.Status</MudChip>
-                                                }
-                                                else if (employee.Status == "Coterminous")
-                                                {
-                                                    <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.DeepOrange.Lighten1}")">@employee.Status</MudChip>
-                                                }
-                                                else if (employee.Status == "Temporary")
-                                                {
-                                                    <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Red.Lighten1}")">@employee.Status</MudChip>
-                                                }
-                                                else if (employee.Status == "Detailed")
-                                                {
-                                                    <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Orange.Lighten1}")">@employee.Status</MudChip>
-                                                }
-                                                <MudChip Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.LightGreen.Default}")">
-                                                    Active
-                                                </MudChip>
-                                            </MudPaper>
-                                        </MudStack>
-                                    </MudStack>
-                                </MudCard>
-                            </MudItem>
-                        </MudVirtualize>
-                    }
+                    <MudText>Search for employee</MudText>
                 }
-            </MudGrid>
-        </MudItem>
-    </MudGrid>
-</MudContainer>
+            }
+        </MudGrid>
+    </MudItem>
+</MudGrid>
 
 
 @code {
     // Get API URL
     private readonly string API_URL = APIService.PGASePortalAPI;
-    private List<m_vwGetAllEmployee_MinifiedDTO>? allPgasEmployees = new();
+    private List<m_vwGetAllEmployee_MinifiedDTO>? randomPGASEmployees;
     private List<m_vwGetAllEmployee_MinifiedDTO>? pgasEmployee;
     private List<string>? distinctOfficeNames;
-    private string? query = "";
-
-
-    protected async Task HandleKeyDown(KeyboardEventArgs e)
-    {
-        if (!string.IsNullOrWhiteSpace(query)) // Check if query is not null or empty or whitespace
-        {
-            if (e.Key == "Enter")
-            {
-                await selectEmployee();
-            }
-        }
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        await randomEmployees();
-    }
+    private string? query = null;
 
     public class m_vwGetAllEmployee_MinifiedDTO
     {
@@ -227,6 +112,21 @@
         public bool? isactive { get; set; }
     }
 
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching data: {ex.Message}");
+        }
+        finally
+        {
+            await base.OnInitializedAsync();
+        }
+    }
+
     private async Task selectEmployee()
     {
         try
@@ -234,35 +134,10 @@
             using HttpClient httpClient = new HttpClient();
             HttpResponseMessage httpResponse = await httpClient.GetAsync(API_URL + "/api/m_vwGetAllEmployee_Minified/query?searchDetails=" + query)!;
             httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
+
             using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
-            pgasEmployee = await JsonSerializer.DeserializeAsync<List<m_vwGetAllEmployee_MinifiedDTO>>(responseStream,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-        }
-        catch (HttpRequestException ex)
-        {
-            // Handle exception, log, or display an error message
-            Console.WriteLine($"Error fetching data: {ex.Message}");
-        }
-    }
-
-    private async Task randomEmployees()
-    {
-        try
-        {
-            using HttpClient httpClient = new HttpClient();
-            HttpResponseMessage httpResponse = await httpClient.GetAsync(API_URL + "/api/m_vwGetAllEmployee_Minified")!;
-            httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
-            using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
-            allPgasEmployees = await JsonSerializer.DeserializeAsync<List<m_vwGetAllEmployee_MinifiedDTO>>(responseStream,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-            // Shuffle the list randomly
-            var random = new Random();
-            var shuffledEmployees = allPgasEmployees?.OrderBy(x => random.Next()).ToList();
-
-            // Select only 15 employees
-            var selectedEmployees = shuffledEmployees?.Take(50).ToList();
-
-            allPgasEmployees = selectedEmployees;
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            pgasEmployee = await JsonSerializer.DeserializeAsync<List<m_vwGetAllEmployee_MinifiedDTO>>(responseStream, options);
         }
         catch (HttpRequestException ex)
         {

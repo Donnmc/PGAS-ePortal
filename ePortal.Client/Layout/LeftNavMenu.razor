@@ -1,8 +1,10 @@
 ﻿@using System.Text.Json
+@inject NavigationManager NavigationManager
 @inject UserService UserService
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <MudGrid Spacing="2">
-    @if (UserService.eid.HasValue)
+    @if (eid?.eid != null)
     {
         <MudItem xs="12">
             <MudStack Class="pl-3 pr-3">
@@ -12,7 +14,7 @@
                         <MudAvatar Variant="Variant.Outlined" Class="mud-border-dark">
                             <MudImage Style="image-rendering: optimizeSpeed"
                                       ObjectFit="ObjectFit.ScaleDown"
-                                      Src="@($"https://pgas.ph/hris/Content/images/photos/{UserService.eid}.png")"
+                                      Src="@($"https://pgas.ph/hris/Content/images/photos/{eid.eid}.png")"
                                       onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
                             </MudImage>
                         </MudAvatar>
@@ -40,8 +42,6 @@
             <MudNavLink Href="/employees" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.People" IconColor="Color.Tertiary">Employees</MudNavLink>
             <MudNavLink Href="/phone-directory" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.LocalPhone" IconColor="Color.Tertiary">Phone Directory</MudNavLink>
             <MudNavLink Href="/praise-message" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ChatBubble" IconColor="Color.Tertiary">Praise Message</MudNavLink>
-            <MudNavLink Href="/bible-verse" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.MenuBook" IconColor="Color.Tertiary">Bible Verses</MudNavLink>
-            <MudNavLink Href="/files" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Folder" IconColor="Color.Tertiary">Files</MudNavLink>
 
             <MudText Class="mt-3" Typo="Typo.subtitle2">External Links</MudText>
             <MudDivider Class="mud-border-dark" />
@@ -100,6 +100,7 @@
     private const string API_URL = "https://localhost:7049";
     private List<v_external_linkParentListDTO>? externalLinks;
     private m_vwGetAllEmployee_MinifiedDTO? pgasEmployee;
+    private UserService.eportalUser? eid;
 
     public class v_external_linkParentListDTO
     {
@@ -137,18 +138,22 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await UserService.LoadUserSession();
-        UserService.OnChange += StateHasChanged;
-        if (UserService.eid.HasValue)
-        {
-            await SelectEmployee();
-        }
+        UserService.OnUserChanged += UpdateUser;
+        await UpdateUserAsync();
         await GetExternalLinks();
     }
 
-    public void Dispose()
+    private async Task UpdateUserAsync()
     {
-        UserService.OnChange -= StateHasChanged;
+        eid = await UserService.GetCurrentUserAsync();
+        await SelectEmployee();
+        StateHasChanged();
+    }
+
+    private void UpdateUser()
+    {
+        // Calling the async method from a non-async method
+        _ = UpdateUserAsync();
     }
 
     private async Task GetExternalLinks()
@@ -164,6 +169,7 @@
             externalLinks = await JsonSerializer.DeserializeAsync<List<v_external_linkParentListDTO>>(responseStream, options);
 
             Console.WriteLine("External links fetched successfully.");
+            StateHasChanged();
         }
         catch (HttpRequestException ex)
         {
@@ -174,33 +180,29 @@
 
     private async Task SelectEmployee()
     {
-        if (UserService.eid.HasValue)
+        try
         {
-            try
+            if (eid?.eid != null)
             {
                 using HttpClient httpClient = new HttpClient();
-                HttpResponseMessage httpResponse = await httpClient.GetAsync($"{API_URL}/api/m_vwGetAllEmployee_Minified/{UserService.eid}");
+                HttpResponseMessage httpResponse = await httpClient.GetAsync($"{API_URL}/api/m_vwGetAllEmployee_Minified/{eid?.eid}");
                 httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
 
-                using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
-                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                var employee = await JsonSerializer.DeserializeAsync<m_vwGetAllEmployee_MinifiedDTO>(responseStream, options);
+                string jsonResponse = await httpResponse.Content.ReadAsStringAsync();
 
-                if (employee != null)
-                {
-                    pgasEmployee = employee;
-                    Console.WriteLine("Employee data fetched successfully.");
-                }
-                else
-                {
-                    Console.WriteLine("Error: No employee found.");
-                }
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                pgasEmployee = JsonSerializer.Deserialize<m_vwGetAllEmployee_MinifiedDTO>(jsonResponse, options);
             }
-            catch (HttpRequestException ex)
-            {
-                // Handle exception, log, or display an error message
-                Console.WriteLine($"Error fetching data: {ex.Message}");
-            }
+        }
+        catch (HttpRequestException ex)
+        {
+            // Handle exception, log, or display an error message
+            Console.WriteLine($"Error fetching data: {ex.Message}");
+        }
+        catch (JsonException jsonEx)
+        {
+            // Handle JSON deserialization errors
+            Console.WriteLine($"JSON error: {jsonEx.Message}");
         }
     }
 }

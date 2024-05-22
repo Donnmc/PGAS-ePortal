@@ -1,60 +1,48 @@
 ﻿using Blazored.LocalStorage;
+using System.Text.Json;
 
 public class UserService
 {
     private readonly ILocalStorageService _localStorage;
-    private long? _eid = null;
-    private bool? _loaded = false;
+    private eportalUser? _currentUser;
+
+    public event Action? OnUserChanged;
 
     public UserService(ILocalStorageService localStorage)
     {
         _localStorage = localStorage;
     }
 
-    public long? eid
+    public async Task<eportalUser?> GetCurrentUserAsync()
     {
-        get => _eid;
-        set
+        if (_currentUser == null && await _localStorage.ContainKeyAsync("eid"))
         {
-            _eid = value;
-            NotifyStateChanged();
-            SaveUserSession().ConfigureAwait(false);
+            var jsonString = await _localStorage.GetItemAsync<string>("eid");
+            _currentUser = JsonSerializer.Deserialize<eportalUser>(jsonString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
-    }
-    public bool? loaded
-    {
-        get => _loaded;
-        set
-        {
-            _loaded = value;
-            NotifyStateChanged();
-            SaveUserSession().ConfigureAwait(false);
-        }
+
+        return _currentUser;
     }
 
-    public event Action OnChange;
-
-    private void NotifyStateChanged() => OnChange?.Invoke();
-
-    public async Task LoadUserSession()
+    public async Task SetCurrentUserAsync(eportalUser user)
     {
-        _eid = await _localStorage.GetItemAsync<long?>("eid");
-        _loaded = await _localStorage.GetItemAsync<bool?>("loaded");
-        NotifyStateChanged();
+        _currentUser = user;
+        var jsonString = JsonSerializer.Serialize(user);
+        await _localStorage.SetItemAsync("eid", jsonString);
+        NotifyUserChanged();
     }
 
-    private async Task SaveUserSession()
+    public async Task ClearCurrentUserAsync()
     {
-        await _localStorage.SetItemAsync("eid", _eid);
-        await _localStorage.SetItemAsync("loaded", _loaded);
-    }
-
-    public async Task ClearUserSession()
-    {
+        _currentUser = null;
         await _localStorage.RemoveItemAsync("eid");
-        await _localStorage.RemoveItemAsync("loaded");
-        _eid = null;
-        _loaded = null;
-        NotifyStateChanged();
+        NotifyUserChanged();
+    }
+
+    private void NotifyUserChanged() => OnUserChanged?.Invoke();
+
+    public class eportalUser
+    {
+        public long? eid { get; set; }
     }
 }
