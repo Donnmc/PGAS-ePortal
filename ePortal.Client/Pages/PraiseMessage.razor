@@ -1,7 +1,473 @@
 ﻿@page "/praise-message"
-<h3>Praise_Message</h3>
+@using System.Net.Http
+@using System.Text.Json
+@using System.Threading.Tasks
+@inject UserService UserService
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
-<PageTitle>Praise Messages | ePortal | Provincial Government of Agusan del Sur</PageTitle>
+<PageTitle>Praise Messages | PGAS Portal</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.False">
+    <MudGrid Justify="Justify.Center" Class="pa-2 pt-5">
+        <!-- Write Message -->
+        <MudItem xs="12" lg="5">
+            <MudPaper Class="pa-3" Outlined>
+                <MudAutocomplete Variant="Variant.Outlined"
+                                 Class="mb-10"
+                                 Immediate="false"
+                                 T="string"
+                                 ShowProgressIndicator Label="Recipient"
+                                 @bind-Value="selectedRecipientName"
+                                 SearchFunc="SearchEmployee"
+                                 Dense
+                                 Clearable
+                                 ResetValueOnEmptyText
+                                 AdornmentIcon="@Icons.Material.Filled.Search"
+                                 CoerceText AdornmentColor="Color.Primary"
+                                 IsOpenChanged="SelectRecipient"
+                                 OnAdornmentClick="SelectRecipient">
+                </MudAutocomplete>
+                <MudStack Row AlignItems="AlignItems.Center">
+                    <MudText>From:</MudText>
+                    @if (eid?.eid != null)
+                    {
+                        <MudStack Row Spacing="1" AlignItems="AlignItems.Center">
+                            <MudChip>
+                                <AvatarContent>
+                                    <MudAvatar Variant="Variant.Outlined" Class="mud-border-dark">
+                                        <MudImage Style="image-rendering: optimizeSpeed"
+                                                  Src="@($"https://pgas.ph/hris/Content/images/photos/{eid.eid}.png")"
+                                                  onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
+                                        </MudImage>
+                                    </MudAvatar>
+                                </AvatarContent>
+                                <ChildContent>@pgasEmployee?.EmployeeName (@pgasEmployee?.OfficeAbbr)</ChildContent>
+                            </MudChip>
+                        </MudStack>
+                    }
+                </MudStack>
+                <MudStack Class="pt-2">
+                    @if (selectedRecipient != null)
+                    {
+                        <MudDivider />
+                        <MudStack Row>
+                            <MudText>To:</MudText>
+                            <MudPaper Elevation="0" Class="d-flex flex-wrap gap-1" MaxWidth="100%">
+                                <MudChip OnClose="ClearRecipient">
+                                    <AvatarContent>
+                                        <MudAvatar Variant="Variant.Outlined" Class="mud-border-dark">
+                                            <MudImage Style="image-rendering: optimizeSpeed"
+                                                      Src="@($"https://pgas.ph/hris/Content/images/photos/{selectedRecipient?.eid}.png")"
+                                                      onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
+                                            </MudImage>
+                                        </MudAvatar>
+                                    </AvatarContent>
+                                    <ChildContent>@selectedRecipient?.EmployeeName (@selectedRecipient?.OfficeAbbr)</ChildContent>
+                                </MudChip>
+                            </MudPaper>
+                        </MudStack>
+                        <MudStack Row>
+                            <MudText>Rating: </MudText>
+                            <MudRating MaxValue="5" @bind-SelectedValue="stars" />
+                        </MudStack>
+                    }
+                </MudStack>
+                <MudTextField Class="mt-5" Clearable @bind-Value="message" T="string" Counter="0"
+                              Immediate Label="Message" Variant="Variant.Outlined" Lines="5">
+                </MudTextField>
+                <MudStack Row Justify="Justify.SpaceBetween">
+                    <MudStack Row AlignItems="AlignItems.Center">
+                    </MudStack>
+                    <MudStack Row AlignItems="AlignItems.Center">
+                        <MudButton Variant="Variant.Outlined" Color="Color.Primary" EndIcon="@Icons.Material.Filled.Send" OnClick="OpenDialog">Submit</MudButton>
+                    </MudStack>
+                </MudStack>
+            </MudPaper>
+        </MudItem>
+
+        <!-- Messages -->
+
+        <MudItem xs="12" lg="7">
+            <MudGrid Spacing="1">
+                <!-- Header -->
+                <MudItem xs="12">
+                    <MudPaper Outlined>
+                        <MudStack Class="pa-2" Spacing="0" AlignItems="AlignItems.Center">
+                            <MudText Align="Align.Center"><b>Praise Messages</b></MudText>
+                        </MudStack>
+                    </MudPaper>
+                </MudItem>
+
+                <!-- Content -->
+                <MudItem xs="12">
+                    <MudStack Spacing="3" Justify="Justify.Center">
+                        @if (paginatedMessages != null && paginatedMessages.Count > 0)
+                        {
+                            <MudVirtualize Items="paginatedMessages" Context="message">
+                                <MudPaper Class="pa-2 mb-2" Outlined>
+                                    @{
+                                        var employeeSender = pgasEmployees?.FirstOrDefault(e => e.eid == message.from_eid);
+                                        var employeeRecipient = pgasEmployees?.FirstOrDefault(e => e.eid == message.to_eid);
+                                    }
+                                    <MudStack Row>
+
+                                        <MudTooltip>
+                                            <ChildContent>
+                                                <MudAvatar Size="Size.Large">
+                                                    <MudImage Style="image-rendering: optimizeSpeed"
+                                                              Src="@($"https://pgas.ph/hris/Content/images/photos/{message.from_eid}.png")"
+                                                              onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
+                                                    </MudImage>
+                                                </MudAvatar>
+                                            </ChildContent>
+                                            <TooltipContent>
+                                                <MudStack Row>
+                                                    <MudAvatar Size="Size.Large">
+                                                        <MudImage Style="image-rendering: optimizeSpeed"
+                                                                  Src="@($"https://pgas.ph/hris/Content/images/photos/{message.from_eid}.png")"
+                                                                  onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
+                                                        </MudImage>
+                                                    </MudAvatar>
+                                                    <MudStack Spacing="0" AlignItems="AlignItems.Start" Justify="Justify.Center">
+                                                        <MudText><b>@employeeSender?.EmployeeName</b></MudText>
+                                                        <MudText Style="font-size: 12px">@employeeSender?.Position</MudText>
+                                                        <MudText Style="font-size: 12px">@employeeSender?.OfficeName</MudText>
+                                                    </MudStack>
+                                                </MudStack>
+                                            </TooltipContent>
+                                        </MudTooltip>
+                                        <MudStack Spacing="0" AlignItems="AlignItems.Start" Justify="Justify.Center">
+                                            <!-- sender to recipient -->
+                                            <MudStack Row Style="width: 100%" Wrap="Wrap.Wrap" Spacing="1">
+                                                <MudTooltip>
+                                                    <ChildContent>
+                                                        <MudText Style="font-size: 14px"><b>@employeeSender?.EmployeeName (@employeeSender?.OfficeAbbr)</b></MudText>
+                                                    </ChildContent>
+                                                    <TooltipContent>
+                                                        <MudStack Row>
+                                                            <MudAvatar Size="Size.Large">
+                                                                <MudImage Style="image-rendering: optimizeSpeed"
+                                                                          Src="@($"https://pgas.ph/hris/Content/images/photos/{message.from_eid}.png")"
+                                                                          onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
+                                                                </MudImage>
+                                                            </MudAvatar>
+                                                            <MudStack Spacing="0" AlignItems="AlignItems.Start" Justify="Justify.Center">
+                                                                <MudText><b>@employeeSender?.EmployeeName</b></MudText>
+                                                                <MudText Style="font-size: 12px">@employeeSender?.Position</MudText>
+                                                                <MudText Style="font-size: 12px">@employeeSender?.OfficeName</MudText>
+                                                            </MudStack>
+                                                        </MudStack>
+                                                    </TooltipContent>
+                                                </MudTooltip>
+                                                <!-- to -->
+                                                <MudText Style="font-size: 14px">to</MudText>
+
+                                                <!-- recipient -->
+                                                <MudTooltip>
+                                                    <ChildContent>
+                                                        <MudText Style="font-size: 14px"><b>@employeeRecipient?.EmployeeName (@employeeRecipient?.OfficeAbbr)</b></MudText>
+                                                    </ChildContent>
+                                                    <TooltipContent>
+                                                        <MudStack Row>
+                                                            <MudAvatar Size="Size.Large">
+                                                                <MudImage Style="image-rendering: optimizeSpeed"
+                                                                          Src="@($"https://pgas.ph/hris/Content/images/photos/{message.to_eid}.png")"
+                                                                          onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
+                                                                </MudImage>
+                                                            </MudAvatar>
+                                                            <MudStack Spacing="0" AlignItems="AlignItems.Start" Justify="Justify.Center">
+                                                                <MudText><b>@employeeRecipient?.EmployeeName</b></MudText>
+                                                                <MudText Style="font-size: 12px">@employeeRecipient?.Position</MudText>
+                                                                <MudText Style="font-size: 12px">@employeeRecipient?.OfficeName</MudText>
+                                                            </MudStack>
+                                                        </MudStack>
+                                                    </TooltipContent>
+                                                </MudTooltip>
+                                            </MudStack>
+                                            <MudTooltip Text="@(message.date?.ToString("MMMM dd, yyyy hh:mm tt") ?? "No Date")">
+                                                <MudText Style="font-size: 10px">@(message.date?.ToString("MMMM dd 'at' hh:mm tt") ?? "No Date")</MudText>
+                                            </MudTooltip>
+                                            <MudRating ReadOnly Size="Size.Small" SelectedValue="@message.stars" />
+                                        </MudStack>
+                                    </MudStack>
+                                    <MudPaper Class="pa-1" Outlined>
+                                        <MudText>@message.message</MudText>
+                                    </MudPaper>
+                                    <MudStack Row Justify="Justify.SpaceBetween">
+                                    </MudStack>
+                                </MudPaper>
+                            </MudVirtualize>
+                            <MudStack Row Justify="Justify.Center">
+                                <MudPagination ShowFirstButton ShowLastButton Count="@totalPages" SelectedChanged="OnPageChanged" />
+                            </MudStack>
+                        }
+                        else
+                        {
+                            <MudText>No messages available.</MudText>
+                        }
+                    </MudStack>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
 @code {
+    private string API_URL = APIService.PGASePortalAPI;
 
+    private ePortal_employee? selectedRecipient;
+    private ePortal_employee? pgasEmployee;
+    private List<ePortal_employee>? pgasEmployees;
+    private List<praise_message>? praiseMessages;
+    private UserService.eportalUser? eid;
+    private string? selectedRecipientName;
+    private string? message;
+    private int stars;
+
+    private List<praise_message>? paginatedMessages;
+    private int pageSize = 5; // Adjust as needed
+    private int currentPage = 1;
+    private int totalPages => (int)Math.Ceiling((double)(praiseMessages?.Count ?? 0) / pageSize);
+
+
+    public class ePortal_employee
+    {
+        public long? eid { get; set; }
+        public string? SwipeID { get; set; }
+        public string? OfficeName { get; set; }
+        public string? OfficeAbbr { get; set; }
+        public string? EmployeeName { get; set; }
+        public string? Position { get; set; }
+        public int? SG { get; set; }
+        public string? Status { get; set; }
+        public bool? isactive { get; set; }
+    }
+
+    public partial class praise_message
+    {
+        public int id { get; set; }
+        public long from_eid { get; set; }
+        public long to_eid { get; set; }
+        public string? message { get; set; }
+        public int stars { get; set; }
+        public DateTime? date { get; set; }
+        public bool? archive { get; set; }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadEmployees();
+        await loadPraiseMessages();
+        UserService.OnUserChanged += UpdateUser;
+        await UpdateUserAsync();
+        RedirectPage();
+    }
+
+    private async Task UpdateUserAsync()
+    {
+        eid = await UserService.GetCurrentUserAsync();
+        await SelectEmployee();
+    }
+
+    private void UpdateUser()
+    {
+        _ = UpdateUserAsync();
+    }
+
+    private async Task SelectEmployee()
+    {
+        try
+        {
+            if (eid?.eid != null)
+            {
+                using HttpClient httpClient = new();
+                HttpResponseMessage httpResponse = await httpClient.GetAsync($"{API_URL}/api/ePortal_employee/id/{eid.eid}");
+                httpResponse.EnsureSuccessStatusCode();
+
+                string jsonResponse = await httpResponse.Content.ReadAsStringAsync();
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                pgasEmployee = JsonSerializer.Deserialize<ePortal_employee>(jsonResponse, options);
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"Error fetching data: {ex.Message}");
+        }
+    }
+
+    private async Task SelectRecipient()
+    {
+        try
+        {
+            if (!string.IsNullOrEmpty(selectedRecipientName))
+            {
+                using HttpClient httpClient = new();
+                HttpResponseMessage httpResponse = await httpClient.GetAsync($"{API_URL}/api/ePortal_employee/name/{selectedRecipientName}");
+                httpResponse.EnsureSuccessStatusCode();
+
+                string jsonResponse = await httpResponse.Content.ReadAsStringAsync();
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                selectedRecipient = JsonSerializer.Deserialize<ePortal_employee>(jsonResponse, options);
+
+                if (selectedRecipient != null)
+                {
+                    selectedRecipientName = string.Empty;
+                }
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"Error fetching data: {ex.Message}");
+        }
+    }
+
+    private async Task loadPraiseMessages()
+    {
+        try
+        {
+            using HttpClient httpClient = new();
+            HttpResponseMessage httpResponse = await httpClient.GetAsync($"{API_URL}/api/praise_message/GetAllPraiseMessages");
+            httpResponse.EnsureSuccessStatusCode();
+
+            string jsonResponse = await httpResponse.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            praiseMessages = JsonSerializer.Deserialize<List<praise_message>>(jsonResponse, options);
+            UpdatePaginatedMessages();
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"Error fetching data: {ex.Message}");
+        }
+    }
+
+    private async Task LoadEmployees()
+    {
+        try
+        {
+            using HttpClient httpClient = new();
+            HttpResponseMessage httpResponse = await httpClient.GetAsync($"{API_URL}/api/ePortal_employee");
+            httpResponse.EnsureSuccessStatusCode();
+
+            using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            pgasEmployees = await JsonSerializer.DeserializeAsync<List<ePortal_employee>>(responseStream, options);
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"Error fetching data: {ex.Message}");
+        }
+    }
+
+    private async Task SubmitPraiseMessage()
+    {
+        if (eid?.eid != null && selectedRecipient != null && !string.IsNullOrEmpty(message))
+        {
+            var praiseMessage = new praise_message
+                {
+                    from_eid = eid.eid!.Value,
+                    to_eid = selectedRecipient.eid!.Value,
+                    message = message,
+                    stars = stars,
+                    date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Asia/Manila")),
+                    archive = false
+                };
+
+            try
+            {
+                using HttpClient httpClient = new();
+                var content = new MultipartFormDataContent
+                {
+                    { new StringContent(praiseMessage.from_eid.ToString()), "from_eid" },
+                    { new StringContent(praiseMessage.to_eid.ToString()), "to_eid" },
+                    { new StringContent(praiseMessage.message), "message" },
+                    { new StringContent(praiseMessage.stars.ToString()), "stars" }
+                };
+
+                HttpResponseMessage response = await httpClient.PostAsync($"{API_URL}/api/praise_message", content);
+                response.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error submitting praise message: {ex.Message}");
+            }
+
+            // Reset stars and clear the form after successful submission
+            stars = 0;
+            message = string.Empty;
+            ClearRecipient();
+        }
+    }
+
+    private void UpdatePaginatedMessages()
+    {
+        paginatedMessages = praiseMessages?
+            .Skip((currentPage - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+    }
+
+    private void OnPageChanged(int page)
+    {
+        currentPage = page;
+        UpdatePaginatedMessages();
+    }
+
+    private void ClearRecipient()
+    {
+        selectedRecipient = null;
+        message = null;
+        stars = 0;
+    }
+
+    private async Task<IEnumerable<string>> SearchEmployee(string value)
+    {
+        // Check if pgasEmployees is null
+        if (pgasEmployees == null)
+        {
+            return Enumerable.Empty<string>();
+        }
+
+        // Perform the search asynchronously
+        return await Task.Run(() =>
+        {
+            var filteredEmployees = pgasEmployees
+                .Where(e => e.eid != eid?.eid && e.eid != selectedRecipient?.eid);
+
+            if (!string.IsNullOrEmpty(value))
+            {
+                filteredEmployees = filteredEmployees
+                    .Where(e => e.EmployeeName != null && e.EmployeeName.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+            }
+
+            return filteredEmployees
+                .Select(e => e.EmployeeName ?? string.Empty)
+                .ToList();
+        });
+    }
+
+
+    private void RedirectPage()
+    {
+        if (eid?.eid == null)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+
+    private async Task OpenDialog()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        var dialog = await DialogService.ShowAsync<Dialogues.PromptVerification>("Are you sure?", options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            await SubmitPraiseMessage();
+            await loadPraiseMessages();
+            StateHasChanged();
+        }
+    }
 }
+

@@ -1,80 +1,193 @@
 ﻿@using System.Net.Http
 @using System.Text.Json
+@using MudBlazor.Utilities
 @using System.Threading.Tasks
+@using Blazored.LocalStorage;
+@inject IJSRuntime JSRuntime
 @inherits LayoutComponentBase
+@inject ILocalStorageService localStorage
 @inject IDialogService DialogService
 @inject UserService UserService
-@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject NavigationManager Navigation
 
-<MudThemeProvider Theme="PGASTheme" DefaultScrollbar="true" />
+<MudThemeProvider Theme="PGASTheme" @bind-IsDarkMode="@isDarkMode" DefaultScrollbar="true" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Style="background-color: rgba(255, 255, 255, 0.8);backdrop-filter: blur(10px)" Elevation="0">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@DrawerToggle" />
-        <MudImage Fluid="true" Width="200" Src="Objects/pgas eportal.webp"></MudImage>
-        <MudSpacer />
-        @if (eid?.eid != null)
-        {
-            <MudAvatar Variant="Variant.Outlined" Class="mud-border-dark">
-                <MudImage Class="cursor-pointer"
-                          Style="image-rendering: optimizeSpeed"
-                          ObjectFit="ObjectFit.ScaleDown"
-                          Src="@($"https://pgas.ph/hris/Content/images/photos/{eid.eid}.png")"
-                          onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';"
-                          @onclick="OpenUserDialog">
-                </MudImage>
-            </MudAvatar>
-        }
-        else
-        {
-            <MudBadge Class="cursor-pointer" Content="@("Login")" OnClick="OpenLoginDialog" Origin="Origin.BottomCenter" Style="margin-top: -5px" Bordered="true" Overlap="true" Color="Color.Primary">
-                <MudAvatar Variant="Variant.Outlined" Class="mud-border-dark">
-                    <MudIconButton Class="pa-0" Size="Size.Large" OnClick="OpenLoginDialog" Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Tertiary">
-                    </MudIconButton>
-                </MudAvatar>
-            </MudBadge>
-        }
+    <MudAppBar Elevation="0">
+        <MudStack Row Style="width: 100%" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+            <MudStack Row Style="width: 100%" Class="pa-1" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                <MudStack Row Spacing="2" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                    <MudImage Fluid="true" Width="50" Src="Objects/Agusan del Sur Logo.webp"></MudImage>
+                    <MudText>PGAS Portal</MudText>
+                </MudStack>
+                <MudHidden Breakpoint="Breakpoint.LgAndUp">
+                    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawerLeft" />
+                </MudHidden>
+            </MudStack>
+            <MudHidden Breakpoint="Breakpoint.MdAndDown">
+                <MudStack Row Style="width: 100%" Justify="Justify.FlexEnd" AlignItems="AlignItems.Center" Spacing="0">
+                    <MudToggleIconButton @bind-Checked="@isDarkMode" Color="Color.Primary" ToggledColor="Color.Primary" ToggledChanged="ToggleDarkMode"
+                                         Icon="@Icons.Material.Filled.LightMode" ToggledIcon="@Icons.Material.Filled.DarkMode" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Apps" Color="Color.Tertiary" />
+                    @if (eid?.eid != null)
+                    {
+                        <MudAvatar Size="Size.Medium" Variant="Variant.Filled">
+                            <MudImage Class="cursor-pointer"
+                                      Style="image-rendering: optimizeSpeed; image-resolution: from-image 50dpi;"
+                                      Src="@($"https://pgas.ph/hris/Content/images/photos/{eid.eid}.png")"
+                                      onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';"
+                                      @onclick="OpenUserDialog">
+                            </MudImage>
+                        </MudAvatar>
+                    }
+                    else
+                    {
+                        <MudButton Variant="Variant.Outlined" OnClick="OpenLoginDialog">Sign in</MudButton>
+                    }
+                </MudStack>
+            </MudHidden>
+        </MudStack>
     </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Anchor="Anchor.Start" Elevation="0">
+    <MudDrawer @bind-Open="@openleft" ClipMode="DrawerClipMode.Docked" PreserveOpenState Breakpoint="Breakpoint.Lg" Variant="@DrawerVariant.Responsive" Anchor="Anchor.Start" Elevation="0">
+        <MudHidden Breakpoint="Breakpoint.LgAndUp">
+            <MudPaper Class="pa-1 rounded-0" Elevation="0">
+                <MudStack Row Reverse Justify="Justify.SpaceBetween" Style="width: 100%; background" AlignItems="AlignItems.Center">
+                    <MudStack Row AlignItems="AlignItems.Center" Spacing="0">
+                        <MudIconButton Icon="@Icons.Material.Filled.SwitchLeft" OnClick="ToggleDrawerRight" Color="Color.Tertiary" />
+                    </MudStack>
+                    <MudStack Row Spacing="0" Class="pl-6" AlignItems="AlignItems.Center">
+                        @if (eid?.eid != null)
+                        {
+                            <MudAvatar Variant="Variant.Filled">
+                                <MudImage Class="cursor-pointer"
+                                          Style="image-rendering: optimizeSpeed; image-resolution: from-image 50dpi;"
+                                          Src="@($"https://pgas.ph/hris/Content/images/photos/{eid.eid}.png")"
+                                          onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';"
+                                          @onclick="OpenUserDialog">
+                                </MudImage>
+                            </MudAvatar>
+                        }
+                        else
+                        {
+                            <MudBadge Class="cursor-pointer" Content="@("Login")" OnClick="OpenLoginDialog" Origin="Origin.BottomCenter" Bordered Overlap Color="Color.Primary">
+                                <MudAvatar Variant="Variant.Outlined" Class="mud-border-dark">
+                                    <MudIconButton Class="pa-0" Size="Size.Large" OnClick="OpenLoginDialog" Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Tertiary">
+                                    </MudIconButton>
+                                </MudAvatar>
+                            </MudBadge>
+                        }
+                        <MudIconButton Icon="@Icons.Material.Filled.Apps" Color="Color.Tertiary" />
+                        <MudToggleIconButton @bind-Checked="@isDarkMode" Color="Color.Primary" ToggledColor="Color.Primary" ToggledChanged="ToggleDarkMode"
+                                             Icon="@Icons.Material.Filled.LightMode" ToggledIcon="@Icons.Material.Filled.DarkMode" />
+                    </MudStack>
+                </MudStack>
+            </MudPaper>
+        </MudHidden>
+
         <LeftNavMenu />
     </MudDrawer>
-    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Anchor="Anchor.End" Elevation="0">
+    <MudDrawer @bind-Open="@openright" ClipMode="DrawerClipMode.Docked" PreserveOpenState Breakpoint="Breakpoint.Lg" Variant="@DrawerVariant.Responsive" Anchor="Anchor.End" Elevation="0">
+
+        <MudHidden Breakpoint="Breakpoint.MdAndUp">
+            <MudPaper Class="pa-1 rounded-0" Elevation="0">
+                <MudStack Row Justify="Justify.FlexStart" Style="width: 100%" AlignItems="AlignItems.Center">
+                    <MudIconButton Icon="@Icons.Material.Filled.SwitchRight" OnClick="ToggleDrawerLeft" Color="Color.Tertiary" />
+                </MudStack>
+            </MudPaper>
+        </MudHidden>
+
         <RightNavMenu />
     </MudDrawer>
     <MudMainContent>
         @Body
     </MudMainContent>
+    <MudTFootRow>Hi</MudTFootRow>
 </MudLayout>
-@code {
-    private UserService.eportalUser? eid;
 
-    MudTheme PGASTheme = new MudTheme()
+@code {
+    bool openleft = true;
+    bool openright = true;
+
+    void ToggleDrawerLeft()
+    {
+        openleft = !openleft;
+        openright = false;
+    }
+    void ToggleDrawerRight()
+    {
+        openright = !openright;
+        openleft = false;
+    }
+
+    private UserService.eportalUser? eid;
+    private bool isDarkMode = false;
+    private MudTheme PGASTheme = new MudTheme()
         {
             Palette = new PaletteLight()
             {
-                LinesInputs = Colors.Shades.Black,
                 Primary = Colors.Blue.Default,
-                Secondary = Colors.Yellow.Darken1,
-                Tertiary = Colors.Grey.Darken4,
+                Secondary = Colors.Yellow.Darken3,
+                Tertiary = Colors.Grey.Darken3,
                 AppbarBackground = Colors.Shades.White,
-                AppbarText = Colors.Shades.Black,
-                TextPrimary = Colors.Shades.Black
+                TextPrimary = "#121212",
+                TextSecondary = "#121212",
+                AppbarText = "#121212",
+                DrawerText = "#121212",
+                Surface = Colors.Shades.White
+            },
+            PaletteDark = new PaletteDark()
+            {
+                Primary = Colors.Yellow.Darken3,
+                Secondary = Colors.Blue.Default,
+                Tertiary = Colors.Grey.Lighten3,
+                Background = "#121212",
+                AppbarBackground = "#121212",
+                DrawerBackground = "#121212",
+                TextPrimary = "#eef0f1",
+                TextSecondary = "#eef0f1",
+                AppbarText = "#eef0f1",
+                DrawerText = "#eef0f1",
+                Surface = "#121212"
             },
             LayoutProperties = new LayoutProperties()
             {
-                DrawerWidthLeft = "260px",
-                DrawerWidthRight = "260px"
+                DrawerWidthLeft = "350px",
+                DrawerWidthRight = "350px"
             }
         };
 
-    bool _drawerOpen = true;
-
     protected override async Task OnInitializedAsync()
     {
+        await Task.Run(() => { openleft = true; });
+        await Task.Run(() => { openright = true; });
         UserService.OnUserChanged += UpdateUser;
         await UpdateUserAsync();
+        isDarkMode = await UserService.GetDarkModeAsync();
+        UserService.OnThemeChanged += HandleThemeChangedAsync;
+    }
+
+    private async Task ToggleDarkMode()
+    {
+        isDarkMode = !isDarkMode;
+        await UserService.SetDarkModeAsync(isDarkMode);
+    }
+
+    private async Task HandleThemeChangedAsync()
+    {
+        isDarkMode = await UserService.GetDarkModeAsync(); // Ensure state is updated
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        UserService.OnThemeChanged -= HandleThemeChangedAsync;
+    }
+
+    private void NavigateTo(string url)
+    {
+        Navigation.NavigateTo(url);
     }
 
     private async Task UpdateUserAsync()
@@ -85,13 +198,7 @@
 
     private void UpdateUser()
     {
-        // Calling the async method from a non-async method
         _ = UpdateUserAsync();
-    }
-
-    void DrawerToggle()
-    {
-        _drawerOpen = !_drawerOpen;
     }
 
     private void OpenLoginDialog()

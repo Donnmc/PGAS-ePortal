@@ -1,0 +1,149 @@
+﻿@page "/applications"
+@using System.Text.Json
+@using System.Net.Http
+
+<MudContainer MaxWidth="MaxWidth.False">
+    <MudGrid Spacing="5" Justify="Justify.Center" Class="pa-2 pt-5">
+        <!-- Information Systems -->
+        <MudItem>
+            <MudGrid Spacing="5">
+                <!-- Content -->
+                <MudItem xs="12">
+                    <MudGrid Justify="Justify.Center" Spacing="5">
+                        @if (informationSystems != null && informationSystems.Any())
+                        {
+                            <MudVirtualize Items="informationSystems" Context="cluster">
+                                <MudItem xs="12">
+                                    <MudPaper Class="pa-3" Outlined>
+                                        <MudStack Class="pa-2" Spacing="3">
+                                            <MudText Align="Align.Center">
+                                                <b>@cluster.Cluster_Name</b>
+                                            </MudText>
+                                            <MudDivider />
+                                            <MudGrid Justify="Justify.Center">
+                                                <MudVirtualize Items="cluster.Information_Systems" Context="system">
+                                                    @if (system.Information_System_Platform == "Web App")
+                                                    {
+                                                        <MudItem xs="6" sm="4" lg="3">
+                                                            <MudPaper Outlined>
+                                                                <MudLink Href="@system.Information_System_Link" Target="_blank" Color="Color.Tertiary" Underline="Underline.None">
+                                                                    <MudStack Row Style="height: 100%">
+                                                                        <MudStack Spacing="0" Class="pa-3" Style="width: 100%">
+                                                                            <MudStack Row Class="pa-0" Justify="Justify.SpaceBetween" Style="width: 100%">
+                                                                                <MudIcon Style="font-size: 4rem;" Icon="@(typeof(Icons.Material.Filled).GetField(system.Information_System_Icon)?.GetValue(null) as string)"
+                                                                                         Color="Color.Primary" />
+                                                                                <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.OpenInNew" />
+                                                                            </MudStack>
+                                                                            <MudText><b>@system.Information_System_Abbreviation</b></MudText>
+                                                                            <MudStack Style="min-height: 70px">
+                                                                                <MudText Style="font-size: 12px">@system.Information_System_Name</MudText>
+                                                                            </MudStack>
+                                                                        </MudStack>
+                                                                    </MudStack>
+                                                                </MudLink>
+                                                            </MudPaper>
+                                                        </MudItem>
+                                                    }
+                                                    else if (system.Information_System_Platform == "Desktop App")
+                                                    {
+                                                        <MudItem xs="6" sm="4" lg="3">
+                                                            <MudPaper Outlined>
+                                                                <MudLink Href="@system.Information_System_Link" Target="_blank" Color="Color.Tertiary" Underline="Underline.None">
+                                                                    <MudStack Row Style="height: 100%">
+                                                                        <MudStack Spacing="0" Class="pa-3" Style="width: 100%">
+                                                                            <MudStack Row Class="pa-0" Justify="Justify.SpaceBetween" Style="width: 100%">
+                                                                                <MudIcon Style="font-size: 4rem;" Icon="@(typeof(Icons.Material.Filled).GetField(system.Information_System_Icon)?.GetValue(null) as string)"
+                                                                                         Color="Color.Primary" />
+                                                                            </MudStack>
+                                                                            <MudStack Row Spacing="1" AlignItems="AlignItems.Center"> 
+                                                                                <MudText><b>@system.Information_System_Abbreviation</b></MudText>
+                                                                                <MudText Style="font-size: 12px">(Desktop App)</MudText>
+                                                                            </MudStack>
+                                                                            <MudStack Style="min-height: 70px">
+                                                                                <MudText Style="font-size: 12px">@system.Information_System_Name</MudText>
+                                                                            </MudStack>
+                                                                        </MudStack>
+                                                                    </MudStack>
+                                                                </MudLink>
+                                                            </MudPaper>
+                                                        </MudItem>
+                                                    }
+                                                </MudVirtualize>
+                                            </MudGrid>
+                                        </MudStack>
+                                    </MudPaper>
+                                </MudItem>
+                            </MudVirtualize>
+                        }
+                        else
+                        {
+                            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+                        }
+                    </MudGrid>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code {
+    // Get API URL
+    private readonly string API_URL = APIService.PGASePortalAPI;
+    private List<v_clustered_information_systemDTO>? informationSystems;
+
+    public class v_clustered_information_systemDTO
+    {
+        public string Cluster_Name { get; set; } = string.Empty;
+        public string Cluster_Abbreviation { get; set; } = string.Empty;
+        public string Cluster_Icon { get; set; } = string.Empty;
+        public List<InformationSystemDTO>? Information_Systems { get; set; }
+    }
+
+    public class InformationSystemDTO
+    {
+        public string Information_System_Name { get; set; } = string.Empty;
+        public string Information_System_Abbreviation { get; set; } = string.Empty;
+        public string Information_System_Icon { get; set; } = string.Empty;
+        public string Information_System_Link { get; set; } = string.Empty;
+        public string Information_System_Platform { get; set; } = string.Empty;
+    }
+    // Initialization method to fetch data and update UI elements
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await GetGroupedClusters();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching data: {ex.Message}");
+        }
+        finally
+        {
+            await base.OnInitializedAsync();
+        }
+    }
+
+    // Method to fetch grouped information systems from the API
+    private async Task GetGroupedClusters()
+    {
+        try
+        {
+            using HttpClient httpClient = new HttpClient();
+            HttpResponseMessage httpResponse = await httpClient.GetAsync(API_URL + "/api/v_clustered_information_system")!;
+            httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
+
+            using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            informationSystems = await JsonSerializer.DeserializeAsync<List<v_clustered_information_systemDTO>>(responseStream, options);
+
+            StateHasChanged();
+        }
+        catch (HttpRequestException ex)
+        {
+            // Handle exception, log, or display an error message
+            Console.WriteLine($"Error fetching data: {ex.Message}");
+        }
+    }
+
+}

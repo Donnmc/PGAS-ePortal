@@ -1,95 +1,194 @@
 ﻿@using System.Text.Json
 
-<MudContainer MaxWidth="MaxWidth.False">
-    <MudGrid Spacing="2">
+<MudContainer Fixed="true">
+    <MudGrid Spacing="3" Class="pa-3">
+        <!-- Governor -->
         <MudItem xs="12">
-            <MudPaper Outlined Class="mud-border-dark">
-                <MudStack Class="pa-1" Spacing="0">
-                    <MudText Align="Align.Center" Typo="Typo.subtitle1">
-                        <b>@TimeShortFormat</b>
-                    </MudText>
-                    <MudDivider />
-                    <MudText Style="font-size: 12px" Align="Align.Center" Typo="Typo.subtitle1">
-                        @TimeLongFormat
-                    </MudText>
+            <MudPaper Class="pb-0" Outlined>
+                <MudStack Row Style="height: 120px" Justify="Justify.SpaceAround">
+                    <MudStack Class="pa-1" Spacing="0" Justify="Justify.FlexEnd" AlignItems="AlignItems.Center">
+                        <MudStack Spacing="0" Justify="Justify.FlexEnd" AlignItems="AlignItems.Center">
+                            <MudText><b>Santiago B. Cane, Jr.</b></MudText>
+                            <MudText Style="font-size: 12px">Provincial Governor</MudText>
+                            <MudDivider/>
+                        </MudStack>
+                        <MudStack Row Class="pa-0 ma-0" Spacing="0">
+                            <MudIconButton Class="pa-1"
+                                           Icon="@Icons.Custom.Brands.Facebook"
+                                           Color="Color.Secondary"
+                                           Href="https://www.facebook.com/santi.cane.3" Target="_blank" />
+                            <MudIconButton Class="pa-1"
+                                           Icon="@Icons.Material.Filled.PersonPin"
+                                           Color="Color.Secondary"
+                                           Href="https://agusandelsur.gov.ph/government-officials/governor/" Target="_blank" />
+                            <MudIconButton Class="pa-1"
+                                           Icon="@Icons.Material.Filled.LibraryBooks"
+                                           Color="Color.Secondary"
+                                           Href="Media Files/Governor/ELA2023.jpg" Target="_blank" />
+                        </MudStack>
+                    </MudStack>
+                    <MudImage Src="/Media Files/Governor/gov-image.png" Fluid />
                 </MudStack>
             </MudPaper>
         </MudItem>
-        <!-- Weather Forecast -->
+        <!-- Announcements -->
         <MudItem xs="12">
-            <MudPaper Outlined Class="mud-border-dark">
-                <a class="weatherwidget-io rounded" href="https://forecast7.com/en/8d05126d06/agusan-del-sur/"
-                   data-label_1="Agusan del Sur" data-label_2="7 Day Weather Forecast" data-theme="pure"
-                   data-accent="">Agusan del Sur Weather Forecast</a>
-                <script>
-                    !function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = 'https://weatherwidget.io/js/widget.min.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'weatherwidget-io-js');
-                </script>
-            </MudPaper>
+            <MudGrid Spacing="1">
+                <!-- Announcement Header -->
+                <MudItem xs="12">
+                    <MudPaper Outlined>
+                        <MudStack Class="pa-1" Spacing="0" AlignItems="AlignItems.Center">
+                            <MudText Align="Align.Center"><b>Announcements</b></MudText>
+                            <MudDivider />
+                            @{
+                                DateTime currentDate = DateTime.UtcNow;
+                                string currentMonth = currentDate.ToString("MMMM");
+                                string currentYear = currentDate.ToString("yyyy");
+                            }
+                            <MudText Typo="Typo.caption" Style="font-size: 12px">Month of @currentMonth, @currentYear</MudText>
+                        </MudStack>
+                    </MudPaper>
+                </MudItem>
+                <!-- Announcement Lists -->
+                <MudItem xs="12">
+                    <MudStack Style="height: 67vh;" Class="overflow-auto flex-nowrap pa-2">
+                        @if (announcementForTheMonth != null && announcementForTheMonth.Any())
+                        {
+                            DateTime currentDate = DateTime.UtcNow;
+                            DateTime referencedDate = currentDate.AddDays(-1);
+                            <MudGrid Justify="Justify.Center" Spacing="2">
+                                <MudVirtualize Items="announcementForTheMonth" Context="announcement">
+                                    @if (announcement.docdate > referencedDate)
+                                    {
+                                        <MudItem xs="12">
+                                            <MudPaper Class="pa-3" Style="scrollbar-gutter: stable" Outlined>
+                                                <MudStack Spacing="0" Wrap="Wrap.NoWrap">
+                                                    <MudStack Row Justify="Justify.SpaceBetween">
+                                                        <MudStack Row Wrap="Wrap.Wrap" Spacing="2" Style="width: 100%" AlignItems="AlignItems.End">
+                                                            <MudText Typo="Typo.body2"><b>@announcement.doctype</b></MudText>
+                                                            <MudText Style="font-size: 10px">@(announcement.docdate?.ToString("MMMM dd, yyyy") ?? "No Date")</MudText>
+                                                        </MudStack>
+                                                        <MudChip Class="pa-2" Color="Color.Secondary" Size="Size.Small">New</MudChip>
+                                                    </MudStack>
+                                                    <MudDivider />
+                                                    <MudStack Spacing="1" Class="pt-2" AlignItems="AlignItems.Start">
+                                                        <MudTooltip Style="max-width: 300px" Arrow="true" Color="Color.Tertiary" Placement="Placement.Top" Text="@announcement.title">
+                                                            <MudText Typo="Typo.body1" Style="font-size: 14px">@TruncateText(announcement?.title ?? "", 150)</MudText>
+                                                        </MudTooltip>
+                                                        <MudTooltip Style="max-width: 300px" Arrow="true" Color="Color.Tertiary" Placement="Placement.Top" Text="@announcement.description">
+                                                            <MudText Typo="Typo.body2" Style="font-size: 12px; color: grey">@TruncateText(announcement?.description ?? "", 100)</MudText>
+                                                        </MudTooltip>
+                                                    </MudStack>
+                                                    <MudStack Row Spacing="1" AlignItems="AlignItems.Center">
+                                                        <MudText Style="font-size: 12px">Attachment: </MudText>
+                                                        <MudButton Href="@("https://pgas.ph/dts/public/read?docid="+announcement?.docid)" Target="_blank" StartIcon="@Icons.Material.Filled.Attachment" IconColor="Color.Secondary" Class="pa-1" Style="font-size: 12px" Variant="Variant.Text">@announcement?.docid</MudButton>
+                                                    </MudStack>
+                                                </MudStack>
+                                            </MudPaper>
+                                        </MudItem>
+                                    }
+                                    else
+                                    {
+                                        <MudItem xs="12">
+                                            <MudPaper Class="pa-3" Style="scrollbar-gutter: stable" Outlined>
+                                                <MudStack Spacing="2" Wrap="Wrap.NoWrap" Style="width: 100%">
+                                                    <MudStack Row Justify="Justify.SpaceBetween">
+                                                        <MudStack Row Spacing="2" Style="width: 100%" AlignItems="AlignItems.End">
+                                                            <MudText Typo="Typo.body2"><b>@announcement.doctype</b></MudText>
+                                                            <MudText Style="font-size: 10px">@(announcement.docdate?.ToString("MMMM dd, yyyy") ?? "No Date")</MudText>
+                                                        </MudStack>
+                                                    </MudStack>
+                                                    <MudDivider />
+                                                    <MudStack Spacing="2" Class="pt-2" AlignItems="AlignItems.Start">
+                                                        <MudTooltip Style="max-width: 300px" Arrow="true" Color="Color.Tertiary" Placement="Placement.Top" Text="@announcement.title">
+                                                            <MudText Typo="Typo.body1" Style="font-size: 14px">@TruncateText(announcement?.title ?? "", 150)</MudText>
+                                                        </MudTooltip>
+                                                        <MudTooltip Style="max-width: 300px" Arrow="true" Color="Color.Tertiary" Placement="Placement.Top" Text="@announcement.description">
+                                                            <MudText Typo="Typo.body2" Style="font-size: 12px; color: grey">@TruncateText(announcement?.description ?? "", 100)</MudText>
+                                                        </MudTooltip>
+                                                    </MudStack>
+                                                    <MudStack Row Spacing="1" AlignItems="AlignItems.Center">
+                                                        <MudText Style="font-size: 12px">Attachment: </MudText>
+                                                        <MudButton Href="@("https://pgas.ph/dts/public/read?docid="+announcement.docid)" Target="_blank" StartIcon="@Icons.Material.Filled.Attachment" IconColor="Color.Primary" Class="pa-1" Style="font-size: 12px" Variant="Variant.Text">@announcement.docid</MudButton>
+                                                    </MudStack>
+                                                </MudStack>
+                                            </MudPaper>
+                                        </MudItem>
+                                    }
+                                </MudVirtualize>
+                            </MudGrid>
+                        }
+                        else
+                        {
+                            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+                        }
+                    </MudStack>
+                </MudItem>
+            </MudGrid>
         </MudItem>
     </MudGrid>
 </MudContainer>
 @code {
-
     private readonly string API_URL = APIService.PGASePortalAPI;
-    private BibleVerseLatestDTO? latestVerse;
-    private string? TimeLongFormat { get; set; }
-    private string? TimeShortFormat { get; set; }
+    private List<t_doc_office_vw>? announcementForTheMonth;
+    private Timer? timer;
 
-
-    // DTO class for the latest Bible verse
-    public class BibleVerseLatestDTO
+    public class t_doc_office_vw
     {
-        public string? Verse { get; set; }
-        public string? Chapter { get; set; }
-        public DateTime? Date { get; set; }
-    }
-    // Initialization method to fetch data and update UI elements
-    protected override async Task OnInitializedAsync()
-    {
-        UpdateClock();
-        await GetLatestVerse(); // Fetch the latest Bible verse
+        public long? docid { get; set; }
+        public string? title { get; set; }
+        public string? description { get; set; }
+        public string? OfficeName { get; set; }
+        public string? doctype { get; set; }
+        public DateTime? docdate { get; set; }
     }
 
-
-    private async Task UpdateClock()
-    {
-        while (true)
-        {
-            // Get the current UTC time
-            var now = DateTime.UtcNow;
-
-            // Set the timezone offset for the Philippines (UTC+8)
-            var timeZoneOffset = TimeSpan.FromHours(8);
-            now = now.Add(timeZoneOffset);
-
-            // Format the time as HH:mm:ss
-            TimeShortFormat = now.ToString("hh:mm:ss tt");
-
-            // Format the time as long date and time (e.g., Monday, April 1, 2024 12:00:00 AM)
-            TimeLongFormat = now.ToString("dddd, MMMM d, yyyy");
-
-            // Update the clock every second
-            StateHasChanged();
-            await Task.Delay(1000);
-        }
-    }
-
-    // Method to fetch the latest Bible verse from the API
-    private async Task GetLatestVerse()
+    // Method to fetch office announcements for the month from the API
+    private async Task officeViewAnnouncementsForTheMonth()
     {
         try
         {
             using HttpClient httpClient = new HttpClient();
-            HttpResponseMessage httpResponse = await httpClient.GetAsync(API_URL + "/api/bible_verses/latest")!;
+            HttpResponseMessage httpResponse = await httpClient.GetAsync(API_URL + "/api/eportal_docs_view/officeViewAnnouncements")!;
             httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
             using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
-            latestVerse = await JsonSerializer.DeserializeAsync<BibleVerseLatestDTO>(responseStream,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            announcementForTheMonth = await JsonSerializer.DeserializeAsync<List<t_doc_office_vw>>(responseStream, options);
+
+            StateHasChanged();
         }
         catch (HttpRequestException ex)
         {
             // Handle exception, log, or display an error message
             Console.WriteLine($"Error fetching data: {ex.Message}");
         }
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        timer = new Timer(async _ => await officeViewAnnouncementsForTheMonth(), null, TimeSpan.Zero, TimeSpan.FromMinutes(5)); // Set to refresh every 5 minute
+
+        try
+        {
+            await officeViewAnnouncementsForTheMonth();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching data: {ex.Message}");
+        }
+        finally
+        {
+            await base.OnInitializedAsync();
+        }
+    }
+
+    // Method to truncate text to a specified length
+    private string TruncateText(string text, int maxLength)
+    {
+        if (string.IsNullOrEmpty(text))
+        {
+            return text;
+        }
+
+        return text.Length <= maxLength ? text : text.Substring(0, maxLength) + "...";
     }
 }

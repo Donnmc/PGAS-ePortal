@@ -5,8 +5,10 @@ public class UserService
 {
     private readonly ILocalStorageService _localStorage;
     private eportalUser? _currentUser;
+    private bool isDarkMode;
 
     public event Action? OnUserChanged;
+    public event Func<Task>? OnThemeChanged;
 
     public UserService(ILocalStorageService localStorage)
     {
@@ -44,5 +46,31 @@ public class UserService
     public class eportalUser
     {
         public long? eid { get; set; }
+    }
+
+    // Dark Mode Methods
+    public async Task<bool> GetDarkModeAsync()
+    {
+        if (await _localStorage.ContainKeyAsync("isDarkMode"))
+        {
+            isDarkMode = await _localStorage.GetItemAsync<bool>("isDarkMode");
+        }
+
+        return isDarkMode;
+    }
+
+    public async Task SetDarkModeAsync(bool isDarkMode)
+    {
+        isDarkMode = isDarkMode;
+        await _localStorage.SetItemAsync("isDarkMode", isDarkMode);
+        await NotifyThemeChangedAsync();
+    }
+
+    private async Task NotifyThemeChangedAsync()
+    {
+        if (OnThemeChanged != null)
+        {
+            await OnThemeChanged.Invoke();
+        }
     }
 }

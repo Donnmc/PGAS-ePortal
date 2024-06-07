@@ -7,19 +7,19 @@ namespace ePortal.WebAPI.Controllers.PMIS
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class m_vwGetAllEmployee_MinifiedController : ControllerBase
+    public class ePortal_employeeController : ControllerBase
     {
         private readonly pmisContext _context;
 
-        public m_vwGetAllEmployee_MinifiedController(pmisContext context)
+        public ePortal_employeeController(pmisContext context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<m_vwGetAllEmployee_Minified>>> GetEmployees()
+        public async Task<ActionResult<IEnumerable<ePortal_employee>>> GetEmployees()
         {
-            var employee = await _context.m_vwGetAllEmployee_Minified.ToListAsync();
+            var employee = await _context.ePortal_employee.ToListAsync();
 
             var statusOrder = new[] {
                 "Elected",
@@ -33,19 +33,18 @@ namespace ePortal.WebAPI.Controllers.PMIS
             };
 
             var mappedEmployee = employee
-                .Where(o => o.isactive == true)
                 .OrderBy(o => o.OfficeName) // Order by OfficeName
                 .ThenBy(e =>  // Order statuses in the desired order (descending)
                     Array.IndexOf(statusOrder, e.Status) // Get index based on the order
                 )
                 .ThenByDescending(e => e.SG) // Order by SG (descending)
-                .Select(office => new m_vwGetAllEmployee_Minified
+                .Select(office => new ePortal_employee
                 {
                     //Office
                     OfficeName = office.OfficeName,
                     OfficeAbbr = office.OfficeAbbr,
                     //Employee
-                    EmpName = office.EmpName,
+                    EmployeeName = office.EmployeeName,
                     SwipeID = office.SwipeID,
                     eid = office.eid,
                     Position = office.Position,
@@ -58,7 +57,7 @@ namespace ePortal.WebAPI.Controllers.PMIS
         }
 
         [HttpGet("query")]
-        public async Task<ActionResult<IEnumerable<m_vwGetAllEmployee_Minified>>> SearchEmployees(
+        public async Task<ActionResult<IEnumerable<ePortal_employee>>> SearchEmployees(
         [FromQuery] string? searchDetails = null)
         {
             if (string.IsNullOrWhiteSpace(searchDetails))
@@ -66,7 +65,7 @@ namespace ePortal.WebAPI.Controllers.PMIS
                 return BadRequest("Search details cannot be null or empty.");
             }
 
-            var query = _context.m_vwGetAllEmployee_Minified.AsQueryable();
+            var query = _context.ePortal_employee.AsQueryable();
 
             if (!string.IsNullOrEmpty(searchDetails))
             {
@@ -74,7 +73,7 @@ namespace ePortal.WebAPI.Controllers.PMIS
                     e.OfficeName.Contains(searchDetails) ||
                     e.OfficeAbbr.Contains(searchDetails) ||
                     e.Position.Contains(searchDetails) ||
-                    e.EmpName.Contains(searchDetails) ||
+                    e.EmployeeName.Contains(searchDetails) ||
                     e.SwipeID.Contains(searchDetails) ||
                     e.eid.ToString().Contains(searchDetails));
             }
@@ -98,13 +97,13 @@ namespace ePortal.WebAPI.Controllers.PMIS
                     Array.IndexOf(statusOrder, e.Status) // Get index based on the order
                 )
                 .ThenByDescending(e => e.SG) // Order by SG (descending)
-                .Select(office => new m_vwGetAllEmployee_Minified
+                .Select(office => new ePortal_employee
                 {
                     //Office
                     OfficeName = office.OfficeName,
                     OfficeAbbr = office.OfficeAbbr,
                     //Employee
-                    EmpName = office.EmpName,
+                    EmployeeName = office.EmployeeName,
                     SwipeID = office.SwipeID,
                     eid = office.eid,
                     Position = office.Position,
@@ -116,16 +115,43 @@ namespace ePortal.WebAPI.Controllers.PMIS
             return mappedEmployee;
         }
 
-        [HttpGet("{eid}")]
-        public async Task<ActionResult<m_vwGetAllEmployee_Minified>> GetEmployeeById(long eid)
+        [HttpGet("id/{eid}")]
+        public async Task<ActionResult<ePortal_employee>> GetEmployeeById(long eid)
         {
-            var employee = await _context.m_vwGetAllEmployee_Minified // Replace YourEmployeeTable with your actual table name
+            var employee = await _context.ePortal_employee
                 .Where(e => e.eid == eid)
-                .Select(e => new m_vwGetAllEmployee_Minified
+                .Select(e => new ePortal_employee
                 {
                     OfficeName = e.OfficeName,
                     OfficeAbbr = e.OfficeAbbr,
-                    EmpName = e.EmpName,
+                    EmployeeName = e.EmployeeName,
+                    eid = e.eid,
+                    SwipeID = e.SwipeID,
+                    Position = e.Position,
+                    SG = e.SG,
+                    Status = e.Status,
+                    isactive = e.isactive
+                })
+                .FirstOrDefaultAsync();
+
+            if (employee == null)
+            {
+                return NotFound();
+            }
+
+            return employee;
+        }
+
+        [HttpGet("name/{EmployeeName}")]
+        public async Task<ActionResult<ePortal_employee>> GetEmployeeByName(string EmployeeName)
+        {
+            var employee = await _context.ePortal_employee // Replace YourEmployeeTable with your actual table name
+                .Where(e => e.EmployeeName == EmployeeName)
+                .Select(e => new ePortal_employee
+                {
+                    OfficeName = e.OfficeName,
+                    OfficeAbbr = e.OfficeAbbr,
+                    EmployeeName = e.EmployeeName,
                     eid = e.eid,
                     SwipeID = e.SwipeID,
                     Position = e.Position,

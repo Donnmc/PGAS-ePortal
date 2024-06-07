@@ -2,9 +2,10 @@
 @using System.Text.Json
 @inject UserService UserService
 @inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
-<MudDialog Style="width: 300px">
+<MudDialog Style="width:50%">
     <DialogContent>
     </DialogContent>
     <DialogActions>
@@ -22,7 +23,8 @@
     {
         await UserService.ClearCurrentUserAsync(); // Notify that the user has logged out
         MudDialog?.Close(DialogResult.Ok(true));
-        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomStart;
+        NavigationManager.NavigateTo("/");
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
         Snackbar.Configuration.SnackbarVariant = Variant.Outlined;
         Snackbar.Add("Logged-out", Severity.Info);
     }

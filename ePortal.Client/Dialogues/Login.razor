@@ -6,11 +6,11 @@
 
 <MudDialog Style="width: 300px">
     <DialogContent>
-        <MudTextField T="string" @bind-Value="email" Label="PGAS Email" Variant="Variant.Outlined"
+        <MudTextField T="string" Value="@email" ValueChanged="OnEmailChanged" Label="PGAS Email" Variant="Variant.Outlined"
                       HelperText="firstname.lastname@pgas.ph"></MudTextField>
         <MudSpacer />
         <MudTextField T="string" @bind-Value="password" Label="Password" InputType="@PasswordInput" Required Variant="Variant.Outlined"
-                      Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="@TogglePasswordVisibility"
+                      Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility"
                       AdornmentAriaLabel="Show Password"></MudTextField>
     </DialogContent>
     <DialogActions>
@@ -25,6 +25,14 @@
     private int loginAttempts = 0;
     private string? email = "";
     private string? password = "";
+    private string? displayEmail = ""; // Displayed part of the email
+
+    private void OnEmailChanged(string newValue)
+    {
+        // Update display email and hidden email with @pgas.ph
+        displayEmail = newValue;
+        email = newValue.Split('@')[0] + "@pgas.ph";
+    }
 
     private bool isShow;
     private InputType PasswordInput = InputType.Password;
@@ -52,31 +60,44 @@
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             var eid = await JsonSerializer.DeserializeAsync<UserService.eportalUser>(responseStream, options);
 
-            await UserService.SetCurrentUserAsync(eid);
-            Submit();
+            if (eid != null)
+            {
+                await UserService.SetCurrentUserAsync(eid);
+                Submit();
 
-            Snackbar.Clear();
-            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomStart;
-            Snackbar.Configuration.SnackbarVariant = Variant.Outlined;
-            Snackbar.Add("Logged-in", Severity.Success);
+                Snackbar.Clear();
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+                Snackbar.Configuration.SnackbarVariant = Variant.Outlined;
+                Snackbar.Add("Logged-in", Severity.Success);
+            }
+            else
+            {
+                HandleLoginFailure();
+            }
         }
         catch (HttpRequestException ex)
         {
             Console.WriteLine($"Error logging in: {ex.Message}");
+            HandleLoginFailure();
+        }
+    }
+
+    private void HandleLoginFailure()
+    {
+        Snackbar.Clear();
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+        Snackbar.Configuration.SnackbarVariant = Variant.Outlined;
+        Snackbar.Add("User does not Exist", Severity.Error);
+
+        loginAttempts++;
+
+        if (loginAttempts >= 3)
+        {
             Snackbar.Clear();
             Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
             Snackbar.Configuration.SnackbarVariant = Variant.Outlined;
-            Snackbar.Add("User does not Exist", Severity.Error);
-
-            loginAttempts++;
-
-            if (loginAttempts >= 3)
-            {
-                Snackbar.Clear();
-                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
-                Snackbar.Configuration.SnackbarVariant = Variant.Outlined;
-                Snackbar.Add("Connect with IT Support", Severity.Warning);
-            }
+            Snackbar.Add("Connect with IT Support", Severity.Warning);
         }
     }
+
 }

@@ -41,6 +41,7 @@ public partial class pgas_eportal_v2Context : DbContext
     public virtual DbSet<v_external_link> v_external_link { get; set; }
 
     public virtual DbSet<v_ip_phone_directory> v_ip_phone_directory { get; set; }
+    public virtual DbSet<carousel_image> carousel_image { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -207,15 +208,22 @@ public partial class pgas_eportal_v2Context : DbContext
         {
             entity.HasKey(e => e.id).HasName("PK__praise_m__3213E83FCA56F543");
 
-            entity.Property(e => e.id).ValueGeneratedNever();
+            entity.Property(e => e.id);
             entity.Property(e => e.date).HasColumnType("datetime");
-            entity.Property(e => e.from)
-                .HasMaxLength(100)
-                .IsUnicode(false);
+            entity.Property(e => e.from_eid);
+            entity.Property(e => e.to_eid);
             entity.Property(e => e.message).IsUnicode(false);
-            entity.Property(e => e.to)
-                .HasMaxLength(100)
-                .IsUnicode(false);
+            entity.Property(e => e.stars);
+        });
+
+        modelBuilder.Entity<carousel_image>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("carousel_image");
+
+            entity.Property(e => e.file_name);
+            entity.Property(e => e.upload_date);
         });
 
         modelBuilder.Entity<v_clustered_information_system>(entity =>

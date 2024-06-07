@@ -1,105 +1,112 @@
 ﻿@using System.Text.Json
-@inject NavigationManager NavigationManager
+@using Blazored.LocalStorage;
 @inject UserService UserService
-@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
-<MudGrid Spacing="2">
-    @if (eid?.eid != null)
-    {
-        <MudItem xs="12">
-            <MudStack Class="pl-3 pr-3">
-                <MudStack Row Spacing="1" Class="pl-3" AlignItems="AlignItems.Center">
-                    @if (pgasEmployee != null)
-                    {
-                        <MudAvatar Variant="Variant.Outlined" Class="mud-border-dark">
-                            <MudImage Style="image-rendering: optimizeSpeed"
-                                      ObjectFit="ObjectFit.ScaleDown"
-                                      Src="@($"https://pgas.ph/hris/Content/images/photos/{eid.eid}.png")"
-                                      onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
-                            </MudImage>
-                        </MudAvatar>
-                        <MudStack Spacing="0">
-                            <MudText Typo="Typo.subtitle1" Style="font-size: 12px; margin-bottom: -5px; margin-top: -5px">
-                                <b>@pgasEmployee.EmpName</b>
-                            </MudText>
-                            <MudText Typo="Typo.subtitle1" Style="font-size: 10px; margin-bottom: -5px">
-                                @pgasEmployee.Position
-                            </MudText>
-                            <MudText Typo="Typo.subtitle1" Style="font-size: 10px; margin-bottom: -5px">
-                                @pgasEmployee.OfficeAbbr
-                            </MudText>
-                        </MudStack>
-                    }
+<MudContainer MaxWidth="MaxWidth.False">
+    <MudGrid Spacing="3" Class="pa-3">
+        <!--User-->
+        <!--
+        @if (eid?.eid != null)
+        {
+            <MudItem xs="12">
+                <MudStack>
+                    <MudStack Row Spacing="1" Class="pl-3" AlignItems="AlignItems.Center">
+                        @if (pgasEmployee != null)
+                        {
+                            <MudAvatar>
+                                <MudImage Style="image-rendering: optimizeSpeed"
+                                          ObjectFit="ObjectFit.ScaleDown"
+                                          Src="@($"https://pgas.ph/hris/Content/images/photos/{eid.eid}.png")"
+                                          onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
+                                </MudImage>
+                            </MudAvatar>
+                            <MudStack Spacing="0">
+                                <MudText Style="font-size: 15px; line-height: 20px; margin-bottom: -5px">
+                                    <b>@pgasEmployee.EmployeeName</b>
+                                </MudText>
+                                <MudText Style="font-size: 12px; line-height: 20px">
+                                    @pgasEmployee.Position
+                                </MudText>
+                            </MudStack>
+                        }
+                    </MudStack>
+                    <MudDivider/>
                 </MudStack>
-                <MudDivider Class="mud-border-dark" />
-            </MudStack>
-        </MudItem>
-    }
-    <!-- Menus -->
-    <MudItem xs="12">
-        <MudNavMenu Rounded="true" Margin="Margin.Normal" Class="ml-3 mr-3 pa-0" Dense="true">
-            <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard" IconColor="Color.Tertiary">Dashboard</MudNavLink>
-            <MudNavLink Href="/employees" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.People" IconColor="Color.Tertiary">Employees</MudNavLink>
-            <MudNavLink Href="/phone-directory" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.LocalPhone" IconColor="Color.Tertiary">Phone Directory</MudNavLink>
-            <MudNavLink Href="/praise-message" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ChatBubble" IconColor="Color.Tertiary">Praise Message</MudNavLink>
+            </MudItem>
+        }
+        -->
 
-            <MudText Class="mt-3" Typo="Typo.subtitle2">External Links</MudText>
-            <MudDivider Class="mud-border-dark" />
-            <!-- Dynamic External nav menu -->
-            @if (externalLinks != null && externalLinks.Any())
-            {
-                @foreach (var parentlink in externalLinks)
+        <!-- Menus -->
+        <MudItem xs="12">
+            <MudNavMenu Rounded="true"  Margin="Margin.Normal" Color="Color.Primary" >
+                <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Home</MudNavLink>
+                <MudNavLink Href="/applications" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Apps" IconColor="Color.Tertiary">Applications</MudNavLink>
+                <MudNavLink Href="/phone-directory" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.LocalPhone" IconColor="Color.Tertiary">Phone Directory</MudNavLink>
+                @if (eid?.eid != null)
                 {
-                    if (!string.IsNullOrEmpty(parentlink.Parent_List_Link))
-                    {
-                        <MudNavLink Href="@parentlink.Parent_List_Link" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@(typeof(Icons.Material.Filled).GetField(parentlink.Parent_List_Icon)?.GetValue(null) as string)" IconColor="Color.Tertiary">@parentlink.Parent_List_Name</MudNavLink>
-                    }
-                    else
-                    {
-                        <MudNavGroup Title="@parentlink.Parent_List_Name" Icon="@Icons.Material.Filled.Settings" Expanded="false" IconColor="Color.Tertiary">
-                            @foreach (var childlink in parentlink.v_external_linkChildList)
-                            {
-                                if (!string.IsNullOrEmpty(childlink.Child_List_Name))
+                    <MudNavLink Href="/employees" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.People" IconColor="Color.Tertiary">Employees</MudNavLink>
+                    <MudNavLink Href="/praise-message" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ChatBubble" IconColor="Color.Tertiary">Praise Message</MudNavLink>
+                    <MudNavLink Href="/carousel" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ViewCarousel" IconColor="Color.Tertiary">Carousel</MudNavLink>
+                }
+                <MudStack Row AlignItems="AlignItems.Center">
+                    <MudText Class="mt-3" Typo="Typo.subtitle2">External Links</MudText>
+                    <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.OpenInNew"></MudIcon>
+                </MudStack>
+                <MudDivider />
+                <!-- Dynamic External nav menu -->
+                @if (externalLinks != null && externalLinks.Any())
+                {
+                    <MudVirtualize Items="externalLinks" Context="parentlink">
+                        @if (!string.IsNullOrEmpty(parentlink?.Parent_List_Link))
+                        {
+                            <MudNavLink Href="@parentlink?.Parent_List_Link" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@(typeof(Icons.Material.Filled).GetField(parentlink?.Parent_List_Icon ?? "")?.GetValue(null) as string)" IconColor="Color.Tertiary">@parentlink?.Parent_List_Name</MudNavLink>
+                        }
+                        else
+                        {
+                            <MudNavGroup Title="@parentlink?.Parent_List_Name" Icon="@Icons.Material.Filled.Settings" Expanded="false" IconColor="Color.Tertiary">
+                                <MudVirtualize Items="parentlink?.v_external_linkChildList" Context="childlink">
+                                    @if (!string.IsNullOrEmpty(childlink?.Child_List_Name))
                                 {
                                     DateTime currentDate = DateTime.UtcNow;
                                     DateTime oneMonthAgo = currentDate.AddMonths(-2);
                                     if (childlink.Child_List_Date_Created > oneMonthAgo)
                                     {
-                                        <MudNavLink Href="@childlink.Child_List_Link" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@(typeof(Icons.Material.Filled).GetField(childlink.Child_List_Icon)?.GetValue(null) as string)" IconColor="Color.Tertiary">
+                                        <MudNavLink Href="@childlink.Child_List_Link" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@(typeof(Icons.Material.Filled).GetField(childlink?.Child_List_Icon ?? "")?.GetValue(null) as string)" IconColor="Color.Tertiary">
                                             <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-                                                @childlink.Child_List_Name
+                                                @childlink?.Child_List_Name
                                                 <MudChip Class="pa-2 ma-0" Style="@($"color:{Colors.Shades.Black}; background:{Colors.Yellow.Default}")" Size="Size.Small">New</MudChip>
                                             </MudStack>
                                         </MudNavLink>
                                     }
                                     else
                                     {
-                                        <MudNavLink Href="@childlink.Child_List_Link" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@(typeof(Icons.Material.Filled).GetField(childlink.Child_List_Icon)?.GetValue(null) as string)" IconColor="Color.Tertiary">@childlink.Child_List_Name</MudNavLink>
+                                        <MudNavLink Href="@childlink.Child_List_Link" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@(typeof(Icons.Material.Filled).GetField(childlink?.Child_List_Icon ?? "")?.GetValue(null) as string)" IconColor="Color.Tertiary">@childlink?.Child_List_Name</MudNavLink>
                                     }
                                 }
-                            }
+                            </MudVirtualize>
                         </MudNavGroup>
-                    }
+                        }
+                    </MudVirtualize>
                 }
-            }
-            else
-            {
-                <MudStack Class="pl-5 pt-2" Spacing="2">
-                    <MudSkeleton Width="50%" />
-                    <MudSkeleton Width="35%" />
-                    <MudSkeleton Width="60%" />
-                    <MudSkeleton Width="57%" />
-                    <MudSkeleton Width="80%" />
-                </MudStack>
-            }
-        </MudNavMenu>
-    </MudItem>
-</MudGrid>
+                else
+                {
+                    <MudStack Class="pl-5 pt-2" Spacing="2">
+                        <MudSkeleton Width="50%" />
+                        <MudSkeleton Width="35%" />
+                        <MudSkeleton Width="60%" />
+                        <MudSkeleton Width="57%" />
+                        <MudSkeleton Width="80%" />
+                    </MudStack>
+                }
+            </MudNavMenu>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
 
 @code {
     private const string API_URL = "https://localhost:7049";
     private List<v_external_linkParentListDTO>? externalLinks;
-    private m_vwGetAllEmployee_MinifiedDTO? pgasEmployee;
+    private ePortal_employee? pgasEmployee;
     private UserService.eportalUser? eid;
 
     public class v_external_linkParentListDTO
@@ -121,15 +128,13 @@
         public int? Child_List_Order { get; set; }
     }
 
-    public class m_vwGetAllEmployee_MinifiedDTO
+    public partial class ePortal_employee
     {
-        // Office
-        public string? OfficeName { get; set; }
-        public string? OfficeAbbr { get; set; }
-        // Employee Details
-        public string? EmpName { get; set; }
         public long? eid { get; set; }
         public string? SwipeID { get; set; }
+        public string? OfficeName { get; set; }
+        public string? OfficeAbbr { get; set; }
+        public string? EmployeeName { get; set; }
         public string? Position { get; set; }
         public int? SG { get; set; }
         public string? Status { get; set; }
@@ -167,9 +172,6 @@
             using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             externalLinks = await JsonSerializer.DeserializeAsync<List<v_external_linkParentListDTO>>(responseStream, options);
-
-            Console.WriteLine("External links fetched successfully.");
-            StateHasChanged();
         }
         catch (HttpRequestException ex)
         {
@@ -185,13 +187,12 @@
             if (eid?.eid != null)
             {
                 using HttpClient httpClient = new HttpClient();
-                HttpResponseMessage httpResponse = await httpClient.GetAsync($"{API_URL}/api/m_vwGetAllEmployee_Minified/{eid?.eid}");
+                HttpResponseMessage httpResponse = await httpClient.GetAsync($"{API_URL}/api/ePortal_employee/id/{eid?.eid}");
                 httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
 
                 string jsonResponse = await httpResponse.Content.ReadAsStringAsync();
-
                 var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                pgasEmployee = JsonSerializer.Deserialize<m_vwGetAllEmployee_MinifiedDTO>(jsonResponse, options);
+                pgasEmployee = JsonSerializer.Deserialize<ePortal_employee>(jsonResponse, options);
             }
         }
         catch (HttpRequestException ex)

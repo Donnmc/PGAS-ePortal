@@ -10,23 +10,23 @@ public partial class pmisContext : DbContext
     {
     }
 
-    public virtual DbSet<m_vwGetAllEmployee_Minified> m_vwGetAllEmployee_Minified { get; set; }
+    public virtual DbSet<ePortal_employee> ePortal_employee { get; set; }
     public virtual DbSet<eportalUser> eportalUser { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<m_vwGetAllEmployee_Minified>(entity =>
+        modelBuilder.Entity<ePortal_employee>(entity =>
         {
             entity
                 .HasNoKey()
-                .ToView("m_vwGetAllEmployee_Minified");
+                .ToView("ePortal_employee");
 
             entity.Property(e => e.eid);
             entity.Property(e => e.SwipeID);
-            entity.Property(e => e.EmpName);
+            entity.Property(e => e.EmployeeName);
+            entity.Property(e => e.Position);
             entity.Property(e => e.OfficeAbbr);
             entity.Property(e => e.OfficeName);
-            entity.Property(e => e.Position);
             entity.Property(e => e.SG);
             entity.Property(e => e.Status);
             entity.Property(e => e.isactive);

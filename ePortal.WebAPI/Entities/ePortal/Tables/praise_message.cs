@@ -8,14 +8,10 @@ namespace ePortal.WebAPI.Entities;
 public partial class praise_message
 {
     public int id { get; set; }
-
-    public string from { get; set; }
-
-    public string to { get; set; }
-
+    public long from_eid { get; set; }
+    public long to_eid { get; set; }
     public string message { get; set; }
-
+    public int stars { get; set; }
     public DateTime? date { get; set; }
-
     public bool? archive { get; set; }
 }

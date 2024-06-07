@@ -31,4 +31,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ePortal.Client\PGAS.ePortal.Client.csproj" />
+  </ItemGroup>
+
 </Project>

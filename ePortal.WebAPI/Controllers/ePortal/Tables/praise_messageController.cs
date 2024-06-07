@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using ePortal.WebAPI.Context;
+using ePortal.WebAPI.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ePortal.WebAPI.Context;
-using ePortal.WebAPI.Entities;
 
 namespace ePortal.WebAPI.Controllers.ePortal.Tables
 {
@@ -15,6 +10,7 @@ namespace ePortal.WebAPI.Controllers.ePortal.Tables
     public class praise_messageController : ControllerBase
     {
         private readonly pgas_eportal_v2Context _context;
+        private readonly TimeZoneInfo PhilippineTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Asia/Manila");
 
         public praise_messageController(pgas_eportal_v2Context context)
         {
@@ -22,10 +18,13 @@ namespace ePortal.WebAPI.Controllers.ePortal.Tables
         }
 
         // GET: api/praise_message
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<praise_message>>> Getpraise_message()
+        [HttpGet("GetAllPraiseMessages")]
+        public async Task<ActionResult<IEnumerable<praise_message>>> GetAllPraiseMessages()
         {
-            return await _context.praise_message.ToListAsync();
+            var praiseMessages = await _context.praise_message
+                                              .OrderByDescending(p => p.date) // Assuming "Date" is the property name
+                                              .ToListAsync();
+            return Ok(praiseMessages);
         }
 
         // GET: api/praise_message/5
@@ -76,16 +75,30 @@ namespace ePortal.WebAPI.Controllers.ePortal.Tables
         // POST: api/praise_message
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<praise_message>> Postpraise_message(praise_message praise_message)
+        public async Task<ActionResult<praise_message>> PostPraiseMessage(
+            [FromForm] long from_eid,
+            [FromForm] long to_eid,
+            [FromForm] string message,
+            [FromForm] int stars)
         {
-            _context.praise_message.Add(praise_message);
+            var praiseMessage = new praise_message
+            {
+                from_eid = from_eid,
+                to_eid = to_eid,
+                message = message,
+                stars = stars,
+                date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PhilippineTimeZone),
+                archive = false
+            };
+
+            _context.praise_message.Add(praiseMessage);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (praise_messageExists(praise_message.id))
+                if (PraiseMessageExists(praiseMessage.id))
                 {
                     return Conflict();
                 }
@@ -95,7 +108,12 @@ namespace ePortal.WebAPI.Controllers.ePortal.Tables
                 }
             }
 
-            return CreatedAtAction("Getpraise_message", new { praise_message.id }, praise_message);
+            return CreatedAtAction(nameof(PostPraiseMessage), new { id = praiseMessage.id }, praiseMessage);
+        }
+
+        private bool PraiseMessageExists(int id)
+        {
+            return _context.praise_message.Any(e => e.id == id);
         }
 
         // DELETE: api/praise_message/5

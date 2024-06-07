@@ -8,10 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="wwwroot\Documents\**" />
-    <Content Remove="wwwroot\Documents\**" />
-    <EmbeddedResource Remove="wwwroot\Documents\**" />
-    <None Remove="wwwroot\Documents\**" />
+    <Compile Remove="wwwroot\Uploads\Carousel\**" />
+    <Content Remove="wwwroot\Uploads\Carousel\**" />
+    <EmbeddedResource Remove="wwwroot\Uploads\Carousel\**" />
+    <None Remove="wwwroot\Uploads\Carousel\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\Uploads\" />
+    <Folder Include="wwwroot\Documents\" />
   </ItemGroup>
 
 </Project>

@@ -1,142 +1,197 @@
 ﻿@page "/phone-directory"
 @using System.Text.Json
 
-<PageTitle>Phone Directory | ePortal | Provincial Government of Agusan del Sur</PageTitle>
-
-<MudGrid Spacing="5" Class="pl-2 pr-2 pb-2">
-    <MudItem xs="12">
-        <MudTabs Rounded ApplyEffectsToContainer="true">
-            <MudTabPanel Text="IP Phone Directory" Icon="@Icons.Material.Filled.ContactPhone">
-                <MudGrid Justify="Justify.Center" Class="pt-3">
-                    @if (ipPhoneDirectory != null && ipPhoneDirectory.Any())
-                    {
-                        <MudVirtualize Items="ipPhoneDirectory" Context="line">
-                            <MudItem xs="12">
-                                <MudGrid Justify="Justify.Center">
-                                    <MudVirtualize Items="line.v_ip_phone_directoryArea" Context="area">
-                                        <MudItem xs="12" sm="6" lg="4">
-                                            <MudPaper Outlined Class="mud-border-dark">
-                                                <MudStack Class="pa-2">
-                                                    <MudStack Spacing="0" AlignItems="AlignItems.Center">
-                                                        <MudDivider Class="border-4 rounded mud-border-primary" />
-                                                        <MudText Class="pa-1" Align="Align.Center">
-                                                            <b>@area.Area</b>
-                                                        </MudText>
-                                                        <MudDivider />
-                                                        <MudText Align="Align.Center" Typo="Typo.caption" Style="font-size: 12px">
-                                                            @line.Line
-                                                        </MudText>
-                                                    </MudStack>
-                                                    <MudStack Class="pa-5">
-                                                        <MudVirtualize Items="area.v_ip_phone_directoryOffice" Context="office">
-                                                            <MudPaper Outlined>
+<PageTitle>Phone Directory | PGAS Portal</PageTitle>
+<MudContainer MaxWidth="MaxWidth.False">
+    <MudGrid Spacing="3" Class="pa-2 pt-5">
+        <MudItem xs="12">
+            <MudTabs Outlined Rounded ApplyEffectsToContainer PanelClass="pa-5" TabPanelClass="">
+                <MudTabPanel Text="IP Phone Directory" Icon="@Icons.Material.Filled.ContactPhone">
+                    <ChildContent>
+                        <MudGrid Justify="Justify.Center">
+                            @if (ipPhoneDirectory != null && ipPhoneDirectory.Any())
+                            {
+                                <MudVirtualize Items="ipPhoneDirectory" Context="line">
+                                    <MudItem xs="12">
+                                        <MudGrid Justify="Justify.Center">
+                                            <MudVirtualize Items="line.v_ip_phone_directoryArea" Context="area">
+                                                <MudItem xs="12" sm="6">
+                                                    <MudPaper Outlined>
+                                                        <MudStack Class="pa-2">
+                                                            <MudStack Spacing="0" AlignItems="AlignItems.Center">
+                                                                <MudDivider Class="border-4 rounded mud-border-primary" />
+                                                                <MudText Class="pa-1" Align="Align.Center">
+                                                                    <b>@area.Area</b>
+                                                                </MudText>
+                                                                <MudDivider />
+                                                                <MudText Align="Align.Center" Typo="Typo.caption" Style="font-size: 12px">
+                                                                    @line.Line
+                                                                </MudText>
+                                                            </MudStack>
+                                                            <MudStack Class="pa-5">
+                                                                <MudVirtualize Items="area.v_ip_phone_directoryOffice" Context="office">
+                                                                    <MudPaper Outlined>
+                                                                        <MudStack Class="pa-2" Spacing="0" AlignItems="AlignItems.Center">
+                                                                            <MudText Align="Align.Center" Style="font-size: 14px">
+                                                                                <b>@office.Office_Abbreviation</b>
+                                                                            </MudText>
+                                                                            <MudDivider />
+                                                                            <MudText Align="Align.Center" Typo="Typo.caption" Style="font-size: 12px">
+                                                                                @office.Office
+                                                                            </MudText>
+                                                                        </MudStack>
+                                                                        <MudStack>
+                                                                            <MudTable Hover Elevation="0"
+                                                                                      Items="@office.v_ip_phone_directoryOfficeArea"
+                                                                                      Style="width: 100%">
+                                                                                <HeaderContent>
+                                                                                    <MudTh Class="pl-2" Style="width: 70%">Office</MudTh>
+                                                                                    <MudTh Class="pl-2" Style="width: 30%">Extension</MudTh>
+                                                                                </HeaderContent>
+                                                                                <RowTemplate>
+                                                                                    <MudTd Datalabel="Office">@context.Office_Area</MudTd>
+                                                                                    <MudTd Datalabel="Extension">@context.Line_Number</MudTd>
+                                                                                </RowTemplate>
+                                                                            </MudTable>
+                                                                        </MudStack>
+                                                                    </MudPaper>
+                                                                </MudVirtualize>
+                                                            </MudStack>
+                                                        </MudStack>
+                                                    </MudPaper>
+                                                </MudItem>
+                                            </MudVirtualize>
+                                        </MudGrid>
+                                    </MudItem>
+                                </MudVirtualize>
+                            }
+                            else
+                            {
+                                <MudStack Class="d-flex align-center mt-5">
+                                    <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+                                </MudStack>
+                            }
+                        </MudGrid>
+                    </ChildContent>
+                </MudTabPanel>
+                <MudTabPanel Text="Emergency Hotline" Icon="@Icons.Material.Filled.ContactEmergency">
+                    <MudGrid Justify="Justify.Center">
+                        @if (hotlineDirectory != null && hotlineDirectory.Any())
+                        {
+                            <MudVirtualize Items="hotlineDirectory" Context="office">
+                                @if (office.Office_Abbreviation == "BFP")
+                                {
+                                    <MudItem xs="12">
+                                        <MudPaper Outlined>
+                                            <MudStack Class="pa-2">
+                                                <MudStack Spacing="0" AlignItems="AlignItems.Center">
+                                                    <MudDivider Class="border-4 rounded mud-border-primary" />
+                                                    <MudText Class="pa-1" Align="Align.Center">
+                                                        <b>@office.Office</b>
+                                                    </MudText>
+                                                    <MudDivider />
+                                                    <MudText Align="Align.Center" Typo="Typo.caption" Style="font-size: 12px">
+                                                        @office.Office_Abbreviation
+                                                    </MudText>
+                                                </MudStack>
+                                                <MudStack Class="pa-5">
+                                                    <MudGrid>
+                                                        <MudVirtualize Items="office.v_emergency_hotlineLine" Context="line">
+                                                            <MudItem xs="6">
+                                                                <MudCard Elevation="0" Outlined="true">
+                                                                    <MudStack Class="pa-2" Spacing="0" AlignItems="AlignItems.Center">
+                                                                        <MudText Align="Align.Center" Style="font-size: 14px">
+                                                                            <b>@line.Line</b>
+                                                                        </MudText>
+                                                                    </MudStack>
+                                                                    <MudStack>
+                                                                        <MudTable Hover Elevation="0" Items="@line.v_emergency_hotlineArea" Style="width: 100%">
+                                                                            <HeaderContent>
+                                                                                <MudTh Class="pl-2">Area</MudTh>
+                                                                                <MudTh Class="pl-2">Hotline</MudTh>
+                                                                                <MudTh>Dial</MudTh>
+                                                                            </HeaderContent>
+                                                                            <RowTemplate>
+                                                                                <MudTd Datalabel="Office">@context.Area</MudTd>
+                                                                                <MudTd Datalabel="Extension">@context.Hotline</MudTd>
+                                                                                <MudTd>
+                                                                                    <MudIconButton Href="@("tel: "+context.Hotline)" Icon="@Icons.Material.Filled.Call" Size="Size.Small" Color="Color.Primary" />
+                                                                                </MudTd>
+                                                                            </RowTemplate>
+                                                                        </MudTable>
+                                                                    </MudStack>
+                                                                </MudCard>
+                                                            </MudItem>
+                                                        </MudVirtualize>
+                                                    </MudGrid>
+                                                </MudStack>
+                                            </MudStack>
+                                        </MudPaper>
+                                    </MudItem>
+                                }
+                                else
+                                {
+                                <MudItem xs="12" sm="6">
+                                    <MudPaper Outlined>
+                                        <MudStack Class="pa-2">
+                                            <MudStack Spacing="0" AlignItems="AlignItems.Center">
+                                                <MudDivider Class="border-4 rounded mud-border-primary" />
+                                                <MudText Class="pa-1" Align="Align.Center">
+                                                    <b>@office.Office</b>
+                                                </MudText>
+                                                <MudDivider />
+                                                <MudText Align="Align.Center" Typo="Typo.caption" Style="font-size: 12px">
+                                                    @office.Office_Abbreviation
+                                                </MudText>
+                                            </MudStack>
+                                            <MudStack Class="pa-5">
+                                                <MudGrid>
+                                                    <MudVirtualize Items="office.v_emergency_hotlineLine" Context="line">
+                                                        <MudItem xs="12">
+                                                            <MudCard Elevation="0" Outlined="true">
                                                                 <MudStack Class="pa-2" Spacing="0" AlignItems="AlignItems.Center">
                                                                     <MudText Align="Align.Center" Style="font-size: 14px">
-                                                                        <b>@office.Office_Abbreviation</b>
-                                                                    </MudText>
-                                                                    <MudDivider />
-                                                                    <MudText Align="Align.Center" Typo="Typo.caption" Style="font-size: 12px">
-                                                                        @office.Office
+                                                                        <b>@line.Line</b>
                                                                     </MudText>
                                                                 </MudStack>
                                                                 <MudStack>
-                                                                    <MudTable Hover="true" Dense="true" Elevation="0"
-                                                                              Items="@office.v_ip_phone_directoryOfficeArea"
-                                                                              Style="width: 100%">
+                                                                    <MudTable Hover Elevation="0" Items="@line.v_emergency_hotlineArea" Style="width: 100%">
                                                                         <HeaderContent>
-                                                                            <MudTh Style="width: 70%">Office</MudTh>
-                                                                            <MudTh Style="width: 30%">Extension</MudTh>
+                                                                            <MudTh Class="pl-2">Area</MudTh>
+                                                                            <MudTh Class="pl-2">Hotline</MudTh>
+                                                                            <MudTh>Dial</MudTh>
                                                                         </HeaderContent>
                                                                         <RowTemplate>
-                                                                            <MudTd Datalabel="Office">@context.Office_Area</MudTd>
-                                                                            <MudTd Datalabel="Extension">@context.Line_Number</MudTd>
+                                                                            <MudTd Datalabel="Office">@context.Area</MudTd>
+                                                                            <MudTd Datalabel="Extension">@context.Hotline</MudTd>
+                                                                            <MudTd>
+                                                                                <MudIconButton Href="@("tel: "+context.Hotline)" Icon="@Icons.Material.Filled.Call" Size="Size.Small" Color="Color.Primary" />
+                                                                            </MudTd>
                                                                         </RowTemplate>
                                                                     </MudTable>
                                                                 </MudStack>
-                                                            </MudPaper>
-                                                        </MudVirtualize>
-                                                    </MudStack>
-                                                </MudStack>
-                                            </MudPaper>
-                                        </MudItem>
-                                    </MudVirtualize>
-                                </MudGrid>
-                            </MudItem>
-                        </MudVirtualize>
-                    }
-                    else
-                    {
-                        <MudStack Class="d-flex align-center mt-5">
-                            <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
-                        </MudStack>
-                    }
-                </MudGrid>
-            </MudTabPanel>
-            <MudTabPanel Text="Emergency Hotline" Icon="@Icons.Material.Filled.ContactEmergency">
-                <MudGrid Justify="Justify.Center" Class="pt-3">
-                    @if (hotlineDirectory != null && hotlineDirectory.Any())
-                    {
-                        <MudVirtualize Items="hotlineDirectory" Context="office">
-                            <MudItem xs="12" sm="6" lg="4">
-                                <MudPaper Outlined Class="mud-border-dark">
-                                    <MudStack Class="pa-2">
-                                        <MudStack Spacing="0" AlignItems="AlignItems.Center">
-                                            <MudDivider Class="border-4 rounded mud-border-primary" />
-                                            <MudText Class="pa-1" Align="Align.Center">
-                                                <b>@office.Office</b>
-                                            </MudText>
-                                            <MudDivider />
-                                            <MudText Align="Align.Center" Typo="Typo.caption" Style="font-size: 12px">
-                                                @office.Office_Abbreviation
-                                            </MudText>
+                                                            </MudCard>
+                                                        </MudItem>
+                                                    </MudVirtualize>
+                                                </MudGrid>
+                                            </MudStack>
                                         </MudStack>
-                                        <MudStack Class="pa-5">
-                                            <MudGrid>
-                                                <MudVirtualize Items="office.v_emergency_hotlineLine" Context="line">
-                                                    <MudItem xs="12">
-                                                        <MudCard Elevation="0" Outlined="true">
-                                                            <MudStack Class="pa-2" Spacing="0" AlignItems="AlignItems.Center">
-                                                                <MudText Align="Align.Center" Style="font-size: 14px">
-                                                                    <b>@line.Line</b>
-                                                                </MudText>
-                                                            </MudStack>
-                                                            <MudStack>
-                                                                <MudTable Hover="true" Dense="true" Elevation="0" Items="@line.v_emergency_hotlineArea" Style="width: 100%">
-                                                                    <HeaderContent>
-                                                                        <MudTh>Area</MudTh>
-                                                                        <MudTh>Hotline</MudTh>
-                                                                        <MudTh>Dial</MudTh>
-                                                                    </HeaderContent>
-                                                                    <RowTemplate>
-                                                                        <MudTd Datalabel="Office">@context.Area</MudTd>
-                                                                        <MudTd Datalabel="Extension">@context.Hotline</MudTd>
-                                                                        <MudTd>
-                                                                            <MudIconButton Href="@("tel: "+context.Hotline)" Icon="@Icons.Material.Filled.Call" Size="Size.Small" Color="Color.Primary" />
-                                                                        </MudTd>
-                                                                    </RowTemplate>
-                                                                </MudTable>
-                                                            </MudStack>
-                                                        </MudCard>
-                                                    </MudItem>
-                                                </MudVirtualize>
-                                            </MudGrid>
-                                        </MudStack>
-                                    </MudStack>
-                                </MudPaper>
-                            </MudItem>
-                        </MudVirtualize>
-                    }
-                    else
-                    {
-                        <MudStack Class="d-flex align-center mt-5">
-                            <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
-                        </MudStack>
-                    }
-                </MudGrid>
-            </MudTabPanel>
-        </MudTabs>
-    </MudItem>
-</MudGrid>
+                                    </MudPaper>
+                                </MudItem>}
+                            </MudVirtualize>
+                        }
+                        else
+                        {
+                            <MudStack Class="d-flex align-center mt-5">
+                                <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+                            </MudStack>
+                        }
+                    </MudGrid>
+                </MudTabPanel>
+            </MudTabs>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
 
 @code {
     // Get API URL
