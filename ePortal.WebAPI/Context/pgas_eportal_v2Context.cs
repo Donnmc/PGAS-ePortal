@@ -2,7 +2,7 @@
 using PGAS.WebAPI.Entities.portal_v2.Table;
 using PGAS.WebAPI.Entities.portal_v2.View;
 
-namespace Portal.WebAPI.Context
+namespace PGAS.WebAPI.Context
 {
     public partial class pgas_eportal_v2Context : DbContext
     {

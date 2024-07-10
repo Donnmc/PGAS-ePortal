@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PGAS.WebAPI.Entities.db_others.dts.View;
 
-namespace Portal.WebAPI.Context
+namespace PGAS.WebAPI.Context
 {
     public partial class othersContext : DbContext
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PGAS.WebAPI.Entities.db_others.dts.View;
-using Portal.WebAPI.Context;
+using PGAS.WebAPI.Context;
 
 namespace PGAS.WebAPI.Controllers.Others
 {

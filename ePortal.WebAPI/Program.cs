@@ -10,7 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //SQL Connection pgas_eportal_v2
-builder.Services.AddDbContext<Portal.WebAPI.Context.pgas_eportal_v2Context>(
+builder.Services.AddDbContext<PGAS.WebAPI.Context.pgas_eportal_v2Context>(
     options =>
     {
         options.UseSqlServer(builder.Configuration.GetConnectionString("PGAS_ePortal_v2"));
@@ -18,7 +18,7 @@ builder.Services.AddDbContext<Portal.WebAPI.Context.pgas_eportal_v2Context>(
     );
 
 //SQL Connection pmis
-builder.Services.AddDbContext<Portal.WebAPI.Context.pmisContext>(
+builder.Services.AddDbContext<PGAS.WebAPI.Context.pmisContext>(
     options =>
     {
         options.UseSqlServer(builder.Configuration.GetConnectionString("PMIS"));
@@ -26,7 +26,7 @@ builder.Services.AddDbContext<Portal.WebAPI.Context.pmisContext>(
     );
 
 //SQL Connection others
-builder.Services.AddDbContext<Portal.WebAPI.Context.othersContext>(
+builder.Services.AddDbContext<PGAS.WebAPI.Context.othersContext>(
     options =>
     {
         options.UseSqlServer(builder.Configuration.GetConnectionString("Others"));

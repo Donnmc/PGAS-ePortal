@@ -1,4 +1,4 @@
-﻿namespace PGAS.WebAPI.DTO.ePortal
+﻿namespace PGAS.WebAPI.DTO.portal_v2
 {
     public class v_external_linkParentListDTO
     {

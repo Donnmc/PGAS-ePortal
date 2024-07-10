@@ -2,7 +2,7 @@
 {
     public class vw_pgas_employees
     {
-        public long? eid { get; set; }
+        public long eid { get; set; }
         public string? SwipeID { get; set; }
         public string? OfficeName { get; set; }
         public string? OfficeAbbr { get; set; }

@@ -2,7 +2,7 @@
 using PGAS.WebAPI.Entities.db_pmis.pmis.Table;
 using PGAS.WebAPI.Entities.db_pmis.pmis.View;
 
-namespace Portal.WebAPI.Context
+namespace PGAS.WebAPI.Context
 {
     public partial class pmisContext : DbContext
     {

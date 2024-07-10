@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PGAS.WebAPI.DTO.ePortal;
+using PGAS.WebAPI.Context;
+using PGAS.WebAPI.DTO.portal_v2;
 using PGAS.WebAPI.Entities.portal_v2.Table;
-using Portal.WebAPI.Context;
 
 namespace PGAS.WebAPI.Controllers.ePortal.Tables
 {

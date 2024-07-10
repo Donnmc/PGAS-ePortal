@@ -1,7 +1,7 @@
-﻿using Portal.WebAPI.Context;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PGAS.WebAPI.DTO.PMIS.View;
+using PGAS.WebAPI.Context;
 
 namespace PGAS.WebAPI.Controllers.PMIS.View
 {
@@ -106,12 +106,12 @@ namespace PGAS.WebAPI.Controllers.PMIS.View
             if (!string.IsNullOrEmpty(searchDetails))
             {
                 query = query.Where(e =>
-                    e.OfficeName.Contains(searchDetails) ||
-                    e.OfficeAbbr.Contains(searchDetails) ||
-                    e.Position.Contains(searchDetails) ||
-                    e.EmployeeName.Contains(searchDetails) ||
-                    e.SwipeID.Contains(searchDetails) ||
-                    e.eid.ToString().Contains(searchDetails));
+                    (e.OfficeName!.Contains(searchDetails)) ||
+                    (e.OfficeAbbr!.Contains(searchDetails)) ||
+                    (e.Position!.Contains(searchDetails)) ||
+                    (e.EmployeeName!.Contains(searchDetails)) ||
+                    (e.SwipeID!.Contains(searchDetails)) ||
+                    (e.eid!.ToString().Contains(searchDetails)));
             }
 
             var employee = await query.ToListAsync();
@@ -193,7 +193,7 @@ namespace PGAS.WebAPI.Controllers.PMIS.View
         public async Task<ActionResult<vw_pgas_employeesDTO>> GetEmployeeByName(string EmployeeName)
         {
             var employee = await _context.vw_pgas_employees
-                .Where(e => e.EmployeeName.Contains(EmployeeName))
+                .Where(e => e.EmployeeName!.Contains(EmployeeName))
                 .Select(e => new vw_pgas_employeesDTO
                 {
                     //Office

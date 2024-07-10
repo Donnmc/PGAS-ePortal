@@ -1,4 +1,4 @@
-﻿namespace PGAS.WebAPI.DTO.ePortal
+﻿namespace PGAS.WebAPI.DTO.portal_v2
 {
     public class v_ip_phone_directoryLineDTO
     {
