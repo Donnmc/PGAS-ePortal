@@ -9,12 +9,12 @@
             <MudGrid Spacing="5">
                 <!-- Content -->
                 <MudItem xs="12">
-                    <MudGrid Justify="Justify.Center" Spacing="5">
+                    <MudGrid Justify="Justify.Center" Spacing="3">
                         @if (informationSystems != null && informationSystems.Any())
                         {
                             <MudVirtualize Items="informationSystems" Context="cluster">
                                 <MudItem xs="12">
-                                    <MudPaper Class="pa-3" Outlined>
+                                    <MudPaper Elevation="0" Class="pa-3">
                                         <MudStack Class="pa-2" Spacing="3">
                                             <MudText Align="Align.Center">
                                                 <b>@cluster.Cluster_Name</b>
@@ -34,8 +34,8 @@
                                                                                          Color="Color.Primary" />
                                                                                 <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.OpenInNew" />
                                                                             </MudStack>
-                                                                            <MudText><b>@system.Information_System_Abbreviation</b></MudText>
-                                                                            <MudStack Style="min-height: 70px">
+                                                                            <MudStack Style="min-height: 80px" Spacing="0">
+                                                                                <MudText Style="font-size: 14px"><b>@system.Information_System_Abbreviation</b></MudText>
                                                                                 <MudText Style="font-size: 12px">@system.Information_System_Name</MudText>
                                                                             </MudStack>
                                                                         </MudStack>
@@ -54,12 +54,10 @@
                                                                             <MudStack Row Class="pa-0" Justify="Justify.SpaceBetween" Style="width: 100%">
                                                                                 <MudIcon Style="font-size: 4rem;" Icon="@(typeof(Icons.Material.Filled).GetField(system.Information_System_Icon)?.GetValue(null) as string)"
                                                                                          Color="Color.Primary" />
+                                                                                <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.DesktopWindows" />
                                                                             </MudStack>
-                                                                            <MudStack Row Spacing="1" AlignItems="AlignItems.Center"> 
-                                                                                <MudText><b>@system.Information_System_Abbreviation</b></MudText>
-                                                                                <MudText Style="font-size: 12px">(Desktop App)</MudText>
-                                                                            </MudStack>
-                                                                            <MudStack Style="min-height: 70px">
+                                                                            <MudStack Style="min-height: 80px" Spacing="0">
+                                                                                <MudText Style="font-size: 14px"><b>@system.Information_System_Abbreviation</b></MudText>
                                                                                 <MudText Style="font-size: 12px">@system.Information_System_Name</MudText>
                                                                             </MudStack>
                                                                         </MudStack>
@@ -88,7 +86,7 @@
 
 @code {
     // Get API URL
-    private readonly string API_URL = APIService.PGASePortalAPI;
+    private readonly string API_URL = APIService.PGASPortalAPI;
     private List<v_clustered_information_systemDTO>? informationSystems;
 
     public class v_clustered_information_systemDTO

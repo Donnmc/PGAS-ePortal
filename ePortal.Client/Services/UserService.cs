@@ -61,7 +61,7 @@ public class UserService
 
     public async Task SetDarkModeAsync(bool isDarkMode)
     {
-        isDarkMode = isDarkMode;
+        this.isDarkMode = isDarkMode;
         await _localStorage.SetItemAsync("isDarkMode", isDarkMode);
         await NotifyThemeChangedAsync();
     }

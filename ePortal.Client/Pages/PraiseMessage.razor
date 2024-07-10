@@ -9,24 +9,24 @@
 
 <PageTitle>Praise Messages | PGAS Portal</PageTitle>
 
+<!-- Write Message -->
 <MudContainer MaxWidth="MaxWidth.False">
-    <MudGrid Justify="Justify.Center" Class="pa-2 pt-5">
-        <!-- Write Message -->
+    <MudGrid Justify="Justify.Center" Class="pa-2 pt-5" Style="z-index: 99">
         <MudItem xs="12" lg="5">
-            <MudPaper Class="pa-3" Outlined>
+            <MudPaper Class="pa-3" Elevation="0">
                 <MudAutocomplete Variant="Variant.Outlined"
                                  Class="mb-10"
                                  Immediate="false"
                                  T="string"
                                  ShowProgressIndicator Label="Recipient"
                                  @bind-Value="selectedRecipientName"
-                                 SearchFunc="SearchEmployee"
+                                 SearchFunc="@SearchEmployee"
                                  Dense
                                  Clearable
                                  ResetValueOnEmptyText
                                  AdornmentIcon="@Icons.Material.Filled.Search"
-                                 CoerceText AdornmentColor="Color.Primary"
-                                 IsOpenChanged="SelectRecipient"
+                                 AdornmentColor="Color.Primary"
+                                 OpenChanged="SelectRecipient"
                                  OnAdornmentClick="SelectRecipient">
                 </MudAutocomplete>
                 <MudStack Row AlignItems="AlignItems.Center">
@@ -34,7 +34,7 @@
                     @if (eid?.eid != null)
                     {
                         <MudStack Row Spacing="1" AlignItems="AlignItems.Center">
-                            <MudChip>
+                            <MudChip T="object">
                                 <AvatarContent>
                                     <MudAvatar Variant="Variant.Outlined" Class="mud-border-dark">
                                         <MudImage Style="image-rendering: optimizeSpeed"
@@ -52,10 +52,10 @@
                     @if (selectedRecipient != null)
                     {
                         <MudDivider />
-                        <MudStack Row>
+                        <MudStack Row AlignItems="AlignItems.Center">
                             <MudText>To:</MudText>
                             <MudPaper Elevation="0" Class="d-flex flex-wrap gap-1" MaxWidth="100%">
-                                <MudChip OnClose="ClearRecipient">
+                                <MudChip T="string" OnClose="ClearRecipient">
                                     <AvatarContent>
                                         <MudAvatar Variant="Variant.Outlined" Class="mud-border-dark">
                                             <MudImage Style="image-rendering: optimizeSpeed"
@@ -90,6 +90,7 @@
         <!-- Messages -->
 
         <MudItem xs="12" lg="7">
+            <MudPaper Elevation="0" Class="pa-5">
             <MudGrid Spacing="1">
                 <!-- Header -->
                 <MudItem xs="12">
@@ -210,13 +211,13 @@
                     </MudStack>
                 </MudItem>
             </MudGrid>
+            </MudPaper>
         </MudItem>
     </MudGrid>
 </MudContainer>
 
 @code {
-    private string API_URL = APIService.PGASePortalAPI;
-
+    private string API_URL = APIService.PGASPortalAPI;
     private ePortal_employee? selectedRecipient;
     private ePortal_employee? pgasEmployee;
     private List<ePortal_employee>? pgasEmployees;
@@ -225,7 +226,6 @@
     private string? selectedRecipientName;
     private string? message;
     private int stars;
-
     private List<praise_message>? paginatedMessages;
     private int pageSize = 5; // Adjust as needed
     private int currentPage = 1;
@@ -421,7 +421,9 @@
         stars = 0;
     }
 
-    private async Task<IEnumerable<string>> SearchEmployee(string value)
+
+
+    private async Task<IEnumerable<string>> SearchEmployee(string value, CancellationToken token)
     {
         // Check if pgasEmployees is null
         if (pgasEmployees == null)
@@ -429,23 +431,30 @@
             return Enumerable.Empty<string>();
         }
 
+        // In real life use an asynchronous function for fetching data from an API
+        await Task.Delay(5, token);
+
         // Perform the search asynchronously
         return await Task.Run(() =>
         {
+            // Filter out employees that should be excluded
             var filteredEmployees = pgasEmployees
                 .Where(e => e.eid != eid?.eid && e.eid != selectedRecipient?.eid);
 
+            // If search value is not null or empty, filter employees by name
             if (!string.IsNullOrEmpty(value))
             {
                 filteredEmployees = filteredEmployees
                     .Where(e => e.EmployeeName != null && e.EmployeeName.Contains(value, StringComparison.InvariantCultureIgnoreCase));
             }
 
+            // Select employee names, using an empty string if the name is null
             return filteredEmployees
                 .Select(e => e.EmployeeName ?? string.Empty)
                 .ToList();
         });
     }
+
 
 
     private void RedirectPage()
@@ -458,16 +467,9 @@
 
     private async Task OpenDialog()
     {
-        var options = new DialogOptions { CloseOnEscapeKey = true };
-        var dialog = await DialogService.ShowAsync<Dialogues.PromptVerification>("Are you sure?", options);
-        var result = await dialog.Result;
-
-        if (!result.Canceled)
-        {
-            await SubmitPraiseMessage();
-            await loadPraiseMessages();
-            StateHasChanged();
-        }
+        await SubmitPraiseMessage();
+        await loadPraiseMessages();
+        StateHasChanged();
     }
 }
 

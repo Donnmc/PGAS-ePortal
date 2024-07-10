@@ -1,54 +1,61 @@
-﻿using ePortal.WebAPI.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using PGAS.WebAPI.Entities.db_pmis.pmis.Table;
+using PGAS.WebAPI.Entities.db_pmis.pmis.View;
 
-namespace ePortal.WebAPI.Context;
-
-public partial class pmisContext : DbContext
+namespace Portal.WebAPI.Context
 {
-    public pmisContext(DbContextOptions<pmisContext> options)
-        : base(options)
+    public partial class pmisContext : DbContext
     {
-    }
-
-    public virtual DbSet<ePortal_employee> ePortal_employee { get; set; }
-    public virtual DbSet<eportalUser> eportalUser { get; set; }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<ePortal_employee>(entity =>
+        public pmisContext(DbContextOptions<pmisContext> options)
+            : base(options)
         {
-            entity
-                .HasNoKey()
-                .ToView("ePortal_employee");
+        }
 
-            entity.Property(e => e.eid);
-            entity.Property(e => e.SwipeID);
-            entity.Property(e => e.EmployeeName);
-            entity.Property(e => e.Position);
-            entity.Property(e => e.OfficeAbbr);
-            entity.Property(e => e.OfficeName);
-            entity.Property(e => e.SG);
-            entity.Property(e => e.Status);
-            entity.Property(e => e.isactive);
+        public virtual DbSet<vw_pgas_employees> vw_pgas_employees { get; set; }
+        public virtual DbSet<eportalUserDTO> eportalUser { get; set; }
 
-        });
-
-        OnModelCreatingPartial(modelBuilder);
-        modelBuilder.Entity<eportalUser>(entity =>
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            entity
-                .HasNoKey()
-                .ToView("eportalUser");
+            modelBuilder.Entity<vw_pgas_employees>(entity =>
+            {
+                entity
+                    .HasNoKey()
+                    .ToView("vw_pgas_employees");
 
-            entity.Property(e => e.eid);
-            entity.Property(e => e.SwipEmployeeID);
-            entity.Property(e => e.username);
-            entity.Property(e => e.passcode);
+                entity.Property(e => e.eid);
+                entity.Property(e => e.SwipeID);
+                entity.Property(e => e.EmployeeName);
+                entity.Property(e => e.Position);
+                entity.Property(e => e.OfficeAbbr);
+                entity.Property(e => e.OfficeName);
+                entity.Property(e => e.SG);
+                entity.Property(e => e.Status);
+                entity.Property(e => e.isactive);
+                entity.Property(e => e.Telephone);
+                entity.Property(e => e.EmailAdd);
+                entity.Property(e => e.Cause);
+                entity.Property(e => e.AppointCoverage);
 
-        });
+            });
 
-        OnModelCreatingPartial(modelBuilder);
+            OnModelCreatingPartial(modelBuilder);
+            modelBuilder.Entity<eportalUserDTO>(entity =>
+            {
+                entity
+                    .HasNoKey()
+                    .ToView("eportalUser");
+
+                entity.Property(e => e.eid);
+                entity.Property(e => e.SwipEmployeeID);
+                entity.Property(e => e.username);
+                entity.Property(e => e.passcode);
+
+            });
+
+            OnModelCreatingPartial(modelBuilder);
+        }
+
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
-
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }
+

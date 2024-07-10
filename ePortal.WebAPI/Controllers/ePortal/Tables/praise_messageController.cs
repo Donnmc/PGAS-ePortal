@@ -1,9 +1,9 @@
-﻿using ePortal.WebAPI.Context;
-using ePortal.WebAPI.Entities;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PGAS.WebAPI.Entities.portal_v2.Table;
+using Portal.WebAPI.Context;
 
-namespace ePortal.WebAPI.Controllers.ePortal.Tables
+namespace PGAS.WebAPI.Controllers.ePortal.Tables
 {
     [Route("api/[controller]")]
     [ApiController]

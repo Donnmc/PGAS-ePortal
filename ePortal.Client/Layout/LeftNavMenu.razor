@@ -42,11 +42,15 @@
                 <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home" IconColor="Color.Tertiary">Home</MudNavLink>
                 <MudNavLink Href="/applications" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Apps" IconColor="Color.Tertiary">Applications</MudNavLink>
                 <MudNavLink Href="/phone-directory" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.LocalPhone" IconColor="Color.Tertiary">Phone Directory</MudNavLink>
+                <MudNavLink Href="/downloadble-forms" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Download" IconColor="Color.Tertiary">Downloadble Forms</MudNavLink>
                 @if (eid?.eid != null)
                 {
                     <MudNavLink Href="/employees" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.People" IconColor="Color.Tertiary">Employees</MudNavLink>
                     <MudNavLink Href="/praise-message" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ChatBubble" IconColor="Color.Tertiary">Praise Message</MudNavLink>
-                    <MudNavLink Href="/carousel" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ViewCarousel" IconColor="Color.Tertiary">Carousel</MudNavLink>
+                    <MudNavGroup Icon="@Icons.Material.Filled.Settings" Title="Admin Settings" IconColor="Color.Tertiary">
+                        <MudNavLink Href="/governor-images" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Image" IconColor="Color.Tertiary">Governor Images</MudNavLink>
+                        <MudNavLink Href="/external-link" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.OpenInNew" IconColor="Color.Tertiary">External Links</MudNavLink>
+                    </MudNavGroup>
                 }
                 <MudStack Row AlignItems="AlignItems.Center">
                     <MudText Class="mt-3" Typo="Typo.subtitle2">External Links</MudText>
@@ -59,28 +63,28 @@
                     <MudVirtualize Items="externalLinks" Context="parentlink">
                         @if (!string.IsNullOrEmpty(parentlink?.Parent_List_Link))
                         {
-                            <MudNavLink Href="@parentlink?.Parent_List_Link" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@(typeof(Icons.Material.Filled).GetField(parentlink?.Parent_List_Icon ?? "")?.GetValue(null) as string)" IconColor="Color.Tertiary">@parentlink?.Parent_List_Name</MudNavLink>
+                            <MudNavLink Href="@parentlink?.Parent_List_Link" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@GetIcon(parentlink?.Parent_List_Icon ?? "")" IconColor="Color.Tertiary">@parentlink?.Parent_List_Name</MudNavLink>
                         }
                         else
                         {
-                            <MudNavGroup Title="@parentlink?.Parent_List_Name" Icon="@Icons.Material.Filled.Settings" Expanded="false" IconColor="Color.Tertiary">
+                            <MudNavGroup Title="@parentlink?.Parent_List_Name" Icon="@GetIcon(parentlink?.Parent_List_Icon ?? "")" Expanded="false" IconColor="Color.Tertiary">
                                 <MudVirtualize Items="parentlink?.v_external_linkChildList" Context="childlink">
                                     @if (!string.IsNullOrEmpty(childlink?.Child_List_Name))
                                 {
                                     DateTime currentDate = DateTime.UtcNow;
-                                    DateTime oneMonthAgo = currentDate.AddMonths(-2);
+                                    DateTime oneMonthAgo = currentDate.AddMonths(-1);
                                     if (childlink.Child_List_Date_Created > oneMonthAgo)
                                     {
-                                        <MudNavLink Href="@childlink.Child_List_Link" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@(typeof(Icons.Material.Filled).GetField(childlink?.Child_List_Icon ?? "")?.GetValue(null) as string)" IconColor="Color.Tertiary">
+                                        <MudNavLink Href="@childlink.Child_List_Link" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@GetIcon(childlink?.Child_List_Icon ?? "")" IconColor="Color.Tertiary">
                                             <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
                                                 @childlink?.Child_List_Name
-                                                <MudChip Class="pa-2 ma-0" Style="@($"color:{Colors.Shades.Black}; background:{Colors.Yellow.Default}")" Size="Size.Small">New</MudChip>
+                                                <MudChip T="string" Class="pa-2 ma-0" Style="@($"color:{Colors.Shades.Black}; background:{Colors.Yellow.Default}")" Size="Size.Small">New</MudChip>
                                             </MudStack>
                                         </MudNavLink>
                                     }
                                     else
                                     {
-                                        <MudNavLink Href="@childlink.Child_List_Link" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@(typeof(Icons.Material.Filled).GetField(childlink?.Child_List_Icon ?? "")?.GetValue(null) as string)" IconColor="Color.Tertiary">@childlink?.Child_List_Name</MudNavLink>
+                                        <MudNavLink Href="@childlink?.Child_List_Link" Target="_blank" Match="NavLinkMatch.Prefix" Icon="@GetIcon(childlink?.Child_List_Icon ?? "")" IconColor="Color.Tertiary">@childlink?.Child_List_Name</MudNavLink>
                                     }
                                 }
                             </MudVirtualize>
@@ -104,7 +108,7 @@
 </MudContainer>
 
 @code {
-    private const string API_URL = "https://localhost:7049";
+    private readonly string API_URL = APIService.PGASPortalAPI;
     private List<v_external_linkParentListDTO>? externalLinks;
     private ePortal_employee? pgasEmployee;
     private UserService.eportalUser? eid;
@@ -114,7 +118,7 @@
         public string? Parent_List_Name { get; set; }
         public string? Parent_List_Icon { get; set; }
         public string? Parent_List_Link { get; set; }
-        public DateOnly? Parent_List_Date_Created { get; set; }
+        public DateTime? Parent_List_Date_Created { get; set; }
         public int? Parent_List_Order { get; set; }
         public List<v_external_linkChildListDTO>? v_external_linkChildList { get; set; }
     }
@@ -166,7 +170,7 @@
         try
         {
             using var httpClient = new HttpClient();
-            HttpResponseMessage httpResponse = await httpClient.GetAsync($"{API_URL}/api/v_external_link");
+            HttpResponseMessage httpResponse = await httpClient.GetAsync($"{API_URL}/api/external_link");
             httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
 
             using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
@@ -205,5 +209,40 @@
             // Handle JSON deserialization errors
             Console.WriteLine($"JSON error: {jsonEx.Message}");
         }
+    }
+
+    private string GetIcon(string iconName)
+    {
+        if (string.IsNullOrEmpty(iconName))
+        {
+            return string.Empty; // Return an empty string if the icon name is null or empty
+        }
+
+        // Attempt to get the icon from Icons.Custom.FileFormats
+        var customIconType = typeof(Icons.Custom.FileFormats);
+        var customIconField = customIconType.GetField(iconName);
+        if (customIconField != null)
+        {
+            var customIconValue = customIconField.GetValue(null) as string;
+            if (!string.IsNullOrEmpty(customIconValue))
+            {
+                return customIconValue;
+            }
+        }
+
+        // Attempt to get the icon from Icons.Material.Filled
+        var materialIconType = typeof(Icons.Material.Filled);
+        var materialIconField = materialIconType.GetField(iconName);
+        if (materialIconField != null)
+        {
+            var materialIconValue = materialIconField.GetValue(null) as string;
+            if (!string.IsNullOrEmpty(materialIconValue))
+            {
+                return materialIconValue;
+            }
+        }
+
+        // Return a default icon or empty string if not found
+        return string.Empty;
     }
 }

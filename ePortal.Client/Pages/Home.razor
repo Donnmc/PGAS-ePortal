@@ -8,7 +8,7 @@
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <MudContainer MaxWidth="MaxWidth.False">
-    <MudGrid Spacing="3" Class="pa-3">
+    <MudGrid Spacing="3" Class="pa-3" Justify="Justify.Center">
         <!-- Header
         <MudItem xs="12">
             <MudLink Href="https://agusandelsur.gov.ph/" Target="_blank" Underline="Underline.None">
@@ -43,221 +43,412 @@
         <MudDivider />
 
          -->
-        <!-- Gov Images -->
+
         <MudItem xs="12">
-            <MudGrid Spacing="2" Justify="Justify.Center">
-                <MudVirtualize Items="images" Context="image">
-                    <MudItem xs="4" lg="3">
-                        <MudImage Style="max-height: 100%; height: auto; max-width: 100%; width: auto"
-                                  Fluid
-                                  data-infinite="true"
-                                  Class="spotlight cursor-pointer rounded"
-                                  Src="@($"Uploads/{image.file_name}")" />
-                    </MudItem>
-                </MudVirtualize>
+            <MudGrid>
+                <MudItem xs="6" lg="3">
+                    <MudPaper Outlined>
+                        <MudLink Href="https://agusandelsur.gov.ph/" Target="_blank" Color="Color.Tertiary" Underline="Underline.None">
+                            <MudStack Row Style="height: 100%">
+                                <MudStack Spacing="0" Class="pa-3" Style="width: 100%">
+                                    <MudStack>
+                                        <MudStack Class="absolute align-self-end pa-2">
+                                            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.OpenInNew"></MudIcon>
+                                        </MudStack>
+                                        <MudImage Src="Objects/Agusan del Sur Logo.webp" Style="object-fit: cover; object-position: top; height: 100%; width: 30%;" />
+                                    </MudStack>
+                                    <MudStack Style="min-height: 80px" Spacing="0">
+                                        <MudText Style="font-size: 14px"><b>Agusan del Sur Official Website</b></MudText>
+                                        <MudText Style="font-size: 12px">Website</MudText>
+                                    </MudStack>
+                                </MudStack>
+                            </MudStack>
+                        </MudLink>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="6" lg="3">
+                    <MudPaper Outlined>
+                        <MudLink Href="https://www.facebook.com/NaliyaganFestival" Target="_blank" Color="Color.Tertiary" Underline="Underline.None">
+                            <MudStack Row Style="height: 100%">
+                                <MudStack Spacing="0" Class="pa-3" Style="width: 100%">
+                                    <MudStack>
+                                        <MudStack Class="absolute align-self-end pa-2">
+                                            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.OpenInNew"></MudIcon>
+                                        </MudStack>
+                                        <MudImage Src="Objects/naliyagan.webp" Style="object-fit: cover; object-position: top; height: 100%; width: 30%;" />
+                                    </MudStack>
+                                    <MudStack Style="min-height: 80px" Spacing="0">
+                                        <MudText Style="font-size: 14px"><b>Naliyagan Festival</b></MudText>
+                                        <MudText Style="font-size: 12px">Facebook Page</MudText>
+                                    </MudStack>
+                                </MudStack>
+                            </MudStack>
+                        </MudLink>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="6" lg="3">
+                    <MudPaper Outlined>
+                        <MudLink Href="https://www.facebook.com/UnlockTheLandlockedAgusanDelSur" Target="_blank" Color="Color.Tertiary" Underline="Underline.None">
+                            <MudStack Row Style="height: 100%">
+                                <MudStack Spacing="0" Class="pa-3" Style="width: 100%">
+                                    <MudStack>
+                                        <MudStack Class="absolute align-self-end pa-2">
+                                            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.OpenInNew"></MudIcon>
+                                        </MudStack>
+                                        <MudImage Src="Objects/unlock the landlocked.webp" Style="object-fit: cover; object-position: top; height: 100%; width: 30%;" />
+                                    </MudStack>
+                                    <MudStack Style="min-height: 80px" Spacing="0">
+                                        <MudText Style="font-size: 14px"><b>Unlock the Landlocked Agusan del Sur</b></MudText>
+                                        <MudText Style="font-size: 12px">Facebook Page</MudText>
+                                    </MudStack>
+                                </MudStack>
+                            </MudStack>
+                        </MudLink>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="6" lg="3">
+                    <MudPaper Outlined>
+                        <MudLink Href="https://www.facebook.com/ppioagusansur" Target="_blank" Color="Color.Tertiary" Underline="Underline.None">
+                            <MudStack Row Style="height: 100%">
+                                <MudStack Spacing="1" Class="pa-3" Style="width: 100%">
+                                    <MudStack>
+                                        <MudStack Class="absolute align-self-end pa-2">
+                                            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.OpenInNew"></MudIcon>
+                                        </MudStack>
+                                        <MudImage Src="Objects/ppio.webp" Style="object-fit: cover; object-position: top; height: 100%; width: 30%;" />
+                                    </MudStack>
+                                    <MudStack Style="min-height: 80px" Spacing="0">
+                                        <MudText Style="font-size: 14px"><b>Provincial Public Information Office Agusan del Sur</b></MudText>
+                                        <MudText Style="font-size: 12px">Facebook Page</MudText>
+                                    </MudStack>
+                                </MudStack>
+                            </MudStack>
+                        </MudLink>
+                    </MudPaper>
+                </MudItem>
             </MudGrid>
         </MudItem>
 
-        <MudDivider />
+        <!-- Gov Images -->
+        <MudItem xs="12" lg="9">
+            @if (images != null && images.Count > 0)
+            {
+                <MudStack Row Spacing="1" Justify="Justify.Center">
+                    <MudStack Spacing="1">
+                        @foreach (var image in images.Take(2))
+                        {
+                            <MudImage Style="object-fit: cover; height: 50%; width: 100%"
+                                      Class="spotlight cursor-pointer"
+                                      Src="@($"Uploads/{image.file_name}")" />
+                        }
+                    </MudStack>
+                    <MudStack Spacing="1">
+                        @foreach (var image in images.Skip(2).Take(2))
+                        {
+                            <MudImage Style="object-fit: cover; height: 33.33%; width: 100%"
+                                      Class="spotlight cursor-pointer"
+                                      Src="@($"Uploads/{image.file_name}")" />
+                        }
+                        @foreach (var image in images.Skip(4).Take(1))
+                        {
+                            <MudLink Href="@($"Uploads/{image.file_name}")" Underline="Underline.None" Class="spotlight" Style="height: 33.33%">
+                                <MudStack Class="relative" Style="height: 100%">
+                                    <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center"
+                                              Style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgb(0,0,0, 0.25);">
+
+                                        @{
+                                            var count = images.Count() - 5;
+                                            string totalCount = count.ToString();
+
+                                            <MudText Style="font-size: 30px; color: white">+@totalCount</MudText>
+                                        }
+                                    </MudStack>
+                                    <MudImage Style="object-fit: cover; height: 100%; width: 100%"
+                                              Class="cursor-pointer"
+                                              Src="@($"Uploads/{image.file_name}")">
+                                    </MudImage>
+                                </MudStack>
+                            </MudLink>
+                        }
+                        @foreach (var image in images.Skip(5))
+                        {
+                            <MudImage Style="display: none; object-fit: cover; height: 26.66%; width: 100%"
+                                      Class="spotlight cursor-pointer"
+                                      Src="@($"Uploads/{image.file_name}")">
+                            </MudImage>
+                        }
+                    </MudStack>
+                </MudStack>
+            }
+        </MudItem>
 
         <!-- Praise Messages -->
-        <MudItem xs="12" lg="8">
-            <MudGrid Spacing="1">
-                <!-- Header -->
-                <MudItem xs="12">
-                    <MudPaper Outlined>
-                        <MudStack Class="pa-2" Spacing="0" AlignItems="AlignItems.Center">
-                            <MudText Align="Align.Center"><b>Praise Messages</b></MudText>
-                        </MudStack>
-                    </MudPaper>
-                </MudItem>
-
-                <!-- Content -->
-                <MudItem xs="12">
-                    <MudStack Spacing="3" Justify="Justify.Center">
-                        @if (paginatedMessages != null && paginatedMessages.Count > 0)
-                        {
-                            <MudVirtualize Items="paginatedMessages" Context="message">
-                                <MudPaper Class="pa-2 mb-2" Outlined>
-                                    @{
-                                        var employeeSender = pgasEmployees?.FirstOrDefault(e => e.eid == message.from_eid);
-                                        var employeeRecipient = pgasEmployees?.FirstOrDefault(e => e.eid == message.to_eid);
+        <MudItem xs="12" lg="9">
+            <MudPaper Elevation="0">
+                <MudGrid Spacing="3">
+                    <!-- Header -->
+                    <!-- Content -->
+                    <MudItem xs="12">
+                        <MudStack Justify="Justify.Center" Spacing="3">
+                            @if (praiseMessages != null && praiseMessages.Count > 0)
+                            {
+                                DateTime currentDate = DateTime.UtcNow;
+                                DateTime referencedDate = currentDate.AddDays(-1);
+                                <MudVirtualize Items="announcementForTheMonth" Context="announcement">
+                                    @if (announcement.docdate > referencedDate)
+                                    {
+                                        <MudLink Href="@("https://pgas.ph/dts/public/read?docid="+announcement.docid)" Target="_blank" Underline="Underline.None">
+                                            <MudPaper Class="pa-3" Style="scrollbar-gutter: stable" Outlined>
+                                                <MudStack Spacing="2" Wrap="Wrap.NoWrap" Style="width: 100%">
+                                                    <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Start">
+                                                        <MudStack Spacing="0" Style="width: 100%">
+                                                            <MudText Typo="Typo.body2"><b>@announcement.doctype</b></MudText>
+                                                            <MudStack Row Spacing="2">
+                                                                <MudText Style="font-size: 10px">@(announcement.docdate?.ToString("MMMM dd, yyyy") ?? "No Date")</MudText>
+                                                                <MudText Style="font-size: 10px" Color="Color.Secondary">(New)</MudText>
+                                                            </MudStack>
+                                                        </MudStack>
+                                                        <MudIcon Icon="@Icons.Material.Filled.Attachment" Color="Color.Secondary" />
+                                                    </MudStack>
+                                                    <MudDivider />
+                                                    <MudStack Spacing="2" Class="pt-2" AlignItems="AlignItems.Start">
+                                                        <MudTooltip Style="max-width: 300px" Arrow Placement="Placement.Top" Text="@announcement.title">
+                                                            <MudText Typo="Typo.body1" Style="font-size: 14px">@TruncateText(announcement?.title ?? "", 150)</MudText>
+                                                        </MudTooltip>
+                                                        <MudTooltip Style="max-width: 300px" Arrow Placement="Placement.Top" Text="@announcement.description">
+                                                            <MudText Typo="Typo.body2" Style="font-size: 12px; font-style: italic">@TruncateText(announcement?.description ?? "", 100)</MudText>
+                                                        </MudTooltip>
+                                                    </MudStack>
+                                                </MudStack>
+                                            </MudPaper>
+                                        </MudLink>
                                     }
-                                    <MudStack Row>
-
-                                        <MudTooltip>
-                                            <ChildContent>
-                                                <MudAvatar Size="Size.Large">
-                                                    <MudImage Style="image-rendering: optimizeSpeed"
-                                                              Src="@($"https://pgas.ph/hris/Content/images/photos/{message.from_eid}.png")"
-                                                              onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
-                                                    </MudImage>
-                                                </MudAvatar>
-                                            </ChildContent>
-                                            <TooltipContent>
-                                                <MudStack Row>
+                                    else
+                                    {
+                                        <MudLink Href="@("https://pgas.ph/dts/public/read?docid="+announcement.docid)" Target="_blank" Underline="Underline.None">
+                                            <MudPaper Class="pa-3" Style="scrollbar-gutter: stable" Outlined>
+                                                <MudStack Spacing="2" Wrap="Wrap.NoWrap" Style="width: 100%">
+                                                    <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Start">
+                                                        <MudStack Spacing="0" Style="width: 100%">
+                                                            <MudText Typo="Typo.body2"><b>@announcement.doctype</b></MudText>
+                                                            <MudText Style="font-size: 10px">@(announcement.docdate?.ToString("MMMM dd, yyyy") ?? "No Date")</MudText>
+                                                        </MudStack>
+                                                        <MudIcon Icon="@Icons.Material.Filled.Attachment" Color="Color.Primary" />
+                                                    </MudStack>
+                                                    <MudDivider />
+                                                    <MudStack Spacing="2" Class="pt-2" AlignItems="AlignItems.Start">
+                                                        <MudTooltip Style="max-width: 300px" Arrow Placement="Placement.Top" Text="@announcement.title">
+                                                            <MudText Typo="Typo.body1" Style="font-size: 14px">@TruncateText(announcement?.title ?? "", 150)</MudText>
+                                                        </MudTooltip>
+                                                        <MudTooltip Style="max-width: 300px" Arrow Placement="Placement.Top" Text="@announcement.description">
+                                                            <MudText Typo="Typo.body2" Style="font-size: 12px; font-style: italic">@TruncateText(announcement?.description ?? "", 100)</MudText>
+                                                        </MudTooltip>
+                                                    </MudStack>
+                                                </MudStack>
+                                            </MudPaper>
+                                        </MudLink>
+                                    }
+                                </MudVirtualize>
+                                <Virtualize Items="praiseMessages" Context="message" OverscanCount="2">
+                                    <MudPaper Class="pa-2" Outlined>
+                                        @{
+                                            var employeeSender = pgasEmployees?.FirstOrDefault(e => e.eid == message.from_eid);
+                                            var employeeRecipient = pgasEmployees?.FirstOrDefault(e => e.eid == message.to_eid);
+                                        }
+                                        <MudStack Row>
+                                            <MudTooltip >
+                                                <ChildContent>
                                                     <MudAvatar Size="Size.Large">
-                                                        <MudImage Style="image-rendering: optimizeSpeed"
-                                                                  Src="@($"https://pgas.ph/hris/Content/images/photos/{message.from_eid}.png")"
+                                                        <MudImage Src="@($"https://pgas.ph/hris/Content/images/photos/{message.from_eid}.png")"
                                                                   onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
                                                         </MudImage>
                                                     </MudAvatar>
-                                                    <MudStack Spacing="0" AlignItems="AlignItems.Start" Justify="Justify.Center">
-                                                        <MudText><b>@employeeSender?.EmployeeName</b></MudText>
-                                                        <MudText Style="font-size: 12px">@employeeSender?.Position</MudText>
-                                                        <MudText Style="font-size: 12px">@employeeSender?.OfficeName</MudText>
+                                                </ChildContent>
+                                                <TooltipContent>
+                                                    <MudStack Row>
+                                                        <MudAvatar Size="Size.Large">
+                                                            <MudImage Src="@($"https://pgas.ph/hris/Content/images/photos/{message.from_eid}.png")"
+                                                                      onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
+                                                            </MudImage>
+                                                        </MudAvatar>
+                                                        <MudStack Spacing="0" AlignItems="AlignItems.Start" Justify="Justify.Center">
+                                                            <MudText><b>@employeeSender?.EmployeeName</b></MudText>
+                                                            <MudText Style="font-size: 12px">@employeeSender?.Position</MudText>
+                                                            <MudText Style="font-size: 12px">@employeeSender?.OfficeName</MudText>
+                                                        </MudStack>
                                                     </MudStack>
-                                                </MudStack>
-                                            </TooltipContent>
-                                        </MudTooltip>
-                                        <MudStack Spacing="0" AlignItems="AlignItems.Start" Justify="Justify.Center">
-                                            <!-- sender to recipient -->
-                                            <MudStack Row Style="width: 100%" Wrap="Wrap.Wrap" Spacing="1">
-                                                <MudTooltip>
-                                                    <ChildContent>
-                                                        <MudText Style="font-size: 14px"><b>@employeeSender?.EmployeeName (@employeeSender?.OfficeAbbr)</b></MudText>
-                                                    </ChildContent>
-                                                    <TooltipContent>
-                                                        <MudStack Row>
-                                                            <MudAvatar Size="Size.Large">
-                                                                <MudImage Style="image-rendering: optimizeSpeed"
-                                                                          Src="@($"https://pgas.ph/hris/Content/images/photos/{message.from_eid}.png")"
-                                                                          onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
-                                                                </MudImage>
-                                                            </MudAvatar>
-                                                            <MudStack Spacing="0" AlignItems="AlignItems.Start" Justify="Justify.Center">
-                                                                <MudText><b>@employeeSender?.EmployeeName</b></MudText>
-                                                                <MudText Style="font-size: 12px">@employeeSender?.Position</MudText>
-                                                                <MudText Style="font-size: 12px">@employeeSender?.OfficeName</MudText>
-                                                            </MudStack>
-                                                        </MudStack>
-                                                    </TooltipContent>
-                                                </MudTooltip>
-                                                <!-- to -->
-                                                <MudText Style="font-size: 14px">to</MudText>
-
-                                                <!-- recipient -->
-                                                <MudTooltip>
-                                                    <ChildContent>
-                                                        <MudText Style="font-size: 14px"><b>@employeeRecipient?.EmployeeName (@employeeRecipient?.OfficeAbbr)</b></MudText>
-                                                    </ChildContent>
-                                                    <TooltipContent>
-                                                        <MudStack Row>
-                                                            <MudAvatar Size="Size.Large">
-                                                                <MudImage Style="image-rendering: optimizeSpeed"
-                                                                          Src="@($"https://pgas.ph/hris/Content/images/photos/{message.to_eid}.png")"
-                                                                          onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
-                                                                </MudImage>
-                                                            </MudAvatar>
-                                                            <MudStack Spacing="0" AlignItems="AlignItems.Start" Justify="Justify.Center">
-                                                                <MudText><b>@employeeRecipient?.EmployeeName</b></MudText>
-                                                                <MudText Style="font-size: 12px">@employeeRecipient?.Position</MudText>
-                                                                <MudText Style="font-size: 12px">@employeeRecipient?.OfficeName</MudText>
-                                                            </MudStack>
-                                                        </MudStack>
-                                                    </TooltipContent>
-                                                </MudTooltip>
-                                            </MudStack>
-                                            <MudTooltip Text="@(message.date?.ToString("MMMM dd, yyyy hh:mm tt") ?? "No Date")">
-                                                <MudText Style="font-size: 10px">@(message.date?.ToString("MMMM dd 'at' hh:mm tt") ?? "No Date")</MudText>
+                                                </TooltipContent>
                                             </MudTooltip>
-                                            <MudRating ReadOnly Size="Size.Small" SelectedValue="@message.stars" />
+                                            <MudStack Spacing="0" AlignItems="AlignItems.Start" Justify="Justify.Center">
+                                                <!-- sender to recipient -->
+                                                <MudStack Row Style="width: 100%" Wrap="Wrap.Wrap" Spacing="2">
+                                                    <MudTooltip>
+                                                        <ChildContent>
+                                                            <MudText Style="font-size: 14px"><b>@employeeSender?.EmployeeName</b></MudText>
+                                                        </ChildContent>
+                                                        <TooltipContent>
+                                                            <MudStack Row>
+                                                                <MudAvatar Size="Size.Large">
+                                                                    <MudImage Style="image-rendering: optimizeSpeed"
+                                                                              Src="@($"https://pgas.ph/hris/Content/images/photos/{message.from_eid}.png")"
+                                                                              onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
+                                                                    </MudImage>
+                                                                </MudAvatar>
+                                                                <MudStack Spacing="0" AlignItems="AlignItems.Start" Justify="Justify.Center">
+                                                                    <MudText><b>@employeeSender?.EmployeeName</b></MudText>
+                                                                    <MudText Style="font-size: 12px">@employeeSender?.Position</MudText>
+                                                                    <MudText Style="font-size: 12px">@employeeSender?.OfficeName</MudText>
+                                                                </MudStack>
+                                                            </MudStack>
+                                                        </TooltipContent>
+                                                    </MudTooltip>
+                                                    <!-- to -->
+                                                    <MudText Style="font-size: 14px">to</MudText>
+
+                                                    <!-- recipient -->
+                                                    <MudTooltip>
+                                                        <ChildContent>
+                                                            <MudText Style="font-size: 14px"><b>@employeeRecipient?.EmployeeName</b></MudText>
+                                                        </ChildContent>
+                                                        <TooltipContent>
+                                                            <MudStack Row>
+                                                                <MudAvatar Size="Size.Large">
+                                                                    <MudImage Style="image-rendering: optimizeSpeed"
+                                                                              Src="@($"https://pgas.ph/hris/Content/images/photos/{message.to_eid}.png")"
+                                                                              onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
+                                                                    </MudImage>
+                                                                </MudAvatar>
+                                                                <MudStack Spacing="0" AlignItems="AlignItems.Start" Justify="Justify.Center">
+                                                                    <MudText><b>@employeeRecipient?.EmployeeName</b></MudText>
+                                                                    <MudText Style="font-size: 12px">@employeeRecipient?.Position</MudText>
+                                                                    <MudText Style="font-size: 12px">@employeeRecipient?.OfficeName</MudText>
+                                                                </MudStack>
+                                                            </MudStack>
+                                                        </TooltipContent>
+                                                    </MudTooltip>
+                                                </MudStack>
+                                                <MudTooltip Text="@(message.date?.ToString("MMMM dd, yyyy hh:mm tt") ?? "No Date")">
+                                                    <MudText Style="font-size: 10px">@(message.date?.ToString("MMMM dd 'at' hh:mm tt") ?? "No Date")</MudText>
+                                                </MudTooltip>
+                                                <MudRating ReadOnly Size="Size.Small" SelectedValue="@message.stars" />
+                                            </MudStack>
                                         </MudStack>
-                                    </MudStack>
-                                    <MudPaper Class="pa-1" Elevation="0">
-                                        <MudText>@message.message</MudText>
+                                        <MudDivider />
+                                        <MudPaper Class="pa-3" Elevation="0">
+                                            <MudText>@message.message</MudText>
+                                        </MudPaper>
+                                        <MudStack Row Justify="Justify.SpaceBetween">
+                                        </MudStack>
                                     </MudPaper>
-                                    <MudStack Row Justify="Justify.SpaceBetween">
+                                </Virtualize>
+                            }
+                            else
+                            {
+                                <MudPaper Outlined Class="pa-2">
+                                    <MudStack Spacing="2">
+                                        <MudStack Row>
+                                            <MudSkeleton SkeletonType="SkeletonType.Circle" Width="50px" Height="50px" />
+                                            <MudStack Style="width: 100%" Spacing="0" AlignItems="AlignItems.Start">
+                                                <MudSkeleton Width="70%" />
+                                                <MudSkeleton Width="30%" />
+                                            </MudStack>
+                                        </MudStack>
+                                        <MudPaper Elevation="0" Class="pa-2">
+                                            <MudSkeleton Width="100%" />
+                                            <MudSkeleton Width="100%" />
+                                            <MudSkeleton Width="30%" />
+                                        </MudPaper>
                                     </MudStack>
                                 </MudPaper>
-                            </MudVirtualize>
-                            <MudStack Row Justify="Justify.Center">
-                                <MudPagination ShowFirstButton ShowLastButton Count="@totalPages" SelectedChanged="OnPageChanged" />
-                            </MudStack>
-                        }
-                        else
-                        {
-                            <MudText>No messages available.</MudText>
-                        }
-                    </MudStack>
-                </MudItem>
-            </MudGrid>
+                            }
+                        </MudStack>
+                    </MudItem>
+
+                </MudGrid>
+            </MudPaper>
         </MudItem>
 
-        <MudDivider />
+        <!-- Promoted Employees -->
+        <MudItem xs="12" lg="5">
+            <MudPaper Elevation="0" Class="pa-5">
+                <MudGrid Spacing="3">
+                    <!-- Header -->
+                    <MudItem xs="12">
+                        <MudText Align="Align.Center"><b>Promoted Employees</b></MudText>
+                    </MudItem>
+                    <MudDivider />
+                    <!-- Promoted Employees List -->
+                    <MudItem xs="12">
+                        @if (paginatedPromotedPGASEmployees != null && paginatedPromotedPGASEmployees.Count > 0)
+                        {
+                            <MudStack Spacing="5">
+                                <MudVirtualize Items="paginatedPromotedPGASEmployees" Context="promoted">
+                                    <MudPaper Outlined>
+                                        <MudStack Row="true" Class="justify-start" Spacing="0">
+                                            <MudStack Justify="Justify.FlexEnd">
+                                                <MudImage Fluid Width="100" Height="150"
+                                                          Src="@("https://pgas.ph/hris/Content/images/photos/"+ promoted.eid + ".png")"
+                                                          onerror="this.src='Objects/agusan del sur.webp'"
+                                                          ObjectFit="ObjectFit.Cover"
+                                                          ObjectPosition="ObjectPosition.Top"
+                                                          Class="rounded-l-sm">
+                                                </MudImage>
+                                            </MudStack>
+                                            <MudDivider Vertical="true" FlexItem />
+                                            <MudStack Style="width: 100%" Spacing="1" Class="pa-2">
+                                                <MudText Style="font-size: 14px"><b>@promoted.EmployeeName</b></MudText>
+                                                <MudText Style="font-size: 13px" Typo="Typo.body2">@promoted.OfficeName</MudText>
+                                                <MudStack Row Spacing="1" AlignItems="AlignItems.Center">
+                                                    <MudIcon Icon="@Icons.Material.Filled.KeyboardDoubleArrowUp" Size="Size.Small"></MudIcon>
+                                                    <MudText Style="font-size: 12px"><b>@promoted.Position</b></MudText>
+                                                </MudStack>
+                                                <MudStack Row Spacing="1" AlignItems="AlignItems.Center">
+                                                    <MudIcon Icon="@Icons.Material.Filled.CalendarToday" Size="Size.Small"></MudIcon>
+                                                    <MudText Style="font-size: 12px"><b>@(promoted.AppointCoverage?.ToString("MMMM dd, yyyy") ?? "No Date")</b></MudText>
+                                                </MudStack>
+                                            </MudStack>
+                                        </MudStack>
+                                    </MudPaper>
+                                </MudVirtualize>
+                                <MudStack Row Justify="Justify.Center">
+                                    <MudPagination ShowFirstButton ShowLastButton Size="Size.Small" Count="@totalPagesPromotedEmployees" SelectedChanged="OnPageChangedPromotedEmployees" />
+                                </MudStack>
+                            </MudStack>
+                        }
+                    </MudItem>
+                </MudGrid>
+            </MudPaper>
 
-        <!-- Downloadble Forms -->
-        <MudItem xs="12">
-            <MudGrid Spacing="1">
-                <!-- Header -->
-                <MudItem xs="12">
-                    <MudPaper Outlined>
-                        <MudStack Class="pa-2" Spacing="0" AlignItems="AlignItems.Center">
-                            <MudText Align="Align.Center"><b>Downloadble Forms</b></MudText>
-                        </MudStack>
-                    </MudPaper>
-                </MudItem>
-
-                <!-- Content -->
-                <MudItem xs="12">
-                    <MudStack Class="pa-2">
-                        <MudStack Row Class="flex-wrap" Spacing="5" Justify="Justify.Center">
-                            @foreach (var documentName in documentNames)
-                            {
-                                <MudPaper Outlined>
-                                    <MudButton Size="Size.Small" StartIcon="@Icons.Custom.FileFormats.FileDocument" IconColor="Color.Info" Target="_blank" Href="@($"Documents/{@documentName}.doc")">@documentName</MudButton>
-                                </MudPaper>
-                            }
-                            @foreach (var excelDocumentName in excelDocumentNames)
-                            {
-                                <MudPaper Outlined>
-                                    <MudButton Size="Size.Small" StartIcon="@Icons.Custom.FileFormats.FileExcel" IconColor="Color.Success" Target="_blank" Href="@($"Documents/{@excelDocumentName}.xlsx")">@excelDocumentName</MudButton>
-                                </MudPaper>
-                            }
-                        </MudStack>
-                    </MudStack>
-                </MudItem>
-            </MudGrid>
         </MudItem>
     </MudGrid>
 </MudContainer>
 @code {
     // Get API URL
-    private readonly string API_URL = APIService.PGASePortalAPI;
+    private readonly string API_URL = APIService.PGASPortalAPI;
     private List<ePortal_employee>? pgasEmployees;
+    private List<ePortal_employee>? promotedPGASEmployees;
+    private List<ePortal_employee>? paginatedPromotedPGASEmployees;
     private List<praise_message>? praiseMessages;
     private List<carousel_image>? images;
-    private List<praise_message>? paginatedMessages;
-    private int pageSize = 5; // Adjust as needed
-    private int currentPage = 1;
-    private int totalPages => (int)Math.Ceiling((double)(praiseMessages?.Count ?? 0) / pageSize);
+    private int pageSizePraiseMessages = 5; // Count per pagination for praise messages
+    private int currentPagePraiseMessages = 1;
+    private int totalPagesPraiseMessages => (int)Math.Ceiling((double)(praiseMessages?.Count ?? 0) / pageSizePraiseMessages);
+    private int pageSizePromotedEmployees = 5; // Count per pagination for promoted employees
+    private int currentPagePromotedEmployees = 1;
+    private int totalPagesPromotedEmployees => (int)Math.Ceiling((double)(promotedPGASEmployees?.Count ?? 0) / pageSizePromotedEmployees);
     private bool? isDarkMode;
-    private List<string> documentNames = new List<string>
-    {
-        "Accounting Clearance",
-        "Allocation of Maternity Leave",
-        "Leave Application Form",
-        "Library Clearance",
-        "Tambayayong Award Nomination Form",
-        "Treasurer Clearance",
-        "Trip Ticket",
-        "Ulirang Kawani Nomination Form"
-    };
+    private List<t_doc_office_vw>? announcementForTheMonth;
+    private Timer? timer;
 
-    private List<string> excelDocumentNames = new List<string>
+    public class t_doc_office_vw
     {
-        "CS Form No7 ClearanceForm",
-        "Disbursement Voucher (DV)",
-        "Personal Data Sheet (PDS) - CSC Form 212 Revised 2017",
-        "Itinerary of Travel",
-        "Liquidation Report",
-        "Obligation Request (OBR)",
-        "Official Business Authorization Slip (OBAS)",
-        "Pass - Compensatory Service Slip (PASCO)",
-        "Purchase Request (PR)",
-        "Reimbursement Expense Receipt",
-        "Request Slip"
-    };
+        public long? docid { get; set; }
+        public string? title { get; set; }
+        public string? description { get; set; }
+        public string? OfficeName { get; set; }
+        public string? doctype { get; set; }
+        public DateTime? docdate { get; set; }
+    }
 
     public class ePortal_employee
     {
@@ -267,9 +458,13 @@
         public string? OfficeAbbr { get; set; }
         public string? EmployeeName { get; set; }
         public string? Position { get; set; }
-        public int? SG { get; set; }
+        public byte? SG { get; set; }
         public string? Status { get; set; }
         public bool? isactive { get; set; }
+        public string? Telephone { get; set; }
+        public string? EmailAdd { get; set; }
+        public string? Cause { get; set; }
+        public DateTime? AppointCoverage { get; set; }
     }
 
     public partial class praise_message
@@ -295,9 +490,11 @@
     {
         try
         {
-            await loadPraiseMessages();
             await LoadEmployees();
             await LoadCarousel();
+            await LoadPraiseMessages();
+            //await LoadPromotedEmployees();
+            //await officeViewAnnouncementsForTheMonth();
             isDarkMode = await UserService.GetDarkModeAsync();
             UserService.OnThemeChanged += HandleThemeChangedAsync;
         }
@@ -322,7 +519,28 @@
         UserService.OnThemeChanged -= HandleThemeChangedAsync;
     }
 
-    private async Task loadPraiseMessages()
+    private async Task officeViewAnnouncementsForTheMonth()
+    {
+        try
+        {
+            using HttpClient httpClient = new HttpClient();
+            HttpResponseMessage httpResponse = await httpClient.GetAsync(API_URL + "/api/eportal_docs_view/officeViewAnnouncements")!;
+            httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
+            using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            announcementForTheMonth = await JsonSerializer.DeserializeAsync<List<t_doc_office_vw>>(responseStream, options);
+
+            StateHasChanged();
+        }
+        catch (HttpRequestException ex)
+        {
+            // Handle exception, log, or display an error message
+            Console.WriteLine($"Error fetching data: {ex.Message}");
+        }
+    }
+
+
+    private async Task LoadPraiseMessages()
     {
         try
         {
@@ -333,26 +551,11 @@
             string jsonResponse = await httpResponse.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             praiseMessages = JsonSerializer.Deserialize<List<praise_message>>(jsonResponse, options);
-            UpdatePaginatedMessages();
         }
         catch (HttpRequestException ex)
         {
             Console.WriteLine($"Error fetching data: {ex.Message}");
         }
-    }
-
-    private void UpdatePaginatedMessages()
-    {
-        paginatedMessages = praiseMessages?
-            .Skip((currentPage - 1) * pageSize)
-            .Take(pageSize)
-            .ToList();
-    }
-
-    private void OnPageChanged(int page)
-    {
-        currentPage = page;
-        UpdatePaginatedMessages();
     }
 
     private async Task LoadEmployees()
@@ -373,6 +576,39 @@
         }
     }
 
+    private async Task LoadPromotedEmployees()
+    {
+        try
+        {
+            using HttpClient httpClient = new();
+            HttpResponseMessage httpResponse = await httpClient.GetAsync($"{API_URL}/api/ePortal_employee/promotedEmployees");
+            httpResponse.EnsureSuccessStatusCode();
+
+            using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            promotedPGASEmployees = await JsonSerializer.DeserializeAsync<List<ePortal_employee>>(responseStream, options);
+            UpdatePaginatedPromotedEmployees();
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"Error fetching data: {ex.Message}");
+        }
+    }
+
+    private void UpdatePaginatedPromotedEmployees()
+    {
+        paginatedPromotedPGASEmployees = promotedPGASEmployees?
+            .Skip((currentPagePromotedEmployees - 1) * pageSizePromotedEmployees)
+            .Take(pageSizePromotedEmployees)
+            .ToList();
+    }
+
+    private void OnPageChangedPromotedEmployees(int page)
+    {
+        currentPagePromotedEmployees = page;
+        UpdatePaginatedPromotedEmployees();
+    }
+
     private async Task LoadCarousel()
     {
         try
@@ -389,5 +625,16 @@
         {
             Console.WriteLine($"Error fetching data: {ex.Message}");
         }
+    }
+
+    // Method to truncate text to a specified length
+    private string TruncateText(string text, int maxLength)
+    {
+        if (string.IsNullOrEmpty(text))
+        {
+            return text;
+        }
+
+        return text.Length <= maxLength ? text : text.Substring(0, maxLength) + "...";
     }
 }

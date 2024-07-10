@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ePortal.WebAPI.Context;
-using ePortal.WebAPI.DTO.ePortal;
+using PGAS.WebAPI.DTO.ePortal;
+using Portal.WebAPI.Context;
 
-namespace ePortal.WebAPI.Controllers.ePortal.Views
+namespace PGAS.WebAPI.Controllers.ePortal.Views
 {
     [Route("api/[controller]")]
     [ApiController]

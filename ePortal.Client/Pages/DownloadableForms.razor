@@ -1,0 +1,100 @@
+﻿@page "/downloadble-forms"
+@using System.Text.Json
+@using System.Net.Http
+
+
+<MudContainer MaxWidth="MaxWidth.False">
+    <MudGrid Spacing="3" Class="pa-3">
+        <!-- Downloadble Forms -->
+        <MudItem xs="12">
+            <MudPaper Elevation="0" Class="pa-5">
+                <MudGrid Spacing="3">
+                    <!-- Header -->
+                    <MudItem xs="12">
+                        <MudText Align="Align.Center"><b>Downloadble Forms</b></MudText>
+                    </MudItem>
+                    <MudDivider />
+                    <!-- Content -->
+                    <MudItem xs="12">
+                        <MudGrid Justify="Justify.Center">
+                            @foreach (var documentName in documentNames)
+                            {
+                                <MudItem xs="6" sm="4" lg="3">
+                                    <MudPaper Outlined>
+                                        <MudLink Href="@($"Documents/{@documentName}.doc")" Target="_blank" Color="Color.Tertiary" Underline="Underline.None">
+                                            <MudStack Row Style="height: 100%">
+                                                <MudStack Spacing="0" Class="pa-3" Style="width: 100%">
+                                                    <MudStack Row Class="pa-0" Justify="Justify.SpaceBetween" Style="width: 100%">
+                                                        <MudIcon Style="font-size: 4rem;" Icon="@Icons.Custom.FileFormats.FileDocument"
+                                                                 Color="Color.Info" />
+                                                        <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Download" />
+                                                    </MudStack>
+                                                    <MudStack Style="min-height: 80px" Spacing="0">
+                                                        <MudText Style="font-size: 14px"><b>@documentName</b></MudText>
+                                                        <MudText Style="font-size: 12px">Word Document</MudText>
+                                                    </MudStack>
+                                                </MudStack>
+                                            </MudStack>
+                                        </MudLink>
+                                    </MudPaper>
+                                </MudItem>
+                            }
+                            @foreach (var excelDocumentName in excelDocumentNames)
+                            {
+                                <MudItem xs="6" sm="4" lg="3">
+                                    <MudPaper Outlined>
+                                        <MudLink Href="@($"Documents/{@excelDocumentName}.doc")" Target="_blank" Color="Color.Tertiary" Underline="Underline.None">
+                                            <MudStack Row Style="height: 100%">
+                                                <MudStack Spacing="0" Class="pa-3" Style="width: 100%">
+                                                    <MudStack Row Class="pa-0" Justify="Justify.SpaceBetween" Style="width: 100%">
+                                                        <MudIcon Style="font-size: 4rem;" Icon="@Icons.Custom.FileFormats.FileExcel"
+                                                                 Color="Color.Success" />
+                                                        <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Download" />
+                                                    </MudStack>
+                                                    <MudStack Class="pl-2" Spacing="0">
+                                                        <MudStack Style="min-height: 80px" Spacing="0">
+                                                            <MudText Style="font-size: 12px"><b>@excelDocumentName</b></MudText>
+                                                            <MudText Style="font-size: 12px">Excel Document</MudText>
+                                                        </MudStack>
+                                                    </MudStack>
+                                                </MudStack>
+                                            </MudStack>
+                                        </MudLink>
+                                    </MudPaper>
+                                </MudItem>
+                            }
+                        </MudGrid>
+                    </MudItem>
+                </MudGrid>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+@code {
+    private List<string> documentNames = new List<string>
+    {
+        "Accounting Clearance",
+        "Allocation of Maternity Leave",
+        "Leave Application Form",
+        "Library Clearance",
+        "Tambayayong Award Nomination Form",
+        "Treasurer Clearance",
+        "Trip Ticket",
+        "Ulirang Kawani Nomination Form"
+    };
+
+    private List<string> excelDocumentNames = new List<string>
+    {
+        "CS Form No7 ClearanceForm",
+        "Disbursement Voucher (DV)",
+        "Personal Data Sheet (PDS) - CSC Form 212 Revised 2017",
+        "Itinerary of Travel",
+        "Liquidation Report",
+        "Obligation Request (OBR)",
+        "Official Business Authorization Slip (OBAS)",
+        "Pass - Compensatory Service Slip (PASCO)",
+        "Purchase Request (PR)",
+        "Reimbursement Expense Receipt",
+        "Request Slip"
+    };
+}

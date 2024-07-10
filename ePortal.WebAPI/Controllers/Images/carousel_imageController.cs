@@ -1,9 +1,9 @@
-﻿using ePortal.WebAPI.Context;
-using ePortal.WebAPI.Entities;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PGAS.WebAPI.Entities.portal_v2.Table;
+using Portal.WebAPI.Context;
 
-namespace ePortal.WebAPI.Controllers.Others
+namespace PGAS.WebAPI.Controllers.Others
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -23,7 +23,7 @@ namespace ePortal.WebAPI.Controllers.Others
             return await _context.carousel_image.ToListAsync();
         }
 
-        private readonly string _uploadsFolderPath = @"C:\Users\jonis\source\repos\PGAS ePortal\ePortal.Client\wwwroot\Uploads";
+        private readonly string _uploadsFolderPath = @"C:\Users\jonis\source\repos\PGAS PGAS\PGAS.Client\wwwroot\Uploads";
 
         [HttpGet("images")]
         public IActionResult GetImages()

@@ -1,0 +1,6 @@
+@PGAS.UserLogin.ActiveDirectory_HostAddress = http://localhost:5062
+
+GET {{PGAS.UserLogin.ActiveDirectory_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
