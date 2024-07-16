@@ -8,124 +8,122 @@
 
 <PageTitle>Employees | PGAS Portal</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.False">
-    <MudGrid Spacing="3" Class="pa-2 pt-5">
-        <!-- Search Bar -->
-        <MudItem xs="12">
-            <MudPaper Elevation="0">
-                <MudStack Class="pa-5">
-                    <MudTextField Clearable
-                                  @bind-Value="query"
-                                  T="string"
-                                  Label="Search"
-                                  HelperText="Office Name | Office Abbreviation | Employee Name | Employee ID | Position"
-                                  Variant="Variant.Outlined"
-                                  OnKeyUp="@(async (args) => await HandleKeyUp(args))"
-                                  OnAdornmentClick="@(async () => await selectEmployee())"
-                                  AdornmentIcon="@Icons.Material.Filled.Search"
-                                  Adornment="Adornment.End"
-                                  Required
-                                  AdornmentAriaLabel="Search"
-                                  IconSize="Size.Medium"
-                                  AdornmentColor="Color.Primary">
-                    </MudTextField>
-                </MudStack>
-            </MudPaper>
-        </MudItem>
-        <!-- Employees -->
-        <MudItem xs="12">
-            <MudGrid Justify="Justify.Center">
-                @if (pgasEmployee != null && pgasEmployee.Any())
+<MudGrid Spacing="3" Class="pa-3">
+    <!-- Search Bar -->
+    <MudItem xs="12">
+        <MudPaper Elevation="0">
+            <MudStack Class="pa-x">
+                <MudTextField Clearable
+                              @bind-Value="query"
+                              T="string"
+                              Label="Search"
+                              HelperText="Office Name | Office Abbreviation | Employee Name | Employee ID | Position"
+                              Variant="Variant.Outlined"
+                              OnKeyUp="@(async (args) => await HandleKeyUp(args))"
+                              OnAdornmentClick="@(async () => await selectEmployee())"
+                              AdornmentIcon="@Icons.Material.Filled.Search"
+                              Adornment="Adornment.End"
+                              Required
+                              AdornmentAriaLabel="Search"
+                              IconSize="Size.Medium"
+                              AdornmentColor="Color.Primary">
+                </MudTextField>
+            </MudStack>
+        </MudPaper>
+    </MudItem>
+    <!-- Employees -->
+    <MudItem xs="12">
+        <MudGrid Justify="Justify.Center">
+            @if (pgasEmployee != null && pgasEmployee.Any())
+            {
+                if (!string.IsNullOrEmpty(query))
                 {
-                    if (!string.IsNullOrEmpty(query))
-                    {
-                        <MudVirtualize Items="pgasEmployee" Context="employee">
-                            <MudItem xs="6" md="4" xl="3">
-                                <MudPaper Elevation="0" Outlined>
-                                    <MudStack Class="justify-start" Spacing="0">
-                                        <MudImage Src="@($"https://pgas.ph/hris/Content/images/photos/{employee.eid}.png")"
-                                                  onerror="this.src='Objects/agusan del sur.webp'"
-                                                  ObjectFit="ObjectFit.Cover"
-                                                  Class="rounded-t" Style="height: 320px; width: 100%" Fluid>
-                                        </MudImage>
-                                        <MudStack Class="pa-3" Style="width: 100%" Spacing="1">
-                                            <MudStack Style="height: 100px" Spacing="1">
-                                                <MudText Class="m-0" Typo="Typo.body1"><b>@employee.EmployeeName</b></MudText>
-                                                <MudText Class="m-0" Style="font-size: 12px" Typo="Typo.body2">@employee.Position</MudText>
-                                                <MudText Class="m-0" Style="font-size: 12px" Typo="Typo.body2">@employee.OfficeName (@employee.OfficeAbbr)</MudText>
-                                            </MudStack>
-                                            <MudDivider />
-                                            <MudStack Style="height: 50px" Spacing="1">
-                                                @if (!string.IsNullOrWhiteSpace(employee.Telephone) && System.Text.RegularExpressions.Regex.IsMatch(employee.Telephone, @"^\d+$"))
-                                                {
-                                                    <MudStack Row Spacing="1">
-                                                        <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Call"></MudIcon>
-                                                        <MudText Style="font-size: 12px">@employee.Telephone</MudText>
-                                                    </MudStack>
-                                                }
-                                                <MudStack Row Spacing="1">
-                                                    <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Mail"></MudIcon>
-                                                    <MudText Style="font-size: 12px">@employee.EmailAdd</MudText>
-                                                </MudStack>
-                                            </MudStack>
-                                            <MudDivider />
-                                            <MudPaper Height="70px" Elevation="0">
-                                                <MudChip T="string" Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Gray.Darken3}")">
-                                                    @employee.SwipeID
-                                                </MudChip>
-                                                <MudChip T="string" Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Amber.Darken3}")">
-                                                    @employee.OfficeAbbr
-                                                </MudChip>
-                                                @foreach (var status in new[] { "Elected", "Permanent", "Casual", "Job Order", "Contract of Service", "Coterminous", "Temporary", "Detailed" })
-                                                {
-                                                    var color = status switch
-                                                    {
-                                                        "Elected" => Colors.Amber.Lighten1,
-                                                        "Permanent" => Colors.LightBlue.Lighten1,
-                                                        "Casual" => Colors.Cyan.Lighten1,
-                                                        "Job Order" => Colors.Teal.Lighten1,
-                                                        "Contract of Service" => Colors.Green.Lighten1,
-                                                        "Coterminous" => Colors.DeepOrange.Lighten1,
-                                                        "Temporary" => Colors.Red.Lighten1,
-                                                        "Detailed" => Colors.Orange.Lighten1,
-                                                        _ => Colors.Shades.Black
-                                                    };
-                                                    if (employee.Status == status)
-                                                    {
-                                                        <MudChip T="string" Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{color}")">
-                                                            @employee.Status
-                                                        </MudChip>
-                                                    }
-                                                }
-                                            </MudPaper>
+                    <MudVirtualize Items="pgasEmployee" Context="employee">
+                        <MudItem xs="6" md="4" lg="3" xl="2">
+                            <MudPaper Elevation="0" Outlined>
+                                <MudStack Justify="Justify.FlexStart" Spacing="0">
+                                    <MudImage Src="@($"https://pgas.ph/hris/Content/images/photos/{employee.eid}.png")"
+                                              onerror="this.src='Objects/agusan del sur.webp'"
+                                              ObjectFit="ObjectFit.Cover"
+                                              Class="rounded-t" Style="height: 320px; width: 100%" Fluid>
+                                    </MudImage>
+                                    <MudStack Class="pa-3" Style="width: 100%" Spacing="1">
+                                        <MudStack Style="height: 130px" Spacing="1">
+                                            <MudText Class="m-0" Typo="Typo.body1"><b>@employee.EmployeeName</b></MudText>
+                                            <MudText Class="m-0" Style="font-size: 12px" Typo="Typo.body2">@employee.Position</MudText>
+                                            <MudText Class="m-0" Style="font-size: 12px" Typo="Typo.body2">@employee.OfficeName (@employee.OfficeAbbr)</MudText>
                                         </MudStack>
+                                        <MudDivider />
+                                        <MudStack Style="height: 50px" Spacing="1">
+                                            @if (!string.IsNullOrWhiteSpace(employee.Telephone) && System.Text.RegularExpressions.Regex.IsMatch(employee.Telephone, @"^\d+$"))
+                                            {
+                                                <MudStack Row Spacing="1">
+                                                    <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Call"></MudIcon>
+                                                    <MudText Style="font-size: 12px">@employee.Telephone</MudText>
+                                                </MudStack>
+                                            }
+                                            <MudStack Row Spacing="1">
+                                                <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Mail"></MudIcon>
+                                                <MudText Style="font-size: 12px">@employee.EmailAdd</MudText>
+                                            </MudStack>
+                                        </MudStack>
+                                        <MudDivider />
+                                        <MudPaper Height="70px" Elevation="0">
+                                            <MudChip T="string" Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Gray.Darken3}")">
+                                                @employee.SwipeID
+                                            </MudChip>
+                                            <MudChip T="string" Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{Colors.Amber.Darken3}")">
+                                                @employee.OfficeAbbr
+                                            </MudChip>
+                                            @foreach (var status in new[] { "Elected", "Permanent", "Casual", "Job Order", "Contract of Service", "Coterminous", "Temporary", "Detailed" })
+                                            {
+                                                var color = status switch
+                                                {
+                                                    "Elected" => Colors.Amber.Lighten1,
+                                                    "Permanent" => Colors.LightBlue.Lighten1,
+                                                    "Casual" => Colors.Cyan.Lighten1,
+                                                    "Job Order" => Colors.Teal.Lighten1,
+                                                    "Contract of Service" => Colors.Green.Lighten1,
+                                                    "Coterminous" => Colors.DeepOrange.Lighten1,
+                                                    "Temporary" => Colors.Red.Lighten1,
+                                                    "Detailed" => Colors.Orange.Lighten1,
+                                                    _ => Colors.Shades.Black
+                                                };
+                                                if (employee.Status == status)
+                                                {
+                                                    <MudChip T="string" Size="Size.Small" Style="@($"color:{Colors.Shades.White}; background:{color}")">
+                                                        @employee.Status
+                                                    </MudChip>
+                                                }
+                                            }
+                                        </MudPaper>
                                     </MudStack>
-                                </MudPaper>
-                            </MudItem>
-                        </MudVirtualize>
-                    }
-                    else
-                    {
-                        <MudText>Search for employee</MudText>
-                    }
+                                </MudStack>
+                            </MudPaper>
+                        </MudItem>
+                    </MudVirtualize>
                 }
                 else
                 {
-                    <MudText>No employees found</MudText>
+                    <MudText>Search for employee</MudText>
                 }
-            </MudGrid>
-        </MudItem>
-    </MudGrid>
-</MudContainer>
+            }
+            else
+            {
+                <MudText>No employees found</MudText>
+            }
+        </MudGrid>
+    </MudItem>
+</MudGrid>
 
 @code {
     // Get API URL
     private readonly string API_URL = APIService.PGASPortalAPI;
-    private List<ePortal_employee>? pgasEmployee;
+    private List<vw_pgas_employeesDTO>? pgasEmployee;
     private UserService.eportalUser? eid;
     private string? query;
 
-    public partial class ePortal_employee
+    public partial class vw_pgas_employeesDTO
     {
         public long? eid { get; set; }
         public string? SwipeID { get; set; }
@@ -171,12 +169,12 @@
         try
         {
             using HttpClient httpClient = new HttpClient();
-            HttpResponseMessage httpResponse = await httpClient.GetAsync($"{API_URL}/api/ePortal_employee/query?searchDetails={query}");
+            HttpResponseMessage httpResponse = await httpClient.GetAsync($"{API_URL}/api/vw_pgas_employeesDTO/query?searchDetails={query}");
             httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
 
             using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            pgasEmployee = await JsonSerializer.DeserializeAsync<List<ePortal_employee>>(responseStream, options);
+            pgasEmployee = await JsonSerializer.DeserializeAsync<List<vw_pgas_employeesDTO>>(responseStream, options);
         }
         catch (HttpRequestException ex)
         {

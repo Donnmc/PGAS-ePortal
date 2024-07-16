@@ -1,30 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PGAS.WebAPI.Context;
-using PGAS.WebAPI.DTO.portal_v2;
+using PGAS.WebAPI.DTO.portal_v2.View;
 
 namespace PGAS.WebAPI.Controllers.ePortal.Views
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class v_emergency_hotlineController : ControllerBase
+    public class vw_emergency_hotlineController : ControllerBase
     {
         private readonly pgas_eportal_v2Context _context;
 
-        public v_emergency_hotlineController(pgas_eportal_v2Context context)
+        public vw_emergency_hotlineController(pgas_eportal_v2Context context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<v_emergency_hotlineOfficeDTO>>> GetEmergencyHotline()
+        public async Task<ActionResult<IEnumerable<vw_emergency_hotlineOfficeDTO>>> GetEmergencyHotline()
         {
-            var directory = await _context.v_emergency_hotline.ToListAsync();
+            var directory = await _context.vw_emergency_hotline.ToListAsync();
 
             var mappedHotelineDirectory = directory
                 .OrderByDescending(o => o.Office)
                 .GroupBy(o => new { o.Office, o.Office_Abbreviation })
-                .Select(office => new v_emergency_hotlineOfficeDTO
+                .Select(office => new vw_emergency_hotlineOfficeDTO
                 {
                     //office
                     Office = office.Key.Office,

@@ -1,6 +1,6 @@
 ﻿namespace PGAS.WebAPI.Entities.portal_v2.Table
 {
-    public partial class v_ip_phone_directory
+    public partial class vw_ip_phone_directory
     {
         public string? Line { get; set; }
         public string? Area { get; set; }

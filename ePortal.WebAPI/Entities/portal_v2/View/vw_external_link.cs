@@ -1,6 +1,6 @@
 ﻿namespace PGAS.WebAPI.Entities.portal_v2.Table
 {
-    public partial class v_external_link
+    public partial class vw_external_link
     {
         public string? Parent_List_Name { get; set; }
         public string? Parent_List_Icon { get; set; }

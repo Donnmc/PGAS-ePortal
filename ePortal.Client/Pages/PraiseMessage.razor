@@ -9,88 +9,86 @@
 
 <PageTitle>Praise Messages | PGAS Portal</PageTitle>
 
-<!-- Write Message -->
-<MudContainer MaxWidth="MaxWidth.False">
-    <MudGrid Justify="Justify.Center" Class="pa-2 pt-5" Style="z-index: 99">
-        <MudItem xs="12" lg="5">
-            <MudPaper Class="pa-3" Elevation="0">
-                <MudAutocomplete Variant="Variant.Outlined"
-                                 Class="mb-10"
-                                 Immediate="false"
-                                 T="string"
-                                 ShowProgressIndicator Label="Recipient"
-                                 @bind-Value="selectedRecipientName"
-                                 SearchFunc="@SearchEmployee"
-                                 Dense
-                                 Clearable
-                                 ResetValueOnEmptyText
-                                 AdornmentIcon="@Icons.Material.Filled.Search"
-                                 AdornmentColor="Color.Primary"
-                                 OpenChanged="SelectRecipient"
-                                 OnAdornmentClick="SelectRecipient">
-                </MudAutocomplete>
-                <MudStack Row AlignItems="AlignItems.Center">
-                    <MudText>From:</MudText>
-                    @if (eid?.eid != null)
-                    {
-                        <MudStack Row Spacing="1" AlignItems="AlignItems.Center">
-                            <MudChip T="object">
+<MudGrid Spacing="3" Class="pa-3">
+    <MudItem xs="12" lg="5">
+        <MudPaper Class="pa-3" Elevation="0">
+            <MudAutocomplete Variant="Variant.Outlined"
+                             Class="mb-10"
+                             Immediate="false"
+                             T="string"
+                             ShowProgressIndicator Label="Recipient"
+                             @bind-Value="selectedRecipientName"
+                             SearchFunc="SearchEmployee"
+                             Dense
+                             Clearable
+                             ResetValueOnEmptyText
+                             AdornmentIcon="@Icons.Material.Filled.Search"
+                             AdornmentColor="Color.Primary"
+                             OpenChanged="SelectRecipient"
+                             OnAdornmentClick="SelectRecipient">
+            </MudAutocomplete>
+            <MudStack Row AlignItems="AlignItems.Center">
+                <MudText>From:</MudText>
+                @if (eid?.eid != null)
+                {
+                    <MudStack Row Spacing="1" AlignItems="AlignItems.Center">
+                        <MudChip T="object">
+                            <AvatarContent>
+                                <MudAvatar Variant="Variant.Outlined" Class="mud-border-dark">
+                                    <MudImage Style="image-rendering: optimizeSpeed"
+                                              Src="@($"https://pgas.ph/hris/Content/images/photos/{eid.eid}.png")"
+                                              onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
+                                    </MudImage>
+                                </MudAvatar>
+                            </AvatarContent>
+                            <ChildContent>@pgasEmployee?.EmployeeName (@pgasEmployee?.OfficeAbbr)</ChildContent>
+                        </MudChip>
+                    </MudStack>
+                }
+            </MudStack>
+            <MudStack Class="pt-2">
+                @if (selectedRecipient != null)
+                {
+                    <MudDivider />
+                    <MudStack Row AlignItems="AlignItems.Center">
+                        <MudText>To:</MudText>
+                        <MudPaper Elevation="0" Class="d-flex flex-wrap gap-1" MaxWidth="100%">
+                            <MudChip T="string" OnClose="ClearRecipient">
                                 <AvatarContent>
                                     <MudAvatar Variant="Variant.Outlined" Class="mud-border-dark">
                                         <MudImage Style="image-rendering: optimizeSpeed"
-                                                  Src="@($"https://pgas.ph/hris/Content/images/photos/{eid.eid}.png")"
+                                                  Src="@($"https://pgas.ph/hris/Content/images/photos/{selectedRecipient?.eid}.png")"
                                                   onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
                                         </MudImage>
                                     </MudAvatar>
                                 </AvatarContent>
-                                <ChildContent>@pgasEmployee?.EmployeeName (@pgasEmployee?.OfficeAbbr)</ChildContent>
+                                <ChildContent>@selectedRecipient?.EmployeeName (@selectedRecipient?.OfficeAbbr)</ChildContent>
                             </MudChip>
-                        </MudStack>
-                    }
-                </MudStack>
-                <MudStack Class="pt-2">
-                    @if (selectedRecipient != null)
-                    {
-                        <MudDivider />
-                        <MudStack Row AlignItems="AlignItems.Center">
-                            <MudText>To:</MudText>
-                            <MudPaper Elevation="0" Class="d-flex flex-wrap gap-1" MaxWidth="100%">
-                                <MudChip T="string" OnClose="ClearRecipient">
-                                    <AvatarContent>
-                                        <MudAvatar Variant="Variant.Outlined" Class="mud-border-dark">
-                                            <MudImage Style="image-rendering: optimizeSpeed"
-                                                      Src="@($"https://pgas.ph/hris/Content/images/photos/{selectedRecipient?.eid}.png")"
-                                                      onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
-                                            </MudImage>
-                                        </MudAvatar>
-                                    </AvatarContent>
-                                    <ChildContent>@selectedRecipient?.EmployeeName (@selectedRecipient?.OfficeAbbr)</ChildContent>
-                                </MudChip>
-                            </MudPaper>
-                        </MudStack>
-                        <MudStack Row>
-                            <MudText>Rating: </MudText>
-                            <MudRating MaxValue="5" @bind-SelectedValue="stars" />
-                        </MudStack>
-                    }
-                </MudStack>
-                <MudTextField Class="mt-5" Clearable @bind-Value="message" T="string" Counter="0"
-                              Immediate Label="Message" Variant="Variant.Outlined" Lines="5">
-                </MudTextField>
-                <MudStack Row Justify="Justify.SpaceBetween">
-                    <MudStack Row AlignItems="AlignItems.Center">
+                        </MudPaper>
                     </MudStack>
-                    <MudStack Row AlignItems="AlignItems.Center">
-                        <MudButton Variant="Variant.Outlined" Color="Color.Primary" EndIcon="@Icons.Material.Filled.Send" OnClick="OpenDialog">Submit</MudButton>
+                    <MudStack Row>
+                        <MudText>Rating: </MudText>
+                        <MudRating MaxValue="5" @bind-SelectedValue="stars" />
                     </MudStack>
+                }
+            </MudStack>
+            <MudTextField Class="mt-5" Clearable @bind-Value="message" T="string" Counter="0"
+                          Immediate Label="Message" Variant="Variant.Outlined" Lines="5">
+            </MudTextField>
+            <MudStack Row Justify="Justify.SpaceBetween">
+                <MudStack Row AlignItems="AlignItems.Center">
                 </MudStack>
-            </MudPaper>
-        </MudItem>
+                <MudStack Row AlignItems="AlignItems.Center">
+                    <MudButton Variant="Variant.Outlined" Color="Color.Primary" EndIcon="@Icons.Material.Filled.Send" OnClick="OpenDialog">Submit</MudButton>
+                </MudStack>
+            </MudStack>
+        </MudPaper>
+    </MudItem>
 
-        <!-- Messages -->
+    <!-- Messages -->
 
-        <MudItem xs="12" lg="7">
-            <MudPaper Elevation="0" Class="pa-5">
+    <MudItem xs="12" lg="7">
+        <MudPaper Elevation="0" Class="pa-5">
             <MudGrid Spacing="1">
                 <!-- Header -->
                 <MudItem xs="12">
@@ -211,16 +209,15 @@
                     </MudStack>
                 </MudItem>
             </MudGrid>
-            </MudPaper>
-        </MudItem>
-    </MudGrid>
-</MudContainer>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
 
 @code {
     private string API_URL = APIService.PGASPortalAPI;
-    private ePortal_employee? selectedRecipient;
-    private ePortal_employee? pgasEmployee;
-    private List<ePortal_employee>? pgasEmployees;
+    private vw_pgas_employeesDTO? selectedRecipient;
+    private vw_pgas_employeesDTO? pgasEmployee;
+    private List<vw_pgas_employeesDTO>? pgasEmployees;
     private List<praise_message>? praiseMessages;
     private UserService.eportalUser? eid;
     private string? selectedRecipientName;
@@ -232,7 +229,7 @@
     private int totalPages => (int)Math.Ceiling((double)(praiseMessages?.Count ?? 0) / pageSize);
 
 
-    public class ePortal_employee
+    public class vw_pgas_employeesDTO
     {
         public long? eid { get; set; }
         public string? SwipeID { get; set; }
@@ -283,12 +280,12 @@
             if (eid?.eid != null)
             {
                 using HttpClient httpClient = new();
-                HttpResponseMessage httpResponse = await httpClient.GetAsync($"{API_URL}/api/ePortal_employee/id/{eid.eid}");
+                HttpResponseMessage httpResponse = await httpClient.GetAsync($"{API_URL}/api/vw_pgas_employeesDTO/id/{eid.eid}");
                 httpResponse.EnsureSuccessStatusCode();
 
                 string jsonResponse = await httpResponse.Content.ReadAsStringAsync();
                 var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                pgasEmployee = JsonSerializer.Deserialize<ePortal_employee>(jsonResponse, options);
+                pgasEmployee = JsonSerializer.Deserialize<vw_pgas_employeesDTO>(jsonResponse, options);
             }
         }
         catch (HttpRequestException ex)
@@ -304,12 +301,12 @@
             if (!string.IsNullOrEmpty(selectedRecipientName))
             {
                 using HttpClient httpClient = new();
-                HttpResponseMessage httpResponse = await httpClient.GetAsync($"{API_URL}/api/ePortal_employee/name/{selectedRecipientName}");
+                HttpResponseMessage httpResponse = await httpClient.GetAsync($"{API_URL}/api/vw_pgas_employeesDTO/name/{selectedRecipientName}");
                 httpResponse.EnsureSuccessStatusCode();
 
                 string jsonResponse = await httpResponse.Content.ReadAsStringAsync();
                 var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                selectedRecipient = JsonSerializer.Deserialize<ePortal_employee>(jsonResponse, options);
+                selectedRecipient = JsonSerializer.Deserialize<vw_pgas_employeesDTO>(jsonResponse, options);
 
                 if (selectedRecipient != null)
                 {
@@ -347,12 +344,12 @@
         try
         {
             using HttpClient httpClient = new();
-            HttpResponseMessage httpResponse = await httpClient.GetAsync($"{API_URL}/api/ePortal_employee");
+            HttpResponseMessage httpResponse = await httpClient.GetAsync($"{API_URL}/api/vw_pgas_employeesDTO");
             httpResponse.EnsureSuccessStatusCode();
 
             using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            pgasEmployees = await JsonSerializer.DeserializeAsync<List<ePortal_employee>>(responseStream, options);
+            pgasEmployees = await JsonSerializer.DeserializeAsync<List<vw_pgas_employeesDTO>>(responseStream, options);
         }
         catch (HttpRequestException ex)
         {
@@ -430,9 +427,6 @@
         {
             return Enumerable.Empty<string>();
         }
-
-        // In real life use an asynchronous function for fetching data from an API
-        await Task.Delay(5, token);
 
         // Perform the search asynchronously
         return await Task.Run(() =>

@@ -16,4 +16,8 @@
         public string? Cause { get; set; }
         public DateTime? AppointCoverage { get; set; }
     }
+    public class vw_pgas_employeesNamesDTO
+    {
+        public string? EmployeeName { get; set; }
+    }
 }

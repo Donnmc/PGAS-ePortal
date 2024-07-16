@@ -23,10 +23,10 @@ namespace PGAS.WebAPI.Context
         public virtual DbSet<ip_phone_directory_line> ip_phone_directory_line { get; set; }
         public virtual DbSet<ip_phone_directory_office> ip_phone_directory_office { get; set; }
         public virtual DbSet<praise_message> praise_message { get; set; }
-        public virtual DbSet<v_clustered_information_system> v_clustered_information_system { get; set; }
-        public virtual DbSet<v_emergency_hotline> v_emergency_hotline { get; set; }
-        public virtual DbSet<v_external_link> v_external_link { get; set; }
-        public virtual DbSet<v_ip_phone_directory> v_ip_phone_directory { get; set; }
+        public virtual DbSet<vw_clustered_information_system> vw_clustered_information_system { get; set; }
+        public virtual DbSet<vw_emergency_hotline> vw_emergency_hotline { get; set; }
+        public virtual DbSet<vw_external_link> vw_external_link { get; set; }
+        public virtual DbSet<vw_ip_phone_directory> vw_ip_phone_directory { get; set; }
         public virtual DbSet<carousel_image> carousel_image { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -212,11 +212,11 @@ namespace PGAS.WebAPI.Context
                 entity.Property(e => e.upload_date);
             });
 
-            modelBuilder.Entity<v_clustered_information_system>(entity =>
+            modelBuilder.Entity<vw_clustered_information_system>(entity =>
             {
                 entity
                     .HasNoKey()
-                    .ToView("v_clustered_information_system");
+                    .ToView("vw_clustered_information_system");
 
                 entity.Property(e => e.Cluster_Abbreviation)
                     .HasMaxLength(10)
@@ -253,11 +253,11 @@ namespace PGAS.WebAPI.Context
                 entity.Property(e => e.Information_System___Is_Active_).HasColumnName("Information System - Is Active?");
             });
 
-            modelBuilder.Entity<v_emergency_hotline>(entity =>
+            modelBuilder.Entity<vw_emergency_hotline>(entity =>
             {
                 entity
                     .HasNoKey()
-                    .ToView("v_emergency_hotline");
+                    .ToView("vw_emergency_hotline");
 
                 entity.Property(e => e.Area)
                     .IsRequired()
@@ -279,11 +279,11 @@ namespace PGAS.WebAPI.Context
                     .HasColumnName("Office Abbreviation");
             });
 
-            modelBuilder.Entity<v_external_link>(entity =>
+            modelBuilder.Entity<vw_external_link>(entity =>
             {
                 entity
                     .HasNoKey()
-                    .ToView("v_external_link");
+                    .ToView("vw_external_link");
 
                 entity.Property(e => e.Child_List_Date_Created).HasColumnName("Child List Date Created");
                 entity.Property(e => e.Child_List_Icon)
@@ -313,11 +313,11 @@ namespace PGAS.WebAPI.Context
                 entity.Property(e => e.Parent_List_Order).HasColumnName("Parent List Order");
             });
 
-            modelBuilder.Entity<v_ip_phone_directory>(entity =>
+            modelBuilder.Entity<vw_ip_phone_directory>(entity =>
             {
                 entity
                     .HasNoKey()
-                    .ToView("v_ip_phone_directory");
+                    .ToView("vw_ip_phone_directory");
 
                 entity.Property(e => e.Area)
                     .HasMaxLength(50)

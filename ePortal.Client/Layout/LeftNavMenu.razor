@@ -110,7 +110,7 @@
 @code {
     private readonly string API_URL = APIService.PGASPortalAPI;
     private List<v_external_linkParentListDTO>? externalLinks;
-    private ePortal_employee? pgasEmployee;
+    private vw_pgas_employeesDTO? pgasEmployee;
     private UserService.eportalUser? eid;
 
     public class v_external_linkParentListDTO
@@ -132,7 +132,7 @@
         public int? Child_List_Order { get; set; }
     }
 
-    public partial class ePortal_employee
+    public partial class vw_pgas_employeesDTO
     {
         public long? eid { get; set; }
         public string? SwipeID { get; set; }
@@ -191,12 +191,12 @@
             if (eid?.eid != null)
             {
                 using HttpClient httpClient = new HttpClient();
-                HttpResponseMessage httpResponse = await httpClient.GetAsync($"{API_URL}/api/ePortal_employee/id/{eid?.eid}");
+                HttpResponseMessage httpResponse = await httpClient.GetAsync($"{API_URL}/api/vw_pgas_employeesDTO/id/{eid?.eid}");
                 httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
 
                 string jsonResponse = await httpResponse.Content.ReadAsStringAsync();
                 var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                pgasEmployee = JsonSerializer.Deserialize<ePortal_employee>(jsonResponse, options);
+                pgasEmployee = JsonSerializer.Deserialize<vw_pgas_employeesDTO>(jsonResponse, options);
             }
         }
         catch (HttpRequestException ex)

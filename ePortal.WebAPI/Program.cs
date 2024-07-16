@@ -13,7 +13,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PGAS.WebAPI.Context.pgas_eportal_v2Context>(
     options =>
     {
-        options.UseSqlServer(builder.Configuration.GetConnectionString("PGAS_ePortal_v2"));
+        options.UseSqlServer(builder.Configuration.GetConnectionString("portal_v2"));
     }
     );
 
@@ -21,7 +21,7 @@ builder.Services.AddDbContext<PGAS.WebAPI.Context.pgas_eportal_v2Context>(
 builder.Services.AddDbContext<PGAS.WebAPI.Context.pmisContext>(
     options =>
     {
-        options.UseSqlServer(builder.Configuration.GetConnectionString("PMIS"));
+        options.UseSqlServer(builder.Configuration.GetConnectionString("db_pmis.pmis"));
     }
     );
 
@@ -29,7 +29,7 @@ builder.Services.AddDbContext<PGAS.WebAPI.Context.pmisContext>(
 builder.Services.AddDbContext<PGAS.WebAPI.Context.othersContext>(
     options =>
     {
-        options.UseSqlServer(builder.Configuration.GetConnectionString("Others"));
+        options.UseSqlServer(builder.Configuration.GetConnectionString("db_others.dts"));
     }
     );
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PGAS.WebAPI.DTO.PMIS.View;
 using PGAS.WebAPI.Context;
+using PGAS.WebAPI.DTO.PMIS.View;
 
 namespace PGAS.WebAPI.Controllers.PMIS.View
 {
@@ -179,7 +179,7 @@ namespace PGAS.WebAPI.Controllers.PMIS.View
                     Cause = e.Cause,
                     AppointCoverage = e.AppointCoverage
                 })
-                .FirstOrDefaultAsync();
+                .AsNoTracking().FirstOrDefaultAsync();
 
             if (employee == null)
             {
@@ -190,28 +190,15 @@ namespace PGAS.WebAPI.Controllers.PMIS.View
         }
 
         [HttpGet("name/{EmployeeName}")]
-        public async Task<ActionResult<vw_pgas_employeesDTO>> GetEmployeeByName(string EmployeeName)
+        public async Task<ActionResult<vw_pgas_employeesNamesDTO>> GetEmployeeByNameAsync(string EmployeeName)
         {
             var employee = await _context.vw_pgas_employees
-                .Where(e => e.EmployeeName!.Contains(EmployeeName))
-                .Select(e => new vw_pgas_employeesDTO
+                .Where(e => e.EmployeeName == EmployeeName)
+                .Select(e => new vw_pgas_employeesNamesDTO
                 {
-                    //Office
-                    OfficeName = e.OfficeName,
-                    OfficeAbbr = e.OfficeAbbr,
-                    //Employee
-                    EmployeeName = e.EmployeeName,
-                    SwipeID = e.SwipeID,
-                    eid = e.eid,
-                    Position = e.Position,
-                    SG = e.SG,
-                    Status = e.Status,
-                    isactive = e.isactive,
-                    Telephone = e.Telephone,
-                    EmailAdd = e.EmailAdd,
-                    Cause = e.Cause,
-                    AppointCoverage = e.AppointCoverage,
+                    EmployeeName = e.EmployeeName
                 })
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
 
             if (employee == null)
@@ -219,7 +206,7 @@ namespace PGAS.WebAPI.Controllers.PMIS.View
                 return NotFound();
             }
 
-            return employee;
+            return Ok(employee);
         }
     }
 }

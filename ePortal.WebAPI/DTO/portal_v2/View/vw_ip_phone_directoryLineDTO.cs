@@ -1,6 +1,6 @@
-﻿namespace PGAS.WebAPI.DTO.portal_v2
+﻿namespace PGAS.WebAPI.DTO.portal_v2.View
 {
-    public class v_ip_phone_directoryLineDTO
+    public class vw_ip_phone_directoryLineDTO
     {
         public string? Line { get; set; }
 

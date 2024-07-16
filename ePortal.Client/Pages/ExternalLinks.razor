@@ -6,180 +6,130 @@
 @using MudBlazor
 @inject HttpClient HttpClient
 
-<MudContainer MaxWidth="MaxWidth.False">
-    <MudGrid Spacing="3" Class="pa-3">
-        <MudItem xs="12">
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddParentLink">
-                Add Parent Link
-            </MudButton>
-            <MudTable Items="@externalLinks" Hover="true" Breakpoint="Breakpoint.Sm">
-                <HeaderContent>
-                    <MudTh>Parent List Name</MudTh>
-                    <MudTh></MudTh>
-                    <MudTh>Parent List Icon</MudTh>
-                    <MudTh>Parent List Link</MudTh>
-                    <MudTh>Date Created</MudTh>
-                    <MudTh>Order</MudTh>
-                    <MudTh></MudTh>
-                </HeaderContent>
-                <RowTemplate>
-                    <MudTd DataLabel="Parent List Name">
-                        @if (context.IsEditing)
-                        {
-                            <MudTextField @bind-Value="context.Parent_List_Name" />
-                        }
-                        else
-                        {
-                            @context.Parent_List_Name
-                        }
-                    </MudTd>
-                    @if (string.IsNullOrEmpty(context.Parent_List_Link))
+<PageTitle>External Links | PGAS Portal</PageTitle>
+
+<MudGrid Spacing="3" Class="pa-3">
+    <!-- Header -->
+    <MudItem xs="12">
+        <MudText Align="Align.Center"><b>External Links</b></MudText>
+    </MudItem>
+    <MudDivider />
+    <!-- Content -->
+    <MudItem xs="12">
+        <MudTable Items="@externalLinks" Hover="true" Breakpoint="Breakpoint.Sm">
+            <ColGroup>
+                <col style="width: 20%" />
+                <col style="width: 15%" />
+                <col style="width: 35%" />
+                <col style="width: 15%" />
+                <col style="width: 15%" />
+                <col style="width: 10%" />
+            </ColGroup>
+            <HeaderContent>
+                <MudTh>Parent List Name</MudTh>
+                <MudTh>Parent List Icon</MudTh>
+                <MudTh>Parent List Link</MudTh>
+                <MudTh>Date Created</MudTh>
+                <MudTh>Order</MudTh>
+                <MudTh></MudTh>
+                <MudTh></MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Parent List Name">
+                    @context.Parent_List_Name
+                </MudTd>
+                <MudTd DataLabel="Parent List Icon">
+                    @context.Parent_List_Icon
+                </MudTd>
+                <MudTd DataLabel="Parent List Link">
+                    @context.Parent_List_Link
+                </MudTd>
+                <MudTd DataLabel="Date Created">@context.Parent_List_Date_Created?.ToString("yyyy-MM-dd")</MudTd>
+                <MudTd DataLabel="Order">
+                    @if (context.IsEditing)
                     {
-                        <MudTd>
-                            <MudButton Variant="Variant.Outlined" Size="Size.Small" OnClick="@(() => ShowBtnPress(context.Parent_List_Name))">
-                                @((context.ShowDetails == true) ? "Hide" : "Show") Subgroup
-                            </MudButton>
-                        </MudTd>
+                        <MudTextField @bind-Value="context.Parent_List_Order" />
                     }
                     else
                     {
-                        <MudTd></MudTd>
+                        @context.Parent_List_Order
                     }
-                    <MudTd DataLabel="Parent List Icon">
-                        @if (context.IsEditing)
-                        {
-                            <MudTextField @bind-Value="context.Parent_List_Icon" />
-                        }
-                        else
-                        {
-                            @context.Parent_List_Icon
-                        }
-                    </MudTd>
-                    <MudTd DataLabel="Parent List Link">
-                        @if (context.IsEditing)
-                        {
-                            <MudTextField @bind-Value="context.Parent_List_Link" />
-                        }
-                        else
-                        {
-                            @context.Parent_List_Link
-                        }
-                    </MudTd>
-                    <MudTd DataLabel="Date Created">@context.Parent_List_Date_Created?.ToString("yyyy-MM-dd")</MudTd>
-                    <MudTd DataLabel="Order">
-                        @if (context.IsEditing)
-                        {
-                            <MudTextField @bind-Value="context.Parent_List_Order" />
-                        }
-                        else
-                        {
-                            @context.Parent_List_Order
-                        }
-                    </MudTd>
+                </MudTd>
+                <MudTd>
+                    <MudStack Row>
+                        <MudIconButton Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" />
+                        <MudIconButton Color="Color.Error" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" />
+                    </MudStack>
+                </MudTd>
+                @if (string.IsNullOrEmpty(context.Parent_List_Link))
+                {
                     <MudTd>
-                        @if (context.IsEditing)
-                        {
-                            <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Primary" @onclick="() => SaveParentLink(context)"></MudIconButton>
-                            <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Secondary" @onclick="() => CancelEditParentLink(context)"></MudIconButton>
-                        }
-                        else
-                        {
-                            <MudIconButton Icon="@Icons.Material.Filled.Edit" @onclick="() => EditParentLink(context)"></MudIconButton>
-                            <MudIconButton Icon="@Icons.Material.Filled.Delete" @onclick="() => DeleteParentLink(context.Parent_List_Name)"></MudIconButton>
-                        }
+                        <MudIconButton Size="Size.Small" Icon="@((context.ShowDetails == true) ? @Icons.Material.Filled.ArrowDropUp : @Icons.Material.Filled.ArrowDropDown)"
+                                       OnClick="@(() => ShowBtnPress(context.Parent_List_Name))" />
                     </MudTd>
-                </RowTemplate>
-                <ChildRowContent>
-                    @if (context.ShowDetails)
-                    {
-                        <MudTr>
-                            <td colspan="12">
-                                <MudCard Elevation="0">
-                                    <MudCardHeader>
-                                        <CardHeaderContent>
-                                            <MudText Typo="Typo.body1">Child Details for <strong>@context.Parent_List_Name</strong></MudText>
-                                            <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" OnClick="@(() => AddChildLink(context.Parent_List_Name))">
-                                                Add Child Link
-                                            </MudButton>
-                                        </CardHeaderContent>
-                                    </MudCardHeader>
-                                    <MudCardContent Class="pa-0">
-                                        <MudTable Items="@context.v_external_linkChildList" Context="ChildContext" Hover="true" Breakpoint="Breakpoint.Sm" Elevation="0">
-                                            <HeaderContent>
-                                                <MudTh>Child List Name</MudTh>
-                                                <MudTh>Child List Icon</MudTh>
-                                                <MudTh>Child List Link</MudTh>
-                                                <MudTh>Date Created</MudTh>
-                                                <MudTh>Order</MudTh>
-                                                <MudTh></MudTh>
-                                            </HeaderContent>
-                                            <RowTemplate>
-                                                <MudTd DataLabel="Child List Name">
-                                                    @if (ChildContext.IsEditing)
-                                                    {
-                                                        <MudTextField @bind-Value="ChildContext.Child_List_Name" />
-                                                    }
-                                                    else
-                                                    {
-                                                        @ChildContext.Child_List_Name
-                                                    }
-                                                </MudTd>
-                                                <MudTd DataLabel="Child List Icon">
-                                                    @if (ChildContext.IsEditing)
-                                                    {
-                                                        <MudTextField @bind-Value="ChildContext.Child_List_Icon" />
-                                                    }
-                                                    else
-                                                    {
-                                                        @ChildContext.Child_List_Icon
-                                                    }
-                                                </MudTd>
-                                                <MudTd DataLabel="Child List Link">
-                                                    @if (ChildContext.IsEditing)
-                                                    {
-                                                        <MudTextField @bind-Value="ChildContext.Child_List_Link" />
-                                                    }
-                                                    else
-                                                    {
-                                                        @ChildContext.Child_List_Link
-                                                    }
-                                                </MudTd>
-                                                <MudTd DataLabel="Date Created">@ChildContext.Child_List_Date_Created?.ToString("yyyy-MM-dd")</MudTd>
-                                                <MudTd DataLabel="Order">
-                                                    @if (ChildContext.IsEditing)
-                                                    {
-                                                        <MudTextField @bind-Value="ChildContext.Child_List_Order" />
-                                                    }
-                                                    else
-                                                    {
-                                                        @ChildContext.Child_List_Order
-                                                    }
-                                                </MudTd>
-                                                <MudTd>
-                                                    @if (ChildContext.IsEditing)
-                                                    {
-                                                        <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Primary" @onclick="() => SaveChildLink(ChildContext)"></MudIconButton>
-                                                        <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Secondary" @onclick="() => CancelEditChildLink(ChildContext)"></MudIconButton>
-                                                    }
-                                                    else
-                                                    {
-                                                        <MudIconButton Icon="@Icons.Material.Filled.Edit" @onclick="() => EditChildLink(ChildContext)"></MudIconButton>
-                                                        <MudIconButton Icon="@Icons.Material.Filled.Delete" @onclick="() => DeleteChildLink(ChildContext.Child_List_Name)"></MudIconButton>
-                                                    }
-                                                </MudTd>
-                                            </RowTemplate>
-                                        </MudTable>
-                                        <MudDivider />
-                                    </MudCardContent>
-                                </MudCard>
-                            </td>
-                        </MudTr>
-                    }
-                </ChildRowContent>
-            </MudTable>
-        </MudItem>
-    </MudGrid>
-</MudContainer>
+                }
+                else
+                {
+                    <MudTd DataLabel="Parent List Link">
+                    </MudTd>
+                }
+            </RowTemplate>
+            <ChildRowContent>
+                @if (context.ShowDetails)
+                {
+                    <MudTr Style="width:100%">
+                        <MudTd Class="pa-0" colspan="7">
+                            <MudTable Items="@context.v_external_linkChildList" Context="ChildContext" Hover="true" Breakpoint="Breakpoint.Sm" Elevation="0">
+                                <ColGroup>
+                                    <col style="width: 5%" />
+                                    <col style="width: 15%" />
+                                    <col style="width: 15%" />
+                                    <col style="width: 35%" />
+                                    <col style="width: 15%" />
+                                    <col style="width: 20%" />
+                                </ColGroup>
+                                <HeaderContent>
+                                    <MudTh Style="text-align: right"><MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.SubdirectoryArrowRight" /></MudTh>
+                                    <MudTh>Child List Name</MudTh>
+                                    <MudTh>Child List Icon</MudTh>
+                                    <MudTh>Child List Link</MudTh>
+                                    <MudTh>Date Created</MudTh>
+                                    <MudTh>Order</MudTh>
+                                    <MudTh></MudTh>
+                                </HeaderContent>
+                                <RowTemplate>
+                                    <MudTd></MudTd>
+                                    <MudTd DataLabel="Child List Name">
+                                        @ChildContext.Child_List_Name
+                                    </MudTd>
+                                    <MudTd DataLabel="Child List Icon">
+                                        @ChildContext.Child_List_Icon
+                                    </MudTd>
+                                    <MudTd DataLabel="Child List Link">
+                                        @ChildContext.Child_List_Link
+                                    </MudTd>
+                                    <MudTd DataLabel="Date Created">
+                                        @ChildContext.Child_List_Date_Created?.ToString("yyyy-MM-dd")
+                                    </MudTd>
+                                    <MudTd DataLabel="Order">
+                                        @ChildContext.Child_List_Order
+                                    </MudTd>
+                                    <MudTd>
+                                        <MudStack Row>
+                                            <MudIconButton Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" />
+                                            <MudIconButton Color="Color.Error" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" />
+                                        </MudStack>
+                                    </MudTd>
+                                </RowTemplate>
+                            </MudTable>
+                        </MudTd>
+                        <MudDivider />
+                    </MudTr>
+                }
+            </ChildRowContent>
+        </MudTable>
+    </MudItem>
+</MudGrid>
 
 @code {
     private readonly string API_URL = APIService.PGASPortalAPI;
@@ -237,111 +187,6 @@
         if (tmpParent != null)
         {
             tmpParent.ShowDetails = !tmpParent.ShowDetails;
-        }
-    }
-
-    private void AddParentLink()
-    {
-        var newParent = new v_external_linkParentListDTO { IsEditing = true, Parent_List_Date_Created = DateTime.Today };
-        externalLinks?.Add(newParent);
-    }
-
-    private void AddChildLink(string parentListName)
-    {
-        var parent = externalLinks?.FirstOrDefault(p => p.Parent_List_Name == parentListName);
-        if (parent != null)
-        {
-            var newChild = new v_external_linkChildListDTO { IsEditing = true, Child_List_Date_Created = DateTime.Today };
-            parent.v_external_linkChildList?.Add(newChild);
-        }
-    }
-
-    private void EditParentLink(v_external_linkParentListDTO parentLink)
-    {
-        parentLink.IsEditing = true;
-    }
-
-    private void CancelEditParentLink(v_external_linkParentListDTO parentLink)
-    {
-        if (parentLink.Parent_List_Name == null)
-        {
-            externalLinks?.Remove(parentLink);
-        }
-        else
-        {
-            parentLink.IsEditing = false;
-        }
-    }
-
-    private async Task SaveParentLink(v_external_linkParentListDTO parentLink)
-    {
-        if (parentLink.Parent_List_Name == null)
-        {
-            await HttpClient.PostAsJsonAsync($"{API_URL}/api/external_link/parent", parentLink);
-        }
-        else
-        {
-            await HttpClient.PutAsJsonAsync($"{API_URL}/api/external_link/parent/{parentLink.Parent_List_Name}", parentLink);
-        }
-        parentLink.IsEditing = false;
-        await GetExternalLinks();
-    }
-
-    private async Task DeleteParentLink(string id)
-    {
-        try
-        {
-            await HttpClient.DeleteAsync($"{API_URL}/api/external_link/parent/{id}");
-            await GetExternalLinks();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error deleting data: {ex.Message}");
-        }
-    }
-
-    private void EditChildLink(v_external_linkChildListDTO childLink)
-    {
-        childLink.IsEditing = true;
-    }
-
-    private void CancelEditChildLink(v_external_linkChildListDTO childLink)
-    {
-        var parent = externalLinks?.FirstOrDefault(p => p.v_external_linkChildList.Contains(childLink));
-        if (childLink.Child_List_Name == null && parent != null)
-        {
-            parent.v_external_linkChildList?.Remove(childLink);
-        }
-        else
-        {
-            childLink.IsEditing = false;
-        }
-    }
-
-    private async Task SaveChildLink(v_external_linkChildListDTO childLink)
-    {
-        if (childLink.Child_List_Name == null)
-        {
-            await HttpClient.PostAsJsonAsync($"{API_URL}/api/external_link/child", childLink);
-        }
-        else
-        {
-            await HttpClient.PutAsJsonAsync($"{API_URL}/api/external_link/child/{childLink.Child_List_Name}", childLink);
-        }
-        childLink.IsEditing = false;
-        await GetExternalLinks();
-    }
-
-    private async Task DeleteChildLink(string id)
-    {
-        try
-        {
-            await HttpClient.DeleteAsync($"{API_URL}/api/external_link/child/{id}");
-            await GetExternalLinks();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error deleting data: {ex.Message}");
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace PGAS.WebAPI.Entities.portal_v2.Table
 {
-    public partial class v_emergency_hotline
+    public partial class vw_emergency_hotline
     {
         public string? Office { get; set; }
         public string? Office_Abbreviation { get; set; }

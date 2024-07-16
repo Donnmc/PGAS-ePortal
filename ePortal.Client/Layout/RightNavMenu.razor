@@ -1,132 +1,130 @@
 ﻿@using System.Text.Json
 
-<MudContainer Fixed="true">
-    <MudGrid Spacing="3" Class="pa-3">
-        <!-- Governor -->
-        <MudItem xs="12">
-            <MudPaper Class="pb-0 pr-1 pt-1 pl-1" Outlined>
-                <MudStack Row Style="height: 120px" Spacing="0" Justify="Justify.SpaceAround">
-                    <MudStack Class="pa-1" Spacing="0" Justify="Justify.FlexEnd" AlignItems="AlignItems.Center">
-                        <MudStack Spacing="0" Justify="Justify.FlexEnd" AlignItems="AlignItems.Center">
-                            <MudText Style="font-size: 15px"><b>Santiago B. Cane, Jr.</b></MudText>
-                            <MudText Style="font-size: 12px">Provincial Governor</MudText>
-                            <MudDivider />
-                        </MudStack>
-                        <MudStack Row Class="pa-0 ma-0" Spacing="0">
-                            <MudIconButton Class="pa-1"
-                                           Icon="@Icons.Custom.Brands.Facebook"
-                                           Color="Color.Secondary"
-                                           Href="https://www.facebook.com/santi.cane.3" Target="_blank" />
-                            <MudIconButton Class="pa-1"
-                                           Icon="@Icons.Material.Filled.PersonPin"
-                                           Color="Color.Secondary"
-                                           Href="https://agusandelsur.gov.ph/government-officials/governor/" Target="_blank" />
-                            <MudIconButton Class="pa-1"
-                                           Icon="@Icons.Material.Filled.LibraryBooks"
-                                           Color="Color.Secondary"
-                                           Href="Media Files/Governor/ELA2023.jpg" Target="_blank" />
-                        </MudStack>
+<MudGrid Spacing="3" Class="pa-3">
+    <!-- Governor -->
+    <MudItem xs="12">
+        <MudPaper Class="pb-0 pr-1 pt-1 pl-1" Outlined>
+            <MudStack Row Style="height: 120px" Spacing="0" Justify="Justify.SpaceAround">
+                <MudStack Class="pa-1" Spacing="0" Justify="Justify.FlexEnd" AlignItems="AlignItems.Center">
+                    <MudStack Spacing="0" Justify="Justify.FlexEnd" AlignItems="AlignItems.Center">
+                        <MudText Style="font-size: 15px"><b>Santiago B. Cane, Jr.</b></MudText>
+                        <MudText Style="font-size: 12px">Provincial Governor</MudText>
+                        <MudDivider />
                     </MudStack>
-                    <MudImage Src="/Media Files/Governor/gov-image.png" Fluid />
+                    <MudStack Row Class="pa-0 ma-0" Spacing="0">
+                        <MudIconButton Class="pa-1"
+                                       Icon="@Icons.Custom.Brands.Facebook"
+                                       Color="Color.Secondary"
+                                       Href="https://www.facebook.com/santi.cane.3" Target="_blank" />
+                        <MudIconButton Class="pa-1"
+                                       Icon="@Icons.Material.Filled.PersonPin"
+                                       Color="Color.Secondary"
+                                       Href="https://agusandelsur.gov.ph/government-officials/governor/" Target="_blank" />
+                        <MudIconButton Class="pa-1"
+                                       Icon="@Icons.Material.Filled.LibraryBooks"
+                                       Color="Color.Secondary"
+                                       Href="Media Files/Governor/ELA2023.jpg" Target="_blank" />
+                    </MudStack>
                 </MudStack>
-            </MudPaper>
-        </MudItem>
+                <MudImage Src="/Media Files/Governor/gov-image.png" Fluid />
+            </MudStack>
+        </MudPaper>
+    </MudItem>
 
-        <MudDivider />
+    <MudDivider />
 
-        <!-- Announcements -->
-        <MudItem xs="12">
-            <MudGrid Spacing="2">
-                <!-- Announcement Header -->
-                <MudItem xs="12">
-                    <MudText Align="Align.Center"><b>Announcements</b></MudText>
-                    <MudDivider />
-                    @{
+    <!-- Announcements -->
+    <MudItem xs="12">
+        <MudGrid Spacing="2">
+            <!-- Announcement Header -->
+            <MudItem xs="12">
+                <MudText Align="Align.Center"><b>Announcements</b></MudText>
+                <MudDivider />
+                @{
+                    DateTime currentDate = DateTime.UtcNow;
+                    string currentMonth = currentDate.ToString("MMMM");
+                    string currentYear = currentDate.ToString("yyyy");
+                }
+                <MudText Style="font-size: 11px" Align="Align.Center">Month of @currentMonth, @currentYear</MudText>
+            </MudItem>
+            <!-- Announcement Lists -->
+            <MudItem xs="12">
+                <MudStack Style="height: 65vh;" Class="overflow-auto flex-nowrap pr-2">
+                    @if (announcementForTheMonth != null && announcementForTheMonth.Any())
+                    {
                         DateTime currentDate = DateTime.UtcNow;
-                        string currentMonth = currentDate.ToString("MMMM");
-                        string currentYear = currentDate.ToString("yyyy");
-                    }
-                    <MudText Style="font-size: 11px" Align="Align.Center">Month of @currentMonth, @currentYear</MudText>
-                </MudItem>
-                <!-- Announcement Lists -->
-                <MudItem xs="12">
-                    <MudStack Style="height: 65vh;" Class="overflow-auto flex-nowrap pr-2">
-                        @if (announcementForTheMonth != null && announcementForTheMonth.Any())
-                        {
-                            DateTime currentDate = DateTime.UtcNow;
-                            DateTime referencedDate = currentDate.AddDays(-1);
-                            <MudGrid Justify="Justify.Center" Spacing="2">
-                                <MudVirtualize Items="announcementForTheMonth" Context="announcement">
-                                    @if (announcement.docdate > referencedDate)
-                                    {
-                                        <MudItem xs="12">
-                                            <MudLink Href="@("https://pgas.ph/dts/public/read?docid="+announcement.docid)" Target="_blank" Underline="Underline.None">
-                                                <MudPaper Class="pa-3" Style="scrollbar-gutter: stable" Outlined>
-                                                    <MudStack Spacing="2" Wrap="Wrap.NoWrap" Style="width: 100%">
-                                                        <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Start">
-                                                            <MudStack Spacing="0" Style="width: 100%">
-                                                                <MudText Typo="Typo.body2"><b>@announcement.doctype</b></MudText>
-                                                                <MudStack Row Spacing="2">
-                                                                    <MudText Style="font-size: 10px">@(announcement.docdate?.ToString("MMMM dd, yyyy") ?? "No Date")</MudText>
-                                                                    <MudText Style="font-size: 10px" Color="Color.Secondary">(New)</MudText>
-                                                                </MudStack>
-                                                            </MudStack>
-                                                            <MudIcon Icon="@Icons.Material.Filled.Attachment" Color="Color.Secondary" />
-                                                        </MudStack>
-                                                        <MudDivider />
-                                                        <MudStack Spacing="2" Class="pt-2" AlignItems="AlignItems.Start">
-                                                            <MudTooltip Style="max-width: 300px" Arrow Placement="Placement.Top" Text="@announcement.title">
-                                                                <MudText Typo="Typo.body1" Style="font-size: 14px">@TruncateText(announcement?.title ?? "", 150)</MudText>
-                                                            </MudTooltip>
-                                                            <MudTooltip Style="max-width: 300px" Arrow Placement="Placement.Top" Text="@announcement.description">
-                                                                <MudText Typo="Typo.body2" Style="font-size: 12px; font-style: italic">@TruncateText(announcement?.description ?? "", 100)</MudText>
-                                                            </MudTooltip>
-                                                        </MudStack>
-                                                    </MudStack>
-                                                </MudPaper>
-                                            </MudLink>
-                                        </MudItem>
-                                    }
-                                    else
-                                    {
-                                        <MudItem xs="12">
-                                            <MudLink Href="@("https://pgas.ph/dts/public/read?docid="+announcement.docid)" Target="_blank" Underline="Underline.None">
-                                                <MudPaper Class="pa-3" Style="scrollbar-gutter: stable" Outlined>
-                                                    <MudStack Spacing="2" Wrap="Wrap.NoWrap" Style="width: 100%">
-                                                        <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Start">
-                                                            <MudStack Spacing="0" Style="width: 100%">
-                                                                <MudText Typo="Typo.body2"><b>@announcement.doctype</b></MudText>
+                        DateTime referencedDate = currentDate.AddDays(-1);
+                        <MudGrid Justify="Justify.Center" Spacing="2">
+                            <MudVirtualize Items="announcementForTheMonth" Context="announcement">
+                                @if (announcement.docdate > referencedDate)
+                                {
+                                    <MudItem xs="12">
+                                        <MudLink Href="@("https://pgas.ph/dts/public/read?docid="+announcement.docid)" Target="_blank" Underline="Underline.None">
+                                            <MudPaper Class="pa-3" Style="scrollbar-gutter: stable" Outlined>
+                                                <MudStack Spacing="2" Wrap="Wrap.NoWrap" Style="width: 100%">
+                                                    <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Start">
+                                                        <MudStack Spacing="0" Style="width: 100%">
+                                                            <MudText Typo="Typo.body2"><b>@announcement.doctype</b></MudText>
+                                                            <MudStack Row Spacing="2">
                                                                 <MudText Style="font-size: 10px">@(announcement.docdate?.ToString("MMMM dd, yyyy") ?? "No Date")</MudText>
+                                                                <MudText Style="font-size: 10px" Color="Color.Secondary">(New)</MudText>
                                                             </MudStack>
-                                                            <MudIcon Icon="@Icons.Material.Filled.Attachment" Color="Color.Primary" />
                                                         </MudStack>
-                                                        <MudDivider />
-                                                        <MudStack Spacing="2" Class="pt-2" AlignItems="AlignItems.Start">
-                                                            <MudTooltip Style="max-width: 300px" Arrow Placement="Placement.Top" Text="@announcement.title">
-                                                                <MudText Typo="Typo.body1" Style="font-size: 14px">@TruncateText(announcement?.title ?? "", 150)</MudText>
-                                                            </MudTooltip>
-                                                            <MudTooltip Style="max-width: 300px" Arrow Placement="Placement.Top" Text="@announcement.description">
-                                                                <MudText Typo="Typo.body2" Style="font-size: 12px; font-style: italic">@TruncateText(announcement?.description ?? "", 100)</MudText>
-                                                            </MudTooltip>
-                                                        </MudStack>
+                                                        <MudIcon Icon="@Icons.Material.Filled.Attachment" Color="Color.Secondary" />
                                                     </MudStack>
-                                                </MudPaper>
-                                            </MudLink>
-                                        </MudItem>
-                                    }
-                                </MudVirtualize>
-                            </MudGrid>
-                        }
-                        else
-                        {
-                            <MudText Align="Align.Center">No announcement posted yet.</MudText>
-                        }
-                    </MudStack>
-                </MudItem>
-            </MudGrid>
-        </MudItem>
-    </MudGrid>
-</MudContainer>
+                                                    <MudDivider />
+                                                    <MudStack Spacing="2" Class="pt-2" AlignItems="AlignItems.Start">
+                                                        <MudTooltip Style="max-width: 300px" Arrow Placement="Placement.Top" Text="@announcement.title">
+                                                            <MudText Typo="Typo.body1" Style="font-size: 14px">@TruncateText(announcement?.title ?? "", 150)</MudText>
+                                                        </MudTooltip>
+                                                        <MudTooltip Style="max-width: 300px" Arrow Placement="Placement.Top" Text="@announcement.description">
+                                                            <MudText Typo="Typo.body2" Style="font-size: 12px; font-style: italic">@TruncateText(announcement?.description ?? "", 100)</MudText>
+                                                        </MudTooltip>
+                                                    </MudStack>
+                                                </MudStack>
+                                            </MudPaper>
+                                        </MudLink>
+                                    </MudItem>
+                                }
+                                else
+                                {
+                                    <MudItem xs="12">
+                                        <MudLink Href="@("https://pgas.ph/dts/public/read?docid="+announcement.docid)" Target="_blank" Underline="Underline.None">
+                                            <MudPaper Class="pa-3" Style="scrollbar-gutter: stable" Outlined>
+                                                <MudStack Spacing="2" Wrap="Wrap.NoWrap" Style="width: 100%">
+                                                    <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Start">
+                                                        <MudStack Spacing="0" Style="width: 100%">
+                                                            <MudText Typo="Typo.body2"><b>@announcement.doctype</b></MudText>
+                                                            <MudText Style="font-size: 10px">@(announcement.docdate?.ToString("MMMM dd, yyyy") ?? "No Date")</MudText>
+                                                        </MudStack>
+                                                        <MudIcon Icon="@Icons.Material.Filled.Attachment" Color="Color.Primary" />
+                                                    </MudStack>
+                                                    <MudDivider />
+                                                    <MudStack Spacing="2" Class="pt-2" AlignItems="AlignItems.Start">
+                                                        <MudTooltip Style="max-width: 300px" Arrow Placement="Placement.Top" Text="@announcement.title">
+                                                            <MudText Typo="Typo.body1" Style="font-size: 14px">@TruncateText(announcement?.title ?? "", 150)</MudText>
+                                                        </MudTooltip>
+                                                        <MudTooltip Style="max-width: 300px" Arrow Placement="Placement.Top" Text="@announcement.description">
+                                                            <MudText Typo="Typo.body2" Style="font-size: 12px; font-style: italic">@TruncateText(announcement?.description ?? "", 100)</MudText>
+                                                        </MudTooltip>
+                                                    </MudStack>
+                                                </MudStack>
+                                            </MudPaper>
+                                        </MudLink>
+                                    </MudItem>
+                                }
+                            </MudVirtualize>
+                        </MudGrid>
+                    }
+                    else
+                    {
+                        <MudText Align="Align.Center">No announcement posted yet.</MudText>
+                    }
+                </MudStack>
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+</MudGrid>
 @code {
     private readonly string API_URL = APIService.PGASPortalAPI;
     private List<t_doc_office_vw>? announcementForTheMonth;

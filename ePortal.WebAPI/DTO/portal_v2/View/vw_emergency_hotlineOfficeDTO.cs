@@ -1,6 +1,6 @@
-﻿namespace PGAS.WebAPI.DTO.portal_v2
+﻿namespace PGAS.WebAPI.DTO.portal_v2.View
 {
-    public class v_emergency_hotlineOfficeDTO
+    public class vw_emergency_hotlineOfficeDTO
     {
         public string? Office { get; set; }
 

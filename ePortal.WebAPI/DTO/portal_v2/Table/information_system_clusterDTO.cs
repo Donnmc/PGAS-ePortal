@@ -1,4 +1,4 @@
-﻿namespace PGAS.WebAPI.DTO.portal_v2
+﻿namespace PGAS.WebAPI.DTO.portal_v2.Table
 {
     public class information_system_clusterDTO
     {
