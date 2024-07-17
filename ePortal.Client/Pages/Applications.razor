@@ -14,7 +14,10 @@
                 <MudVirtualize Items="informationSystems" Context="cluster">
                     <MudItem xs="12">
                         <MudStack Class="pa-2">
-                            <MudText Class="pt-10"><b>@cluster.Cluster_Name</b></MudText>
+                            <MudStack Class="pt-10" Row Spacing="2">
+                                <MudIcon Icon="@(typeof(Icons.Material.Filled).GetField(cluster.Cluster_Icon)?.GetValue(null) as string ?? "")" Color="Color.Primary"/>
+                                <MudText ><b>@cluster.Cluster_Name</b></MudText>
+                            </MudStack>
                             <MudGrid>
                                 <MudVirtualize Items="cluster.Information_Systems" Context="system">
                                     <MudItem xs="6" sm="3" lg="2">

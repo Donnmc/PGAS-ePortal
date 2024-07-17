@@ -29,9 +29,10 @@
             </MudStack>
             <MudHidden Breakpoint="Breakpoint.LgAndDown">
                 <MudStack Row Style="width: 100%" Justify="Justify.FlexEnd" AlignItems="AlignItems.Center" Spacing="3">
+                    <!-- Notification -->
                     <MudStack>
                         <MudBadge Visible="@((hasTodayRecord == true) ? true: false)" Dot Color="Color.Error" Overlap>
-                            <MudIconButton Class="pa-1" Icon="@Icons.Material.Filled.Notifications" OnClick="@ToggleOpen" Color="Color.Tertiary" />
+                            <MudIconButton Class="pa-1" Icon="@Icons.Material.Filled.Notifications" OnClick="ToggleOpenNotification" Color="Color.Tertiary" />
                         </MudBadge>
                         <MudPopover Open="_open" Style="width: 300px; transform: translateX(30px)" Class="py-2 pl-2" OverflowBehavior="OverflowBehavior.FlipAlways" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopRight" Paper Elevation="2">
                             <MudGrid Spacing="2">
@@ -137,7 +138,6 @@
                             </MudGrid>
                         </MudPopover>
                     </MudStack>
-                    <MudIconButton Class="pa-1" Icon="@Icons.Material.Filled.Apps" Color="Color.Tertiary" />
                     <MudToggleIconButton Class="pa-1" @bind-Checked="@isDarkMode" Color="Color.Primary" ToggledColor="Color.Primary" ToggledChanged="ToggleDarkMode"
                                          Icon="@Icons.Material.Filled.LightMode" ToggledIcon="@Icons.Material.Filled.DarkMode" />
                     @if (eid?.eid != null)
@@ -219,7 +219,8 @@
 @code {
     private bool _open;
 
-    private void ToggleOpen() => _open = !_open;
+    private void ToggleOpenNotification() => _open = !_open;
+    private void ToggleOpenApplications() => _open = !_open;
 
     bool openleft = true;
     bool openright = true;
