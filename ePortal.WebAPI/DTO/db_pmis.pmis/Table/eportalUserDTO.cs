@@ -1,4 +1,4 @@
-﻿namespace PGAS.WebAPI.DTO.PMIS.Table
+﻿namespace PGAS.WebAPI.DTO.db_pmis.pmis.Table
 {
     public class eportalUserDTO
     {

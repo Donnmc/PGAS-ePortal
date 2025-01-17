@@ -8,11 +8,15 @@
 
 <PageTitle>Employees | PGAS Portal</PageTitle>
 
-<MudGrid Spacing="3" Class="pa-3">
+<MudGrid Spacing="5" Class="pa-5">
+    <MudItem xs="12">
+        <MudText Style="font-size: 30px"><b>Employees</b></MudText>
+        <MudDivider />
+    </MudItem>
     <!-- Search Bar -->
     <MudItem xs="12">
         <MudPaper Elevation="0">
-            <MudStack Class="pa-x">
+            <MudStack Class="pa-3">
                 <MudTextField Clearable
                               @bind-Value="query"
                               T="string"
@@ -33,19 +37,19 @@
     </MudItem>
     <!-- Employees -->
     <MudItem xs="12">
-        <MudGrid Justify="Justify.Center">
+        @if (!string.IsNullOrEmpty(query))
+        {
             @if (pgasEmployee != null && pgasEmployee.Any())
             {
-                if (!string.IsNullOrEmpty(query))
-                {
+                <MudGrid Justify="Justify.Center">
                     <MudVirtualize Items="pgasEmployee" Context="employee">
                         <MudItem xs="6" md="4" lg="3" xl="2">
-                            <MudPaper Elevation="0" Outlined>
+                            <MudPaper Elevation="0">
                                 <MudStack Justify="Justify.FlexStart" Spacing="0">
                                     <MudImage Src="@($"https://pgas.ph/hris/Content/images/photos/{employee.eid}.png")"
-                                              onerror="this.src='Objects/agusan del sur.webp'"
-                                              ObjectFit="ObjectFit.Cover"
-                                              Class="rounded-t" Style="height: 320px; width: 100%" Fluid>
+                                              Class="rounded-t" Style="height: 250px; width: 100%; background-color: white"
+                                              Fluid onerror="this.src='Objects/agusan del sur.webp'"
+                                              ObjectFit="ObjectFit.Cover">
                                     </MudImage>
                                     <MudStack Class="pa-3" Style="width: 100%" Spacing="1">
                                         <MudStack Style="height: 130px" Spacing="1">
@@ -102,17 +106,23 @@
                             </MudPaper>
                         </MudItem>
                     </MudVirtualize>
-                }
-                else
-                {
-                    <MudText>Search for employee</MudText>
-                }
+                </MudGrid>
             }
             else
             {
-                <MudText>No employees found</MudText>
+                <MudStack Row Justify="Justify.Center">
+                    <MudIcon Icon="@Icons.Material.Filled.SearchOff" Color="Color.Error"></MudIcon>
+                    <MudText Color="Color.Error" Style="font-size: 20px">No employee/s found</MudText>
+                </MudStack>
             }
-        </MudGrid>
+        }
+        else
+        {
+            <MudStack Row Justify="Justify.Center">
+                <MudIcon Icon="@Icons.Material.Filled.Search" Color="Color.Primary"></MudIcon>
+                <MudText Color="Color.Primary" Style="font-size: 20px">Search for employee/s</MudText>
+            </MudStack>
+        }
     </MudItem>
 </MudGrid>
 

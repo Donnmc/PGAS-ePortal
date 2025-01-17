@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PGAS.WebAPI.Context;
 using PGAS.WebAPI.Entities.portal_v2.Table;
 
-namespace PGAS.WebAPI.Controllers.ePortal.Tables
+namespace PGAS.WebAPI.Controllers.portal_v2.Tables
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -108,7 +108,7 @@ namespace PGAS.WebAPI.Controllers.ePortal.Tables
                 }
             }
 
-            return CreatedAtAction(nameof(PostPraiseMessage), new { id = praiseMessage.id }, praiseMessage);
+            return CreatedAtAction(nameof(PostPraiseMessage), new { praiseMessage.id }, praiseMessage);
         }
 
         private bool PraiseMessageExists(int id)

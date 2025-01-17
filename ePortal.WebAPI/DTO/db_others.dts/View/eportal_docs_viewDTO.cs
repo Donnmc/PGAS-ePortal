@@ -1,4 +1,4 @@
-﻿namespace PGAS.WebAPI.DTO.PMIS.View
+﻿namespace PGAS.WebAPI.DTO.db_others.dts.View
 {
     public partial class eportal_docs_viewDTO
     {

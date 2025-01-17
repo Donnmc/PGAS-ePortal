@@ -1,4 +1,4 @@
-﻿namespace PGAS.WebAPI.DTO.PMIS.View
+﻿namespace PGAS.WebAPI.DTO.db_pmis.pmis.View
 {
     public class vw_pgas_employeesDTO
     {
@@ -18,6 +18,9 @@
     }
     public class vw_pgas_employeesNamesDTO
     {
+        public long? eid { get; set; }
         public string? EmployeeName { get; set; }
+        public string? OfficeName { get; set; }
+        public string? OfficeAbbr { get; set; }
     }
 }

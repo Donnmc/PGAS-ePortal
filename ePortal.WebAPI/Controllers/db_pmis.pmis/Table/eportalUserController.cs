@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PGAS.WebAPI.Entities.db_pmis.pmis.Table;
 
-namespace PGAS.WebAPI.Controllers.PMIS.Table
+namespace PGAS.WebAPI.Controllers.db_pmis.pmis.Table
 {
     [Route("api/[controller]")]
     [ApiController]

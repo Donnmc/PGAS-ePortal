@@ -9,86 +9,88 @@
 
 <PageTitle>Praise Messages | PGAS Portal</PageTitle>
 
-<MudGrid Spacing="3" Class="pa-3">
+<MudGrid Spacing="5" Class="pa-5">
+    <MudItem xs="12">
+        <MudText Style="font-size: 30px"><b>Praise Message</b></MudText>
+        <MudDivider />
+    </MudItem>
     <MudItem xs="12" lg="5">
-        <MudPaper Class="pa-3" Elevation="0">
-            <MudAutocomplete Variant="Variant.Outlined"
-                             Class="mb-10"
-                             Immediate="false"
-                             T="string"
-                             ShowProgressIndicator Label="Recipient"
-                             @bind-Value="selectedRecipientName"
-                             SearchFunc="SearchEmployee"
-                             Dense
-                             Clearable
-                             ResetValueOnEmptyText
-                             AdornmentIcon="@Icons.Material.Filled.Search"
-                             AdornmentColor="Color.Primary"
-                             OpenChanged="SelectRecipient"
-                             OnAdornmentClick="SelectRecipient">
-            </MudAutocomplete>
-            <MudStack Row AlignItems="AlignItems.Center">
-                <MudText>From:</MudText>
-                @if (eid?.eid != null)
-                {
-                    <MudStack Row Spacing="1" AlignItems="AlignItems.Center">
-                        <MudChip T="object">
-                            <AvatarContent>
-                                <MudAvatar Variant="Variant.Outlined" Class="mud-border-dark">
-                                    <MudImage Style="image-rendering: optimizeSpeed"
-                                              Src="@($"https://pgas.ph/hris/Content/images/photos/{eid.eid}.png")"
-                                              onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
-                                    </MudImage>
-                                </MudAvatar>
-                            </AvatarContent>
-                            <ChildContent>@pgasEmployee?.EmployeeName (@pgasEmployee?.OfficeAbbr)</ChildContent>
-                        </MudChip>
-                    </MudStack>
-                }
-            </MudStack>
-            <MudStack Class="pt-2">
-                @if (selectedRecipient != null)
-                {
-                    <MudDivider />
+        <MudPaper Class="pa-3">
+            <MudStack Spacing="5">
+                <MudStack Spacing="2">
+                    <MudAutocomplete Variant="Variant.Outlined"
+                                     Margin="Margin.Dense"
+                                     Class="mb-5"
+                                     Immediate="false"
+                                     T="string"
+                                     ShowProgressIndicator
+                                     Label="Recipient"
+                                     @bind-Value="selectedRecipientName"
+                                     SearchFunc="SearchEmployee"
+                                     Dense
+                                     Clearable
+                                     ResetValueOnEmptyText
+                                     AdornmentIcon="@Icons.Material.Filled.Search"
+                                     AdornmentColor="Color.Primary"
+                                     OpenChanged="SelectRecipient"
+                                     OnAdornmentClick="SelectRecipient">
+                    </MudAutocomplete>
                     <MudStack Row AlignItems="AlignItems.Center">
-                        <MudText>To:</MudText>
-                        <MudPaper Elevation="0" Class="d-flex flex-wrap gap-1" MaxWidth="100%">
-                            <MudChip T="string" OnClose="ClearRecipient">
-                                <AvatarContent>
-                                    <MudAvatar Variant="Variant.Outlined" Class="mud-border-dark">
-                                        <MudImage Style="image-rendering: optimizeSpeed"
-                                                  Src="@($"https://pgas.ph/hris/Content/images/photos/{selectedRecipient?.eid}.png")"
-                                                  onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
-                                        </MudImage>
-                                    </MudAvatar>
-                                </AvatarContent>
-                                <ChildContent>@selectedRecipient?.EmployeeName (@selectedRecipient?.OfficeAbbr)</ChildContent>
-                            </MudChip>
-                        </MudPaper>
+                        <MudText>From:</MudText>
+                        @if (eid?.eid != null)
+                        {
+                            <MudStack Row AlignItems="AlignItems.Center">
+                                <MudChip T="object">
+                                    <AvatarContent>
+                                        <MudAvatar Variant="Variant.Outlined" Class="mud-border-dark">
+                                            <MudImage ObjectFit="ObjectFit.Cover"
+                                                      Src="@($"https://pgas.ph/hris/Content/images/photos/{eid.eid}.png")"
+                                                      onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
+                                            </MudImage>
+                                        </MudAvatar>
+                                    </AvatarContent>
+                                    <ChildContent>@pgasEmployee?.EmployeeName (@pgasEmployee?.OfficeAbbr)</ChildContent>
+                                </MudChip>
+                            </MudStack>
+                        }
                     </MudStack>
-                    <MudStack Row>
-                        <MudText>Rating: </MudText>
-                        <MudRating MaxValue="5" @bind-SelectedValue="stars" />
+                    <MudStack Spacing="2">
+                        @if (selectedRecipient != null)
+                        {
+                            <MudDivider />
+                            <MudStack Row AlignItems="AlignItems.Center">
+                                <MudText>To:</MudText>
+                                <MudChip T="string" OnClose="ClearRecipient">
+                                    <AvatarContent>
+                                        <MudAvatar Variant="Variant.Outlined" Class="mud-border-dark">
+                                            <MudImage ObjectFit="ObjectFit.Cover"
+                                                      Src="@($"https://pgas.ph/hris/Content/images/photos/{selectedRecipient?.eid}.png")"
+                                                      onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
+                                            </MudImage>
+                                        </MudAvatar>
+                                    </AvatarContent>
+                                    <ChildContent>@selectedRecipient?.EmployeeName (@selectedRecipient?.OfficeAbbr)</ChildContent>
+                                </MudChip>
+                            </MudStack>
+                            <MudStack Row>
+                                <MudText>Rating: </MudText>
+                                <MudRating MaxValue="5" @bind-SelectedValue="stars" />
+                            </MudStack>
+                        }
                     </MudStack>
-                }
-            </MudStack>
-            <MudTextField Class="mt-5" Clearable @bind-Value="message" T="string" Counter="0"
-                          Immediate Label="Message" Variant="Variant.Outlined" Lines="5">
-            </MudTextField>
-            <MudStack Row Justify="Justify.SpaceBetween">
-                <MudStack Row AlignItems="AlignItems.Center">
+                    <MudTextField Class="mt-5" Clearable ClearIcon="" @bind-Value="message" T="string" Counter="0"
+                                  Immediate Label="Message" Variant="Variant.Outlined" Lines="5">
+                    </MudTextField>
                 </MudStack>
-                <MudStack Row AlignItems="AlignItems.Center">
-                    <MudButton Variant="Variant.Outlined" Color="Color.Primary" EndIcon="@Icons.Material.Filled.Send" OnClick="OpenDialog">Submit</MudButton>
+                <MudStack Row Justify="Justify.FlexEnd">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" EndIcon="@Icons.Material.Filled.Send" OnClick="@(() => OpenDialog(_noHeader))" Size="Size.Small">Submit</MudButton>
                 </MudStack>
             </MudStack>
         </MudPaper>
     </MudItem>
-
     <!-- Messages -->
-
     <MudItem xs="12" lg="7">
-        <MudPaper Elevation="0" Class="pa-5">
+        <MudPaper Class="pa-3">
             <MudGrid Spacing="1">
                 <!-- Header -->
                 <MudItem xs="12">
@@ -98,7 +100,6 @@
                         </MudStack>
                     </MudPaper>
                 </MudItem>
-
                 <!-- Content -->
                 <MudItem xs="12">
                     <MudStack Spacing="3" Justify="Justify.Center">
@@ -115,7 +116,7 @@
                                         <MudTooltip>
                                             <ChildContent>
                                                 <MudAvatar Size="Size.Large">
-                                                    <MudImage Style="image-rendering: optimizeSpeed"
+                                                    <MudImage ObjectFit="ObjectFit.Cover"
                                                               Src="@($"https://pgas.ph/hris/Content/images/photos/{message.from_eid}.png")"
                                                               onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
                                                     </MudImage>
@@ -124,7 +125,7 @@
                                             <TooltipContent>
                                                 <MudStack Row>
                                                     <MudAvatar Size="Size.Large">
-                                                        <MudImage Style="image-rendering: optimizeSpeed"
+                                                        <MudImage ObjectFit="ObjectFit.Cover"
                                                                   Src="@($"https://pgas.ph/hris/Content/images/photos/{message.from_eid}.png")"
                                                                   onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
                                                         </MudImage>
@@ -147,7 +148,7 @@
                                                     <TooltipContent>
                                                         <MudStack Row>
                                                             <MudAvatar Size="Size.Large">
-                                                                <MudImage Style="image-rendering: optimizeSpeed"
+                                                                <MudImage ObjectFit="ObjectFit.Cover"
                                                                           Src="@($"https://pgas.ph/hris/Content/images/photos/{message.from_eid}.png")"
                                                                           onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
                                                                 </MudImage>
@@ -171,7 +172,7 @@
                                                     <TooltipContent>
                                                         <MudStack Row>
                                                             <MudAvatar Size="Size.Large">
-                                                                <MudImage Style="image-rendering: optimizeSpeed"
+                                                                <MudImage ObjectFit="ObjectFit.Cover"
                                                                           Src="@($"https://pgas.ph/hris/Content/images/photos/{message.to_eid}.png")"
                                                                           onerror="this.onerror=null;this.src='Objects/agusan del sur.webp';">
                                                                 </MudImage>
@@ -418,8 +419,6 @@
         stars = 0;
     }
 
-
-
     private async Task<IEnumerable<string>> SearchEmployee(string value, CancellationToken token)
     {
         // Check if pgasEmployees is null
@@ -449,8 +448,6 @@
         });
     }
 
-
-
     private void RedirectPage()
     {
         if (eid?.eid == null)
@@ -459,11 +456,21 @@
         }
     }
 
-    private async Task OpenDialog()
+    private readonly DialogOptions _noHeader = new() { NoHeader = true };
+    private async Task OpenDialog(DialogOptions options)
     {
-        await SubmitPraiseMessage();
-        await loadPraiseMessages();
-        StateHasChanged();
+        bool? result = await DialogService.ShowMessageBox(
+            "Warning",
+            "Do you want to submit message?",
+            yesText: "Yes", cancelText: "Cancel");
+
+        if (result == true)
+        {
+            await SubmitPraiseMessage();
+            await loadPraiseMessages();
+            StateHasChanged();
+        }
     }
+
 }
 

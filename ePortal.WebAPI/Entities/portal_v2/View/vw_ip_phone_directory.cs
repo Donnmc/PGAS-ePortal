@@ -1,4 +1,4 @@
-﻿namespace PGAS.WebAPI.Entities.portal_v2.Table
+﻿namespace PGAS.WebAPI.Entities.portal_v2.View
 {
     public partial class vw_ip_phone_directory
     {

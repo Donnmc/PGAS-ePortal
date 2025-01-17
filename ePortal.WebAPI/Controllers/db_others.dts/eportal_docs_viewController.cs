@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PGAS.WebAPI.Entities.db_others.dts.View;
 using PGAS.WebAPI.Context;
 
-namespace PGAS.WebAPI.Controllers.Others
+namespace PGAS.WebAPI.Controllers.db_others.dts
 {
     [Route("api/[controller]")]
     [ApiController]

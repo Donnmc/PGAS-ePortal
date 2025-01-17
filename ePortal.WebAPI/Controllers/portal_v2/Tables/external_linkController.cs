@@ -4,7 +4,7 @@ using PGAS.WebAPI.Context;
 using PGAS.WebAPI.DTO.portal_v2.View;
 using PGAS.WebAPI.Entities.portal_v2.Table;
 
-namespace PGAS.WebAPI.Controllers.ePortal.Tables
+namespace PGAS.WebAPI.Controllers.portal_v2.Tables
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -80,7 +80,7 @@ namespace PGAS.WebAPI.Controllers.ePortal.Tables
                     throw;
                 }
             }
-            return CreatedAtAction(nameof(PostParentLink), new { id = parentLink.id }, parentLink);
+            return CreatedAtAction(nameof(PostParentLink), new { parentLink.id }, parentLink);
         }
 
         private bool ParentLinkExists(int id)

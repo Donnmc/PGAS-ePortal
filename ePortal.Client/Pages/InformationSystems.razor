@@ -1,27 +1,29 @@
-﻿@page "/applications"
+﻿@page "/information-systems"
 @using System.Text.Json
 @using System.Net.Http
 
-<PageTitle>Applications | PGAS Portal</PageTitle>
+<PageTitle>Information Systems | PGAS Portal</PageTitle>
 
-<MudGrid Spacing="3" Class="pa-3">
+<MudGrid Spacing="5" Class="pa-5">
     <MudItem xs="12">
-        <MudText Style="font-size: 30px"><b>Applications</b></MudText>
+        <MudText Style="font-size: 30px"><b>Information Systems</b></MudText>
         <MudDivider />
+    </MudItem>
+    <MudItem xs="12">
         <MudGrid Spacing="5">
             @if (informationSystems != null && informationSystems.Any())
             {
                 <MudVirtualize Items="informationSystems" Context="cluster">
                     <MudItem xs="12">
                         <MudStack Class="pa-2">
-                            <MudStack Class="pt-10" Row Spacing="2">
+                            <MudStack Row Spacing="2" AlignItems="AlignItems.End">
                                 <MudIcon Icon="@(typeof(Icons.Material.Filled).GetField(cluster.Cluster_Icon)?.GetValue(null) as string ?? "")" Color="Color.Primary"/>
                                 <MudText ><b>@cluster.Cluster_Name</b></MudText>
                             </MudStack>
                             <MudGrid>
                                 <MudVirtualize Items="cluster.Information_Systems" Context="system">
                                     <MudItem xs="6" sm="3" lg="2">
-                                        <MudPaper>
+                                        <MudPaper Elevation="0">
                                             <MudLink Href="@system.Information_System_Link" Target="_blank" Color="Color.Tertiary" Underline="Underline.None">
                                                 <MudStack Row Style="height: 100%">
                                                     <MudStack Spacing="0" Class="pa-3" Style="width: 100%">

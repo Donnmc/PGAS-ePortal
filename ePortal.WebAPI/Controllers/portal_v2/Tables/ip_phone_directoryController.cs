@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PGAS.WebAPI.Entities.portal_v2.Table;
 using PGAS.WebAPI.Context;
 
-namespace PGAS.WebAPI.Controllers.ePortal.Tables
+namespace PGAS.WebAPI.Controllers.portal_v2.Tables
 {
     [Route("api/[controller]")]
     [ApiController]

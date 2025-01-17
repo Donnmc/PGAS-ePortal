@@ -14,4 +14,5 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<MudThemeProvider>();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
+
 await builder.Build().RunAsync();

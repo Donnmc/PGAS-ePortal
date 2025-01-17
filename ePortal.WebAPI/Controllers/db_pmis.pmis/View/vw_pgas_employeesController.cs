@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PGAS.WebAPI.Context;
-using PGAS.WebAPI.DTO.PMIS.View;
+using PGAS.WebAPI.DTO.db_pmis.pmis.View;
 
-namespace PGAS.WebAPI.Controllers.PMIS.View
+namespace PGAS.WebAPI.Controllers.db_pmis.pmis.View
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -61,6 +61,50 @@ namespace PGAS.WebAPI.Controllers.PMIS.View
             return mappedEmployee;
         }
 
+        [HttpGet("numberOfEmployees")]
+        public async Task<ActionResult<int>> GetNumberOfEmployees()
+        {
+            var validPositions = new List<string>
+            {
+                "Permanent",
+                "Casual",
+                "Job Order",
+                "Contract of Service",
+                "Temporary",
+                "Elected",
+                "Coterminous"
+            };
+
+            var employeeCount = await _context.vw_pgas_employees
+                .Where(e => validPositions.Contains(e.Status))
+                .CountAsync();
+
+            return Ok(employeeCount);
+        }
+
+        [HttpGet("numberOfEmployeesPerStatus")]
+        public async Task<ActionResult<IEnumerable<KeyValuePair<string, int>>>> GetNumberOfEmployeesPerStatus()
+        {
+            var validPositions = new List<string>
+            {
+                "Permanent",
+                "Casual",
+                "Job Order",
+                "Contract of Service",
+                "Temporary",
+                "Elected",
+                "Coterminous"
+            };
+
+            var employeeCounts = await _context.vw_pgas_employees
+                .Where(e => validPositions.Contains(e.Status))
+                .GroupBy(e => e.Status)
+                .Select(g => new KeyValuePair<string, int>(g.Key, g.Count()))
+                .ToListAsync();
+
+            return Ok(employeeCounts);
+        }
+
         [HttpGet("promotedEmployees")]
         public async Task<ActionResult<IEnumerable<vw_pgas_employeesDTO>>> GetPromotedEmployees()
         {
@@ -93,8 +137,7 @@ namespace PGAS.WebAPI.Controllers.PMIS.View
         }
 
         [HttpGet("query")]
-        public async Task<ActionResult<IEnumerable<vw_pgas_employeesDTO>>> SearchEmployees(
-        [FromQuery] string? searchDetails = null)
+        public async Task<ActionResult<IEnumerable<vw_pgas_employeesDTO>>> SearchEmployees([FromQuery] string? searchDetails = null)
         {
             if (string.IsNullOrWhiteSpace(searchDetails))
             {
@@ -106,12 +149,12 @@ namespace PGAS.WebAPI.Controllers.PMIS.View
             if (!string.IsNullOrEmpty(searchDetails))
             {
                 query = query.Where(e =>
-                    (e.OfficeName!.Contains(searchDetails)) ||
-                    (e.OfficeAbbr!.Contains(searchDetails)) ||
-                    (e.Position!.Contains(searchDetails)) ||
-                    (e.EmployeeName!.Contains(searchDetails)) ||
-                    (e.SwipeID!.Contains(searchDetails)) ||
-                    (e.eid!.ToString().Contains(searchDetails)));
+                    e.OfficeName!.Contains(searchDetails) ||
+                    e.OfficeAbbr!.Contains(searchDetails) ||
+                    e.Position!.Contains(searchDetails) ||
+                    e.EmployeeName!.Contains(searchDetails) ||
+                    e.SwipeID!.Contains(searchDetails) ||
+                    e.eid!.ToString().Contains(searchDetails));
             }
 
             var employee = await query.ToListAsync();
@@ -190,23 +233,33 @@ namespace PGAS.WebAPI.Controllers.PMIS.View
         }
 
         [HttpGet("name/{EmployeeName}")]
-        public async Task<ActionResult<vw_pgas_employeesNamesDTO>> GetEmployeeByNameAsync(string EmployeeName)
+        public async Task<ActionResult<vw_pgas_employeesNamesDTO>> GetEmployeeByNameAsync([FromRoute] string EmployeeName)
         {
-            var employee = await _context.vw_pgas_employees
+            if (string.IsNullOrWhiteSpace(EmployeeName))
+            {
+                return BadRequest("Search details cannot be null or empty.");
+            }
+
+            var query = await _context.vw_pgas_employees
                 .Where(e => e.EmployeeName == EmployeeName)
                 .Select(e => new vw_pgas_employeesNamesDTO
                 {
-                    EmployeeName = e.EmployeeName
+                    eid = e.eid,
+                    EmployeeName = e.EmployeeName,
+                    OfficeName = e.OfficeName,
+                    OfficeAbbr = e.OfficeAbbr
                 })
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
 
-            if (employee == null)
+            if (query == null)
             {
                 return NotFound();
             }
 
-            return Ok(employee);
+            return Ok(query);
         }
+
+
     }
 }

@@ -8,15 +8,27 @@
 
 <PageTitle>External Links | PGAS Portal</PageTitle>
 
-<MudGrid Spacing="3" Class="pa-3">
+<MudGrid Spacing="5" Class="pa-5">
     <!-- Header -->
     <MudItem xs="12">
-        <MudText Align="Align.Center"><b>External Links</b></MudText>
+        <MudText Style="font-size: 30px"><b>External Links</b></MudText>
+        <MudDivider />
     </MudItem>
-    <MudDivider />
+    <!--Add/Update-->
+    <MudItem xs="12">
+        <MudPaper Elevation="0">
+            <MudStack Row Spacing="3" Class="pa-3">
+                <MudTextField Margin="Margin.Dense" T="string" Variant="Variant.Outlined" @bind-Value="parentList" Label="Parent List"></MudTextField>
+                <MudTextField Margin="Margin.Dense" T="string" Variant="Variant.Outlined" @bind-Value="parentListIcon" Label="Parent List Icon"></MudTextField>
+                <MudTextField Margin="Margin.Dense" T="string" Variant="Variant.Outlined" @bind-Value="parentListLink" Label="Parent List Link"></MudTextField>
+                <MudTextField Margin="Margin.Dense" T="int?" Variant="Variant.Outlined" @bind-Value="parentListOrder" Disabled Label="Order"></MudTextField>
+                <MudButton StartIcon="@Icons.Material.Filled.Add" Variant="Variant.Filled" Color="Color.Primary" OnClick="AddParentExternalLink">Add</MudButton>
+            </MudStack>
+        </MudPaper>
+    </MudItem>
     <!-- Content -->
     <MudItem xs="12">
-        <MudTable Items="@externalLinks" Hover="true" Breakpoint="Breakpoint.Sm">
+        <MudTable Elevation="0" Items="@externalLinks" Hover="true" Breakpoint="Breakpoint.Sm">
             <ColGroup>
                 <col style="width: 20%" />
                 <col style="width: 15%" />
@@ -35,15 +47,9 @@
                 <MudTh></MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="Parent List Name">
-                    @context.Parent_List_Name
-                </MudTd>
-                <MudTd DataLabel="Parent List Icon">
-                    @context.Parent_List_Icon
-                </MudTd>
-                <MudTd DataLabel="Parent List Link">
-                    @context.Parent_List_Link
-                </MudTd>
+                <MudTd DataLabel="Parent List Name">@context.Parent_List_Name</MudTd>
+                <MudTd DataLabel="Parent List Icon">@context.Parent_List_Icon</MudTd>
+                <MudTd DataLabel="Parent List Link">@context.Parent_List_Link</MudTd>
                 <MudTd DataLabel="Date Created">@context.Parent_List_Date_Created?.ToString("yyyy-MM-dd")</MudTd>
                 <MudTd DataLabel="Order">
                     @if (context.IsEditing)
@@ -70,8 +76,7 @@
                 }
                 else
                 {
-                    <MudTd DataLabel="Parent List Link">
-                    </MudTd>
+                    <MudTd DataLabel="Parent List Link"></MudTd>
                 }
             </RowTemplate>
             <ChildRowContent>
@@ -99,21 +104,11 @@
                                 </HeaderContent>
                                 <RowTemplate>
                                     <MudTd></MudTd>
-                                    <MudTd DataLabel="Child List Name">
-                                        @ChildContext.Child_List_Name
-                                    </MudTd>
-                                    <MudTd DataLabel="Child List Icon">
-                                        @ChildContext.Child_List_Icon
-                                    </MudTd>
-                                    <MudTd DataLabel="Child List Link">
-                                        @ChildContext.Child_List_Link
-                                    </MudTd>
-                                    <MudTd DataLabel="Date Created">
-                                        @ChildContext.Child_List_Date_Created?.ToString("yyyy-MM-dd")
-                                    </MudTd>
-                                    <MudTd DataLabel="Order">
-                                        @ChildContext.Child_List_Order
-                                    </MudTd>
+                                    <MudTd DataLabel="Child List Name">@ChildContext.Child_List_Name</MudTd>
+                                    <MudTd DataLabel="Child List Icon">@ChildContext.Child_List_Icon</MudTd>
+                                    <MudTd DataLabel="Child List Link">@ChildContext.Child_List_Link</MudTd>
+                                    <MudTd DataLabel="Date Created">@ChildContext.Child_List_Date_Created?.ToString("yyyy-MM-dd")</MudTd>
+                                    <MudTd DataLabel="Order">@ChildContext.Child_List_Order</MudTd>
                                     <MudTd>
                                         <MudStack Row>
                                             <MudIconButton Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" />
@@ -133,7 +128,38 @@
 
 @code {
     private readonly string API_URL = APIService.PGASPortalAPI;
+    private List<external_link_parent>? externalLinksParent;
     private List<v_external_linkParentListDTO>? externalLinks;
+    private string? parentList;
+    private string? parentListIcon;
+    private string? parentListLink;
+    private int? parentListOrder;
+
+
+    public partial class external_link_parent
+    {
+        public int id { get; set; }
+        public string? name { get; set; }
+        public string? icon { get; set; }
+        public string? link { get; set; }
+        public int? order { get; set; }
+        public DateTime? date_created { get; set; }
+        public bool? active { get; set; }
+        public virtual ICollection<external_link_child>? external_link_child { get; set; } = new List<external_link_child>();
+    }
+
+    public partial class external_link_child
+    {
+        public int id { get; set; }
+        public int parent_id { get; set; }
+        public string? name { get; set; }
+        public string? link { get; set; }
+        public string? icon { get; set; }
+        public int? order { get; set; }
+        public DateTime? date_created { get; set; }
+        public bool? active { get; set; }
+        public virtual external_link_parent? parent { get; set; }
+    }
 
     public class v_external_linkParentListDTO
     {
@@ -153,10 +179,9 @@
         public string? Child_List_Icon { get; set; }
         public string? Child_List_Link { get; set; }
         public DateTime? Child_List_Date_Created { get; set; }
-        public int? Child_List_Order { get; set; } // Make it nullable
+        public int? Child_List_Order { get; set; }
         public bool IsEditing { get; set; }
     }
-
 
     protected override async Task OnInitializedAsync()
     {
@@ -168,17 +193,61 @@
         try
         {
             HttpResponseMessage httpResponse = await HttpClient.GetAsync($"{API_URL}/api/external_link");
-            httpResponse.EnsureSuccessStatusCode(); // Ensure a successful response
+            httpResponse.EnsureSuccessStatusCode();
 
             using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             externalLinks = await JsonSerializer.DeserializeAsync<List<v_external_linkParentListDTO>>(responseStream, options);
+
+            SetInitialOrderValues(externalLinks);
+
+            parentListOrder = GetLatestParentOrder(externalLinks) + 1;
         }
         catch (HttpRequestException ex)
         {
-            // Handle exception, log, or display an error message
             Console.WriteLine($"Error fetching data: {ex.Message}");
         }
+    }
+
+    private async Task AddParentExternalLink()
+    {
+        var parentLink = new external_link_parent
+            {
+                name = parentList,
+                icon = parentListIcon,
+                link = parentListLink,
+                order = parentListOrder
+            };
+
+        try
+        {
+            using HttpClient httpClient = new();
+            var content = new MultipartFormDataContent
+            {
+                { new StringContent(parentLink.name ?? string.Empty), "name" },
+                { new StringContent(parentLink.icon ?? string.Empty), "icon" },
+                { new StringContent(parentLink.link ?? string.Empty), "link" },
+                { new StringContent(parentLink.order.ToString() ?? string.Empty), "order" }
+            };
+
+            HttpResponseMessage response = await httpClient.PostAsync($"{API_URL}/api/external_link/parent", content);
+            response.EnsureSuccessStatusCode();
+
+            ClearParentEntry(); 
+            await GetExternalLinks();
+            StateHasChanged();
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"Error submitting external link: {ex.Message}");
+        }
+    }
+
+    private void ClearParentEntry()
+    {
+        parentList = "";
+        parentListIcon = "";
+        parentListLink = "";
     }
 
     private void ShowBtnPress(string? parentName)
@@ -189,4 +258,30 @@
             tmpParent.ShowDetails = !tmpParent.ShowDetails;
         }
     }
+
+    private void SetInitialOrderValues(List<v_external_linkParentListDTO> parentList)
+    {
+        foreach (var parent in parentList)
+        {
+            parent.Parent_List_Order ??= GetLatestParentOrder(parentList) + 1;
+            if (parent.v_external_linkChildList != null)
+            {
+                foreach (var child in parent.v_external_linkChildList)
+                {
+                    child.Child_List_Order ??= GetLatestChildOrder(parent.v_external_linkChildList) + 1;
+                }
+            }
+        }
+    }
+
+    private int GetLatestParentOrder(List<v_external_linkParentListDTO> parentList)
+    {
+        return parentList.Any() ? parentList.Max(p => p.Parent_List_Order ?? 0) : 0;
+    }
+
+    private int GetLatestChildOrder(List<v_external_linkChildListDTO> childList)
+    {
+        return childList.Any() ? childList.Max(c => c.Child_List_Order ?? 0) : 0;
+    }
 }
+

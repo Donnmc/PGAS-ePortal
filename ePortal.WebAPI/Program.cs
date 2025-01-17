@@ -9,6 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 //SQL Connection pgas_eportal_v2
 builder.Services.AddDbContext<PGAS.WebAPI.Context.pgas_eportal_v2Context>(
     options =>
