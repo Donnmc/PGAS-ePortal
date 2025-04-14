@@ -1,0 +1,303 @@
+﻿@page "/mobile-app"
+@using MudBlazor
+
+<PageTitle>Mobile Applications</PageTitle>
+<div class="page-container">
+    <MudText Typo="Typo.h5">
+        Mobile App Corner<MudIcon Icon="@Icons.Material.Filled.PhoneAndroid" Class="ms-2" />
+    </MudText>
+    <MudTable Items="@MobileApps" Hover="true" Class="custom-header-table">
+    <HeaderContent>
+        <MudTh>#</MudTh>
+        <MudTh>Download</MudTh>
+        <MudTh></MudTh>
+        <MudTh>Mobile Application</MudTh>
+        <MudTh>Description</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.Id</MudTd>
+        <MudTd>
+            <a href="@context.DownloadLink" download>
+                <MudIcon Icon="@Icons.Material.Filled.FileDownload" Size="Size.Large" Color="Color.Primary" />
+            </a>    
+        </MudTd>
+          <MudTd>
+                <MudIcon Icon="@context.AppIcon" Color="@context.IconColor" Size="Size.Medium"/>
+            </MudTd>
+        <MudTd>@context.Name</MudTd>
+        <MudTd>@context.Description</MudTd>
+    </RowTemplate>
+</MudTable>
+ </div>
+
+<style>
+    /* Custom CSS for the table header */
+    .custom-header-table thead {
+        background-color: #4863A0; /* Dark gray (adjust as needed) */
+    }
+        /* Optional: Style header text for contrast */
+        .custom-header-table thead th {
+            color: white !important;
+            font-weight: bold !important;
+        }
+</style>
+
+@code {
+    public class MobileApp
+    {
+        public int Id { get; set; }
+        public string DownloadLink { get; set; }
+        public string AppIcon { get; set; }  // New property
+        public Color IconColor { get; set; } // New property
+        public string Name { get; set; }
+        public string Description { get; set; }
+    }
+
+    private List<MobileApp> MobileApps = new List<MobileApp>
+    {
+        new MobileApp {
+            Id = 1,
+            DownloadLink = "https://pgas.ph/hris/Home/Download/AndroidApp",
+            AppIcon = Icons.Material.Filled.People,
+            IconColor = Color.Success,
+            Name = "HRIS",
+            Description = "Human Resource Information System"
+        },
+         new MobileApp {
+            Id = 2,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/ckzmCJP6xS6dSNw/download",
+            AppIcon = Icons.Material.Filled.Message,
+            IconColor = Color.Success,
+            Name = "Customer Service Satisfaction Form",
+            Description = "Customer Service Satisfaction Form - Android Application1"
+        },
+         new MobileApp {
+            Id = 3,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/fY9d9HzLHiToezS/download",
+            AppIcon = Icons.Material.Filled.PieChart,
+            IconColor = Color.Success,
+            Name = "ACIAR SURVEY APP",
+            Description = "ACIAR SURVEY 2019"
+        },
+         new MobileApp {
+            Id = 4,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/bKqDqX8fKdtwtpi/download",
+            AppIcon = Icons.Material.Filled.PieChart,
+            IconColor = Color.Success,
+            Name = "CHOCIS VIolation App",
+            Description = "Apps that enable individuals to report violations can help empower citizens to hold institutions or authorities accountable."
+        },
+         new MobileApp {
+            Id = 5,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/REYkXGHGWH5n7L6/aownload",
+            AppIcon = Icons.Material.Filled.PieChart,
+            IconColor = Color.Success,
+            Name = "CBMS Survey app 2018",
+            Description = "Community Based Monitoring App"
+        },
+         new MobileApp {
+            Id = 6,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/FoQN8ZfkjxbxqRi/download",
+             AppIcon = Icons.Material.Filled.PieChart,
+            IconColor = Color.Success,
+            Name = "Usad Geotagging",
+            Description = "Usad Geotagging application"
+        },
+         new MobileApp {
+            Id = 7,
+            DownloadLink = "https://pgas.ph/eportal/Content/apk/rptisv_09.apk",
+             AppIcon = Icons.Material.Filled.PieChart,
+            IconColor = Color.Success,
+            Name = "E-FAAS",
+            Description = "Electronic Field Appraisal"
+        },
+         new MobileApp {
+            Id = 8,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/HTWYSocDYE9MCGe/download",
+            AppIcon = Icons.Material.Filled.Home,
+            IconColor = Color.Success,
+            Name = "Home Quarantine App",
+            Description = "Monitoring of individuals having home quarantine"
+        },
+        new MobileApp {
+            Id = 9,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/dLDcYbHfRwbDtkK/download",
+            AppIcon = Icons.Material.Filled.DeviceThermostat,
+            IconColor = Color.Success,
+            Name = "Product Flow (Covid-19)",
+            Description = "Recording IN/Out flow of product in the province"
+        },
+        new MobileApp {
+            Id = 10,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/q32a3Gt7ZxHcJF8/download",
+            AppIcon = Icons.Material.Filled.DirectionsCar,
+            IconColor = Color.Success,
+            Name = "Transport App (Covid-19)",
+            Description = "Recording of names IN/Out in the province"
+        },
+        new MobileApp {
+            Id = 11,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/snjNk39QkE7crLA/download",
+            AppIcon = Icons.Material.Filled.DirectionsCar,
+            IconColor = Color.Success,
+            Name = "Vechicle Pass Verifier",
+            Description = "Verifies Vehicles IN/Out in the province"
+        },
+        new MobileApp {
+            Id = 12,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/e8pbMMqxrxxP2rJ/download",
+             AppIcon = Icons.Material.Filled.PieChart,
+            IconColor = Color.Success,
+            Name = "External Project App",
+            Description = "External Project Mobile Application"
+        },
+        new MobileApp {
+            Id = 13,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/boFmLAQL9YHpNAS/download",
+            AppIcon = Icons.Material.Filled.Dashboard,
+            IconColor = Color.Success,
+            Name = "QR Attendance Mobile App",
+            Description = "Agusan del Sur QR Mobile App (for attendance only)"
+        },
+        new MobileApp {
+            Id = 14,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/NWNaLZgtgM9j9De",
+            AppIcon = Icons.Material.Filled.Dashboard,
+            IconColor = Color.Success,
+            Name = "PMS",
+            Description = "PMS App"
+        },
+        new MobileApp {
+            Id = 15,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/BBadb6NJKC83Fak",
+            AppIcon = Icons.Material.Filled.SystemUpdateAlt,
+            IconColor = Color.Success,
+            Name = "SPMS",
+            Description = "Strategic Permformance Management System - Android Mobile Application"
+        },
+        new MobileApp {
+            Id = 16,
+            DownloadLink = "https://pgas.ph/eportal/Content/apk/app-debug.apk",
+            AppIcon = Icons.Material.Filled.Star,
+            IconColor = Color.Success,
+            Name = "PRAISE",
+            Description = "Give a Praise - Android Mobile Application"
+        },
+        new MobileApp {
+            Id = 17,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/E3iF2c4tLx8T7xr/download",
+            AppIcon = Icons.Material.Filled.SystemUpdateAlt,
+            IconColor = Color.Success,
+            Name = "GMS",
+            Description = "Guest Monitoring System - Android Application"
+        },
+        new MobileApp {
+            Id = 18,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/8pnqRe4T8ww8RcR/download",
+             AppIcon = Icons.Material.Filled.TableChart,
+            IconColor = Color.Success,
+            Name = "eDTR",
+            Description = "Electronic Daily Time Record - Android Application"
+        },
+         new MobileApp {
+            Id = 19,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/ZWCAdjj7Rtx8gfS",
+            AppIcon = Icons.Material.Filled.TableChart,
+            IconColor = Color.Success,
+            Name = "ICT Feedback",
+            Description = "ICT Feedback - Android Application"
+        },
+         new MobileApp {
+            Id = 20,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/DoiXyi9b3jzf3Dz/download",
+            AppIcon = Icons.Material.Filled.Dashboard,
+            IconColor = Color.Success,
+            Name = "Revenue Dashboard App",
+            Description = "Real Property Tax Treasury Dashboard"
+        },
+         new MobileApp {
+            Id = 21,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/kMARJLjeBk5eDMe/download",
+            AppIcon = Icons.Material.Filled.WaterDrop,
+            IconColor = Color.Success,
+            Name = "Water Billing",
+            Description = "Android water billing"
+        },
+         new MobileApp {
+            Id = 22,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/qMBrKdqZE8KkRFn",
+            AppIcon = Icons.Material.Filled.PieChart,
+            IconColor = Color.Success,
+            Name = "Mock Election Survey",
+            Description = "Sample Survey"
+        },
+         new MobileApp {
+            Id = 23,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/6GaMTDkkYLqMBAE/download",
+            AppIcon = Icons.Material.Filled.SystemUpdateAlt,
+            IconColor = Color.Success,
+            Name = "PDTS",
+            Description = "PROCUREMENT DOCUMENT TRACKING SYSTEM"
+        },
+         new MobileApp {
+            Id = 24,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/5jowSYzD9jrasoo/download",
+             AppIcon = Icons.Material.Filled.CheckBox,
+            IconColor = Color.Success,
+            Name = "CheckList",
+            Description = "Bac Checklist"
+        },
+         new MobileApp {
+            Id = 25,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/SdRkApxXfHRxFLS/download",
+            AppIcon = Icons.Material.Filled.TrackChanges,
+            IconColor = Color.Success,
+            Name = "Tracker",
+            Description = "Tracker"
+        },
+         new MobileApp {
+            Id = 26,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/snGyj7Jy8tnLaYq/download",
+            AppIcon = Icons.Material.Filled.ChromeReaderMode,
+            IconColor = Color.Success,
+            Name = "QR Generator/Reader",
+            Description = "QR Code Generator/Reader"
+        },
+        new MobileApp {
+            Id = 27,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/Cb9ybjwoPoECHcJ",
+             AppIcon = Icons.Material.Filled.PieChart,
+            IconColor = Color.Success,
+            Name = "Community Organizing",
+            Description = "Community Organizing Mobile Application"
+        },
+        new MobileApp {
+            Id = 28,
+            DownloadLink = "https://cloud.pgas.ph/index.php/s/fZbeRF3sy35nfxR",
+            AppIcon = Icons.Material.Filled.PieChart,
+            IconColor = Color.Success,
+            Name = "Tagging",
+            Description = "	Tagging"
+        },
+        new MobileApp {
+            Id = 29,
+            DownloadLink = "https://pgas.ph/eportal/Content/apk/tabulation-appremove-duplicate-warning.apk",
+            AppIcon = Icons.Material.Filled.PieChart,
+            IconColor = Color.Success,
+            Name = "Tabulation",
+            Description = "	A tabulation system is a method or process used to collect, organize, and analyze data in a tabular format. It involves data collection, entry, validation, and cleaning. The system allows users to define the structure and layout of the tabular output, perform aggregations and calculations, and generate tables or visual representations of the data. Tabulation systems may include analytical capabilities for further data exploration and reporting features. Security measures are important to protect the data. The complexity of tabulation systems can vary, depending on the project requirements and the level of automation and functionality needed."
+        },
+        new MobileApp {
+            Id = 30,
+            DownloadLink = "https://pgas.ph/eportal/Content/apk/",
+             AppIcon = Icons.Material.Filled.ChromeReaderMode,
+            IconColor = Color.Success,
+            Name = "MALS",
+            Description = "Marketing Assistance Linkage System - Android Application for Price Monitoring"
+        },
+
+
+
+
+    };
+}

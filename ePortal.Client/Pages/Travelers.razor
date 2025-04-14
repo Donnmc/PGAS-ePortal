@@ -1,0 +1,63 @@
+﻿@page "/travelers"
+@using System.Text.Json
+@using System.Net.Http
+
+<MudCard>
+    <MudCardHeader>
+        <MudText Typo="Typo.h5">Travelers<MudIcon Icon="@Icons.Material.Filled.DirectionsCarFilled" Class="ms-2" />
+        </MudText>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudStack>
+            <MudTable Items="@DateRanges" Hover="true" Striped="true">
+                <HeaderContent>
+                    <MudTh>Date From</MudTh>
+                    <MudTh>Date To</MudTh>
+                </HeaderContent>
+                <RowTemplate Context="range">
+                    <MudTd>
+                        <MudDatePicker @bind-Date="range.Start" Margin="Margin.Dense" ReadOnly="@(!_editable)"/>
+                    </MudTd>
+                    <MudTd>
+                        <MudDatePicker @bind-Date="range.End" Margin="Margin.Dense" ReadOnly="@(!_editable)"/>
+                    </MudTd>
+                </RowTemplate>
+            </MudTable>
+
+            <MudCardHeader>
+                <MudText Typo="Typo.h6">Caterogy</MudText>
+            </MudCardHeader>
+            <MudGrid Container>
+                <MudCheckBox @bind-Value="Label_CheckBox1" Label="Training"></MudCheckBox>
+                <MudCheckBox @bind-Value="Label_CheckBox2" Label="Seminar"></MudCheckBox>
+                <MudCheckBox @bind-Value="Label_CheckBox3" Label="Workshop"></MudCheckBox>
+                <MudCheckBox @bind-Value="Label_CheckBox4" Label="Conference"></MudCheckBox>
+                <MudCheckBox @bind-Value="Label_CheckBox5" Label="Others"></MudCheckBox>
+                    <MudButton Style="border-radius: 40px; padding: 5px 10px; margin-left: 10px;" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.ExitToApp" Color="Color.Info" Size="Size.Small">
+                        Load
+                    </MudButton>
+            </MudGrid>
+            
+        </MudStack>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    private bool _editable = true;
+    private bool _clearable = true;
+    private List<DateRange> DateRanges { get; set; } = new() { new DateRange(DateTime.Today, DateTime.Today.AddDays(7)) };
+    private bool _processing = false;
+
+    private bool Label_CheckBox1 { get; set; } = true;
+    private bool Label_CheckBox2 { get; set; } = false;
+    private bool Label_CheckBox3 { get; set; } = false;
+    private bool Label_CheckBox4 { get; set; } = false;
+    private bool Label_CheckBox5 { get; set; } = false;
+
+    async Task ProcessSomething()
+    {
+        _processing = true;
+        await Task.Delay(2000);
+        _processing = false;
+    }
+}

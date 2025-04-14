@@ -9,6 +9,7 @@
             <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
             <MudNavLink Href="/information-systems" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Apps">Information Systems</MudNavLink>
             <MudNavLink Href="/phone-directory" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.LocalPhone">Phone Directory</MudNavLink>
+            <MudNavLink Href="/mobile-app" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.PhoneAndroid">Mobile App Corner</MudNavLink>
             @if (eid?.eid != null)
             {
                 <MudNavLink Href="/employees" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.People">Employees</MudNavLink>
@@ -22,6 +23,57 @@
                 <MudText Class="mt-3" Typo="Typo.subtitle2">External Links</MudText>
                 <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.OpenInNew"></MudIcon>
             </MudStack>
+            <MudPaper Width="250px" Class="py-3 mb-4" Elevation="0">
+                <MudNavMenu>
+                    <MudStack Row AlignItems="AlignItems.Center">
+                <MudText Class="mt-3" Typo="Typo.subtitle2">COMMON REPORT</MudText>
+                    </MudStack><link href="c:\users\acer\sourcex\repos\pgas-eportal\eportal.client\layout\leftnavmenu.razor.css" rel="stylesheet" />
+                    <MudNavGroup Title="Human Resource" Icon="@Icons.Material.Filled.FolderOpen" @bind-Collapsed="_collapsed">
+                        <MudNavLink Href="/travelers" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.DirectionsCar">Travelers</MudNavLink>
+                        <MudNavLink Href="/dtrmanualentries" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AppRegistration">DTR Manual Entries</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/epc" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.CurrencyRuble" Target="_blank">Expense per Capita</MudNavLink>
+                        <MudNavLink Href="/exempted-swiping" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.PersonPin">Exempted from Swiping</MudNavLink>
+                        <MudNavLink Href="/travelled" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.DirectionsCarFilled">Travelled vs Did not Travelled</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/hris/reports/PersonelSummaryExternal" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.DashboardCustomize" Target="_blank">Dashboard</MudNavLink>
+                        <MudNavLink Href="https://serve.pgas.ph/adsceir/kopSpC7YeY/PersonelSummaryRTPCR?Data=q2wmuki34jfMzGJ1Ao3TNQ==" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Group" Target="_blank">Personal RT-PCR Summary</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/hrmis/public/officeprofile" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.PersonPin" Target="_blank">Middle Mgt. Profile</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/hrmis/public/tripticketreport" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.CarCrash" Target="_blank">Fuel on Trip </MudNavLink>
+                    </MudNavGroup>
+                    <MudNavGroup Title="Procurement" Icon="@Icons.Material.Filled.ShoppingCart" @bind-Collapsed="_collapsed">
+                        <MudNavLink Href="https://pgas.ph/pdm/allongoingpr" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AutoAwesomeMotion" Target="_blank">On Going PR</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/pdm/allreturnedpr" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AutoAwesomeMotion" Target="_blank">Returned PR</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/epslite/public/ppmputilization" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Timeline" Target="_blank">PPMP Utilization</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/epslite/public/report" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ChromeReaderMode" Target="_blank">Mode of Procurement</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/epslite/public/search" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ManageSearch" Target="_blank">Search PR</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/epslite/public/posummary" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.LineWeight" Target="_blank">PO Report</MudNavLink>
+                        <MudNavLink Href="/price-bulletin" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Payment">Price Bulletin</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/epslite/public/procureditems" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.LineWeight" Target="_blank">Procured Items</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/pdm/TransactionReports" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.FolderCopy" Target="_blank">Proc. Summary Report</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/spms/home/trainingitems" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.CurrencyRuble" Target="_blank">Training Expenses</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/spmsv2/ICTReview" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.SupervisedUserCircle" Target="_blank">ICT Equipment (AIP)</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/pdm/signatorysummary" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.FileCopy" Target="_blank">Signatory Delay Summary</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/pdm/SignatoryDelays" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.FileCopy" Target="_blank">Signatory Delay Transaction</MudNavLink>
+                    </MudNavGroup>
+                    <MudNavGroup Title="Expenditures" Icon="@Icons.Material.Filled.Payment" @bind-Collapsed="_collapsed">
+                        <MudNavLink Href="/fuel-consumption" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.LocalGasStation">Fuel Consumption</MudNavLink>
+                    </MudNavGroup>
+                    <MudNavGroup Title="Physical Resource" Icon="@Icons.Material.Filled.CollectionsBookmark" @bind-Collapsed="_collapsed">
+                        <MudNavLink Href="/vehicle-schedule" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.EditCalendar">Vehichle Schedule</MudNavLink>
+                        <MudNavLink Href="/ict-inventory" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Inventory">ICT Inventory</MudNavLink>
+                        <MudNavLink Href="/is-inventory" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Inventory">IS Inventory</MudNavLink>
+                    </MudNavGroup>
+                    <MudNavGroup Title="Health Management" Icon="@Icons.Material.Filled.MedicalInformation" @bind-Collapsed="_collapsed">
+                        <MudNavLink Href="https://dopmh.pgas.ph/ihoms/RPTDOHNew" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.FolderCopy" Target="_blank">DOH Reports</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/eis/meds" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Inventory" Target="_blank">Supplies Inventory</MudNavLink>
+                    </MudNavGroup>
+                    <MudNavLink Href="/system-updates" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.CheckBox">System Updates</MudNavLink>
+                </MudNavMenu>
+
+            </MudPaper>
+
+            @code {
+        bool _collapsed = true;
+            }
             <MudDivider />
             <!-- Dynamic External nav menu -->
             @if (externalLinks != null && externalLinks.Any())
@@ -81,7 +133,7 @@
         <MudText Typo="Typo.body2" Style="font-size: 12px">
             All rights reserved. Developed under the leadership of Governor Santiago B. Cane, Jr.
         </MudText>
-    </MudItem>
+    </MudItem> 
 </MudGrid>
 
 @code {

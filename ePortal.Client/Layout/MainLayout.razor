@@ -153,14 +153,19 @@
                 }
             </MudStack>
         </MudAppBar>
-        <MudDrawer @bind-Open="@openleft" Elevation="0" ClipMode="DrawerClipMode.Docked">
+        <MudDrawer @bind-Open="@openleft" Elevation="0" ClipMode="DrawerClipMode.Docked"Anchor="Anchor.Left">
             <LeftNavMenu />
+        </MudDrawer>
+        <MudDrawer @bind-Open="@openright" Elevation="0" ClipMode="DrawerClipMode.Docked" Anchor="Anchor.Right">
+            <RightNavMenu />
         </MudDrawer>
         <MudMainContent>
             @Body
         </MudMainContent>
     </MudContainer>
 </MudLayout>
+
+
 
 @code {
     private bool _open;
