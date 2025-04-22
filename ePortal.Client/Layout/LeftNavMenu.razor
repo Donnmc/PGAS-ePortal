@@ -10,6 +10,7 @@
             <MudNavLink Href="/information-systems" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Apps">Information Systems</MudNavLink>
             <MudNavLink Href="/phone-directory" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.LocalPhone">Phone Directory</MudNavLink>
             <MudNavLink Href="/mobile-app" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.PhoneAndroid">Mobile App Corner</MudNavLink>
+       
             @if (eid?.eid != null)
             {
                 <MudNavLink Href="/employees" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.People">Employees</MudNavLink>
@@ -23,9 +24,43 @@
                 <MudText Class="mt-3" Typo="Typo.subtitle2">External Links</MudText>
                 <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.OpenInNew"></MudIcon>
             </MudStack>
+           
             <MudPaper Width="250px" Class="py-3 mb-4" Elevation="0">
-                <MudNavMenu>
-                    <MudStack Row AlignItems="AlignItems.Center">
+                        <MudNavMenu>
+                           
+             <MudNavGroup Title="USER's TOOL" Icon="@Icons.Material.Filled.FolderOpen" @bind-Collapsed="_collapsed">
+                        <MudNavLink Href="https://pgas.ph/pdm/status" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.List" Target="_blank">PR/PW Monitoring</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/eis/proposed" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ViewList" Target="_blank">Proposed Budget</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/eis/wfpsummary" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Summarize" Target="_blank">WFP Summary</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/epslite/ApprovalPR/wfpDetails#" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ListAlt" Target="_blank">Proc. Items/WFP</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/pdm/ProcTimelineCalc" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Calculate" Target="_blank">Proc. Timeline Calc</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/spms/calendarofActivities/procurementcalendar" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.CalendarMonth" Target="_blank">Proc. Calendar</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/pdm/SuppliersRating" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Star" Target="_blank">Supplier's Rating</MudNavLink>
+                        <MudNavLink Href="https://reports.pgas.ph/Report/share/IHOMS/Hospital%20Medicine%20Inventory?Date=2025-04-16T09%3A18%3A03&hospitals=1%2C2%2C3%2C4%2C5&Showreorderonly=false&ShowBrand=false" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AllInbox" Target="_blank">Hospital Inventory</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/hrmis/public/officeutilization" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.StarOutline" Target="_blank">Performace Rating</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/eomis/public-summary" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ScreenshotMonitor" Target="_blank">POW Monitoring</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/GIS/ActivityDesign" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ViewList" Target="_blank">Venue Availability</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/eis/ldrrmf" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.LineAxis" Target="_blank">LDRRMF Utilization</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/promis3/#!/nbwzrd/mapping" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Map" Target="_blank">Project Location</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/promis3/#!/nbwzrd/ppalist" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ListAlt" Target="_blank">List of Projects</MudNavLink>
+                        <MudNavLink Href="https://reports.pgas.ph/Report/Share/Public/Project%20Profiling%20Report?recordid=" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.LineStyle" Target="_blank">NGA Projects</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/SPMS/home/LPIIDashboard" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.LocationSearching" Target="_blank">LPII</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/promis3/#!/nbwzrd/home" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.SignalWifiStatusbarNull" Target="_blank">Project Status</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/spms/home/publicIndex" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.GpsFixed" Target="_blank">Strategic Direction</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/spms/CalendarofActivities/OrganizationalSchedule" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.CalendarToday" Target="_blank">Calendar of Activities</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/spms/ipccmonitoringhttps://pgas.ph/spms/ipccmonitoring" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Monitor" Target="_blank">IPCC Monitoring</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/paperlessmeeting" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Diversity3" Target="_blank">Meeting</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/aoms/Account/Login?ReturnUrl=%2Faoms%2F" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.FileCopy" Target="_blank">Doc. Composer</MudNavLink>
+                        <MudNavLink Href="https://pgas.ph/pimoforum" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Forum" Target="_blank">Knowledge Center</MudNavLink>
+
+                    </MudNavGroup>
+           
+            </MudNavMenu>
+            </MudPaper>
+
+                        <MudPaper Width="250px" Class="py-3 mb-4" Elevation="0">
+                        <MudNavMenu>
+                            <MudStack Row AlignItems="AlignItems.Center">
                 <MudText Class="mt-3" Typo="Typo.subtitle2">COMMON REPORT</MudText>
                     </MudStack><link href="c:\users\acer\sourcex\repos\pgas-eportal\eportal.client\layout\leftnavmenu.razor.css" rel="stylesheet" />
                     <MudNavGroup Title="Human Resource" Icon="@Icons.Material.Filled.FolderOpen" @bind-Collapsed="_collapsed">
